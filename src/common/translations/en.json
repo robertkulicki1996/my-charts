@@ -1,0 +1,11 @@
+{
+    "views.login.app_name": "MyCharts",
+    "views.login.header": "Sign in",
+    "views.login.or": "or",
+    "views.login.email_field.placeholder": "Email",
+    "views.login.password_field.placeholder": "Password",
+    "views.login.sign_in_button": "Sign in",
+    "views.login.forgot_password": "Forgot password ?",
+    "views.login.do_not_have_an_account": "Don't have an account ?",
+    "views.login.sign_up_button": "Sign up"
+}

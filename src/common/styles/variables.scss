@@ -1,0 +1,28 @@
+// variables.scss - defines all globally used variables
+
+// Colors
+$color-white: #fff;
+$color-black: #000;
+$color-darkpink: #EB1E64;
+$color-darkblue: #202634;
+$color-lightblue: #8492A6;
+$color-lightgrey: #CADAED;
+$color-deepskyblue: #00BFFF;
+$color-error: #F40000;
+
+// Metrics
+$metric-x-small: 8px;
+$metric-small: 16px;
+$metric-base: 24px;
+$metric-med: 48px;
+$metric-large: 64px;
+$metric-x-large: 80px;
+$metric-xx-large: 96px;
+
+// Fonts
+$font-default: 'Ubuntu', sans-serif;
+
+// Font weights
+$font-weight-medium: 500;
+$font-weight-demi: 600;
+$font-weight-bold: 700;

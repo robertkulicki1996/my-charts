@@ -1,0 +1,59 @@
+@import '../../../common/styles/variables.scss';
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.input {
+  padding: $metric-base * 0.5;
+  border-radius: 3px;
+  border: 0;
+  outline: none;
+  background-color: $color-darkblue;
+  color: $color-lightgrey;
+  font-weight: $font-weight-medium;
+  font-size: $metric-small;
+  margin-bottom: $metric-base /2;
+
+  &:focus {
+    border: 1px solid $color-white;
+    color: $color-white;
+  }
+
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  &::placeholder {
+    color: $color-lightgrey;
+    opacity: 1; /* Firefox */
+  }
+
+  /* Internet Explorer 10-11 */
+  &::-ms-input-placeholder {
+    color: $color-lightgrey;
+  }
+
+  /* Microsoft Edge */
+  &::-ms-input-placeholder {
+    color: $color-lightgrey;
+  }
+
+  &:required {
+    box-shadow: none;
+  }
+}
+
+.bordered {
+  border: 1px solid $color-lightgrey;
+}
+
+.input-container.hasError .input {
+  border-color: $color-error;
+}
+
+.input-container span {
+  margin-bottom: $metric-base /2;
+  color: $color-error;
+  font-weight: $font-weight-medium;
+  font-size: $metric-base /2;
+}
