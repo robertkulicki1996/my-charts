@@ -9,7 +9,7 @@ import Input from '../../common/components/Input/Input';
 import Button from '../../common/components/Button/Button';
 
 import auth from '../../firebase';
-import { HOME } from '../../common/consts/routes';
+import { HOME, RECOVER_PASSWORD, SIGN_UP } from '../../common/consts/routes';
 
 import { PropagateLoader } from 'react-spinners';
 
@@ -22,56 +22,92 @@ class Login extends Component {
     const INITIAL_STATE = {
       email: '',
       password: '',
-      error: null,
-      isError: false,
+      isApiError: false,
+      apiError: null,
       isLoading: false
     }
-    this.state = { ...INITIAL_STATE }
+    this.state = {
+      ...INITIAL_STATE
+    }
     this.signInWithGoogle = this.signInWithGoogle.bind(this);
     this.signInWithFacebook = this.signInWithFacebook.bind(this);
     this.signInWithGithub = this.signInWithGithub.bind(this);
     this.signInWithEmailAndPassword = this.signInWithEmailAndPassword.bind(this);
+    this.onEmailChange = this.onEmailChange.bind(this);
+    this.onPasswordChange = this.onPasswordChange.bind(this);
   }
 
-  signInWithEmailAndPassword(event) {
-    const { email, password } = this.state;
-    const { history } = this.props;
+  /**
+   * Method to sign in with email and password
+   */
+  signInWithEmailAndPassword() {
     this.setState({ isLoading: true });
+
+    const { history } = this.props;
+    const { email, password } = this.state;
+
     auth.signInWithEmailAndPassword(email, password).then(() => {
       this.setState({
         ...this.INITIAL_STATE,
       });
       history.push(HOME);
     }).catch(error => {
-      console.log(error);
       this.setState({
         isLoading: false,
-        isError: true,
-        error: error.message
+        isApiError: true,
+        apiError: error.message
       });
     });
-    event.preventDefault();
   }
 
+  /**
+   * Method to sign in with Google account
+   */
   signInWithGoogle() {
     console.log("Sign in with Google");
   }
 
+  /**
+   * Method to sign in with Facebook account
+   */
   signInWithFacebook() {
     console.log("Sign in with Facebook");
   }
 
+  /**
+   * Method to sign in with Github account
+   */
   signInWithGithub() {
     console.log("Sign in with Github");
   }
 
+  /**
+   * Method to set actually email to state
+   */
+  onEmailChange(event) {
+    this.setState({
+      email: event.target.value,
+      emailError: null
+    });
+  }
+
+  /**
+   * Method to set actually password to state
+   */
+  onPasswordChange(event) {
+    this.setState({
+      password: event.target.value,
+      passwordError: null
+    });
+  }
+
   render() {
-    const { intl } = this.props;
-    const { isLoading, isError, error } = this.state;
+    const { intl, history } = this.props;
+    const { isLoading, isApiError, apiError, email, emailError, password, passwordError } = this.state;
 
     const errorBox = (
       <div className="error-box">
-        {error}
+        {apiError}
       </div>
     );
 
@@ -84,7 +120,7 @@ class Login extends Component {
         <div className="login-content">
           <div className="login-form">
             <div className="login-form-header">{intl.formatMessage(translations.signInHeader)}</div>
-            { isError ? errorBox : null }
+            {isApiError ? errorBox : null}
             <div className="login-by-social-accounts">
               <Button
                 buttonStyle="button-social"
@@ -108,38 +144,39 @@ class Login extends Component {
             <div className="divider">
               {intl.formatMessage(translations.or)}
             </div>
-            <form onSubmit={(event) => this.signInWithEmailAndPassword(event)}>
-              <Input
-                type="email"
-                required={true}
-                placeholder={intl.formatMessage(translations.emailPlaceholder)}
-                value={this.state.email}
-                onChange={(event) => this.setState({ email: event.target.value })}
-              />
-              <Input
-                type="password"
-                required={true}
-                placeholder={intl.formatMessage(translations.passwordPlaceholder)}
-                value={this.state.password}
-                onChange={(event) => this.setState({ password: event.target.value })}
-              />
-              <Button buttonStyle="button-primary">
-                {isLoading ? (
-                  <div className="loader-container">
-                    <PropagateLoader
-                      size={12}
-                      color={'#ffffff'}
-                      loading={isLoading}
-                    />
-                  </div>)
-                  : intl.formatMessage(translations.signIn)
-                }
-              </Button>
-            </form>
+            <Input
+              type="email"
+              placeholder={intl.formatMessage(translations.emailPlaceholder)}
+              value={email}
+              onChange={(event) => this.onEmailChange(event)}
+              error={emailError}
+            />
+            <Input
+              type="password"
+              placeholder={intl.formatMessage(translations.passwordPlaceholder)}
+              value={password}
+              onChange={(event) => this.onPasswordChange(event)}
+              error={passwordError}
+            />
+            <Button
+              buttonStyle="button-primary"
+              onClick={(event) => this.signInWithEmailAndPassword()}
+            >
+              {isLoading ? (
+                <div className="loader-container">
+                  <PropagateLoader
+                    size={12}
+                    color={'#ffffff'}
+                    loading={isLoading}
+                  />
+                </div>)
+                : intl.formatMessage(translations.signIn)
+              }
+            </Button>
             <div className="forgot-password">
               <Button
                 buttonStyle="button-link"
-                onClick={() => console.log("dupa")}
+                onClick={() => history.push(RECOVER_PASSWORD)}
               >
                 {intl.formatMessage(translations.forgotPassword)}
               </Button>
@@ -153,7 +190,7 @@ class Login extends Component {
           <Button
             textColor="pink"
             buttonStyle="button-link"
-            onClick={() => console.log("dupa")}
+            onClick={() => history.push(SIGN_UP)}
           >
             {intl.formatMessage(translations.signUp)}
           </Button>

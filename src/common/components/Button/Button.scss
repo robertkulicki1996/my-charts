@@ -14,6 +14,17 @@
   }
 }
 
+.button[disabled] {
+  background: $color-lightblue;
+  color: $color-lightgrey;
+
+  &:hover {
+    box-shadow: 0 0 0;
+    cursor: not-allowed;
+    color: $color-lightgrey;
+  }
+}
+
 .button-primary {
   width: 100%;
   background: $color-darkpink;

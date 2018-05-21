@@ -49,6 +49,7 @@ class Input extends Component {
      */
     displayBorder: PropTypes.bool,
   };
+  
   static defaultProps = {
     className: '',
     inputClassName: '',
@@ -80,7 +81,7 @@ class Input extends Component {
     } = this.props;
 
     return (
-      <div className={`input-container ${className} ${error ? 'hasError' : ''}`} >
+      <div className={`input-container ${className}`} >
         <input
           className={`input ${inputClassName} ${displayBorder ? 'bordered' : ''}`}
           type={type}

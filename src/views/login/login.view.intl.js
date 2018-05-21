@@ -2,7 +2,7 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
   appName: {
-    id: 'views.login.app_name',
+    id: 'views.app_name',
     description: 'Application name',
     defaultMessage: 'TRANSLATE_ME MyCharts',
   },
@@ -27,7 +27,7 @@ export default defineMessages({
     defaultMessage: 'TRANSLATE_ME Password',
   },
   signIn: {
-    id: 'views.login.sign_in_button',
+    id: 'views.login.sign_in',
     description: 'Sign in button text',
     defaultMessage: 'TRANSLATE_ME Sign in',
   },
@@ -42,7 +42,7 @@ export default defineMessages({
     defaultMessage: "TRANSLATE_ME Don't have an account ?"
   },
   signUp: {
-    id: 'views.login.sign_up_button',
+    id: 'views.login.sign_up',
     description: 'Sign up button text',
     defaultMessage: 'TRANSLATE_ME Sign up',
   },

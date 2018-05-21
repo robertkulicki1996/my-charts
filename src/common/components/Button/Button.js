@@ -33,7 +33,7 @@ export default class Button extends PureComponent {
     onClick: noop,
     children: null,
     textColor: 'light',
-    buttonType: 'button-primary',
+    buttonStyle: 'button-link',
   };
 
   render() {

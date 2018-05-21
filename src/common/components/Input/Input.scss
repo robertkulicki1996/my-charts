@@ -47,10 +47,6 @@
   border: 1px solid $color-lightgrey;
 }
 
-.input-container.hasError .input {
-  border-color: $color-error;
-}
-
 .input-container span {
   margin-bottom: $metric-base /2;
   color: $color-error;
