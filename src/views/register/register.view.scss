@@ -1,0 +1,105 @@
+@import '../../common/styles/variables.scss';
+
+.register-view-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    background-color: $color-darkblue;
+
+    .header {
+        display: flex;
+        align-items: center;
+        padding: $metric-x-small;
+        margin: $metric-small;
+
+        .app-name {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: $metric-x-small /2;
+            margin-left: $metric-x-small;
+            font-size: $metric-base;
+            font-weight: $font-weight-bold;
+            color: $color-lightgrey;
+        }
+    }
+
+    .content {
+        display: flex;
+        justify-content: center;
+        margin: $metric-small $metric-small $metric-xx-large *2 $metric-small; 
+        padding: $metric-x-small;
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            max-width: $metric-xx-large*5;
+
+            .info-header {
+                padding: $metric-x-small;
+                font-size: $metric-base;
+                font-weight: $font-weight-medium;
+                color: $color-lightgrey;
+            }
+
+            .info-subheader {
+                padding: $metric-x-small;
+                font-size: $metric-small;
+                font-weight: $font-weight-medium;
+                color: $color-lightgrey;
+            }
+        }
+
+        .divider {
+            width: 1px;
+            background: $color-lightgrey;
+            margin: $metric-base
+        }
+
+        .form {
+            width: $metric-x-large*4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: $metric-base/2 $metric-x-small $metric-x-small $metric-x-small;
+        }
+    }
+
+    .footer {
+        display: flex;
+        justify-content: center;
+        color: $color-lightgrey;
+        margin-top: $metric-base;
+        margin-bottom: $metric-base;
+
+        .text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: $metric-small;
+            font-weight: $font-weight-medium;
+            margin-right: $metric-base /2;
+            margin-bottom: $metric-base /2;
+        }
+    }
+
+    .loader-container {
+        display: flex;
+        justify-content: center;
+        padding-bottom: $metric-base /2;
+    }
+
+    .error-box {
+        display: flex;
+        padding: $metric-base /2;
+        margin-bottom: $metric-base;
+        border-left: 5px solid $color-error;
+        box-shadow: 0 11px 34px 0 rgba(0,0,0,0.08);
+        color: $color-darkblue;
+        background-color: $color-white;
+        font-size: 14px;
+        border-radius: 3px;
+    }
+
+}

@@ -103,7 +103,7 @@ class Login extends Component {
 
   render() {
     const { intl, history } = this.props;
-    const { isLoading, isApiError, apiError, email, emailError, password, passwordError } = this.state;
+    const { isLoading, isApiError, apiError, email, password } = this.state;
 
     const errorBox = (
       <div className="error-box">
@@ -149,14 +149,12 @@ class Login extends Component {
               placeholder={intl.formatMessage(translations.emailPlaceholder)}
               value={email}
               onChange={(event) => this.onEmailChange(event)}
-              error={emailError}
             />
             <Input
               type="password"
               placeholder={intl.formatMessage(translations.passwordPlaceholder)}
               value={password}
               onChange={(event) => this.onPasswordChange(event)}
-              error={passwordError}
             />
             <Button
               buttonStyle="button-primary"

@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { PropagateLoader } from 'react-spinners';
 
+import AppLogoIcon from '../../common/icons/logo.svg';
 import Input from '../../common/components/Input/Input';
 import Button from '../../common/components/Button/Button';
 
 import auth from '../../firebase';
-import { HOME } from '../../common/consts/routes';
+import { SIGN_IN } from '../../common/consts/routes';
+import NotificationService from '../../common/services/notifications';
 
-import { PropagateLoader } from 'react-spinners';
+import './register.view.scss';
+import translations from './register.view.intl';
 
-import './login.view.scss';
-import translations from './login.view.intl';
-
-class Login extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
     const INITIAL_STATE = {
       email: '',
       password: '',
-      isApiError: false,
-      apiError: null,
       isLoading: false
     }
     this.state = {
@@ -30,47 +29,26 @@ class Login extends Component {
   }
 
   /**
-   * Method to sign in with email and password
+   * Method to sign up with email and password
    */
-  signInWithEmailAndPassword() {
+  signUp() {
     this.setState({ isLoading: true });
 
-    const { history } = this.props;
+    const { history, intl } = this.props;
     const { email, password } = this.state;
 
-    auth.signInWithEmailAndPassword(email, password).then(() => {
+    auth.createUserWithEmailAndPassword(email, password).then(() => {
       this.setState({
         ...this.INITIAL_STATE,
       });
-      history.push(HOME);
-    }).catch(error => {
+      history.push(SIGN_IN);
+      NotificationService.success(intl.formatMessage(translations.signUpSuccess));
+    }).catch((error) => {
       this.setState({
-        isLoading: false,
-        isApiError: true,
-        apiError: error.message
-      });
+        isLoading: false
+      })
+      NotificationService.error(error.message);
     });
-  }
-
-  /**
-   * Method to sign in with Google account
-   */
-  signInWithGoogle() {
-    console.log("Sign in with Google");
-  }
-
-  /**
-   * Method to sign in with Facebook account
-   */
-  signInWithFacebook() {
-    console.log("Sign in with Facebook");
-  }
-
-  /**
-   * Method to sign in with Github account
-   */
-  signInWithGithub() {
-    console.log("Sign in with Github");
   }
 
   /**
@@ -95,7 +73,7 @@ class Login extends Component {
 
   render() {
     const { intl, history } = this.props;
-    const { isLoading, isApiError, apiError, email, emailError, password, passwordError } = this.state;
+    const { isLoading, isApiError, apiError, email, password } = this.state;
 
     const errorBox = (
       <div className="error-box">
@@ -104,55 +82,34 @@ class Login extends Component {
     );
 
     return (
-      <div className="login-view-container">
-        <div className="login-header">
+      <div className="register-view-container">
+        <div className="header">
           <AppLogoIcon width={32} height={32} />
           <div className="app-name">{intl.formatMessage(translations.appName)}</div>
         </div>
-        <div className="login-content">
-          <div className="login-form">
-            <div className="login-form-header">{intl.formatMessage(translations.signInHeader)}</div>
-            {isApiError ? errorBox : null}
-            <div className="login-by-social-accounts">
-              <Button
-                buttonStyle="button-social"
-                onClick={() => this.signInWithGoogle()}
-              >
-                <GoogleLogoIcon width={30} height={30} />
-              </Button>
-              <Button
-                buttonStyle="button-social"
-                onClick={() => this.signInWithFacebook()}
-              >
-                <FacebookLogoIcon width={30} height={30} />
-              </Button>
-              <Button
-                buttonStyle="button-social"
-                onClick={() => this.signInWithGithub()}
-              >
-                <GithubLogoIcon width={30} height={30} />
-              </Button>
-            </div>
-            <div className="divider">
-              {intl.formatMessage(translations.or)}
-            </div>
+        {isApiError ? errorBox : null}
+        <div className="content">
+          <div className="info">
+            <div className="info-header">{intl.formatMessage(translations.signUpHeader)}</div>
+            <div className="info-subheader">{intl.formatMessage(translations.signUpSubheader)}</div>
+          </div>
+          <div className="divider"/>
+          <div className="form">
             <Input
               type="email"
               placeholder={intl.formatMessage(translations.emailPlaceholder)}
               value={email}
               onChange={(event) => this.onEmailChange(event)}
-              error={emailError}
             />
             <Input
               type="password"
               placeholder={intl.formatMessage(translations.passwordPlaceholder)}
               value={password}
               onChange={(event) => this.onPasswordChange(event)}
-              error={passwordError}
             />
             <Button
               buttonStyle="button-primary"
-              onClick={(event) => this.signInWithEmailAndPassword()}
+              onClick={(event) => this.signUp()}
             >
               {isLoading ? (
                 <div className="loader-container">
@@ -162,29 +119,21 @@ class Login extends Component {
                     loading={isLoading}
                   />
                 </div>)
-                : intl.formatMessage(translations.signIn)
+                : intl.formatMessage(translations.signUp)
               }
             </Button>
-            <div className="forgot-password">
-              <Button
-                buttonStyle="button-link"
-                onClick={() => history.push(RECOVER_PASSWORD)}
-              >
-                {intl.formatMessage(translations.forgotPassword)}
-              </Button>
-            </div>
           </div>
         </div>
-        <div className="login-footer">
+        <div className="footer">
           <div className="text">
-            {intl.formatMessage(translations.doNotHaveAnAccount)}
+            {intl.formatMessage(translations.alreadyHaveAnAccount)}
           </div>
           <Button
             textColor="pink"
             buttonStyle="button-link"
-            onClick={() => console.log("dupa")}
+            onClick={() => history.push(SIGN_IN)}
           >
-            {intl.formatMessage(translations.signUp)}
+            {intl.formatMessage(translations.signIn)}
           </Button>
         </div>
       </div>
@@ -192,4 +141,4 @@ class Login extends Component {
   }
 }
 
-export default injectIntl(Login);
+export default injectIntl(Register);
