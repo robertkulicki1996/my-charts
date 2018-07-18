@@ -1,10 +1,15 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  appName: {
-    id: 'views.app_name',
-    description: 'Application name',
+  appTitle: {
+    id: 'views.app_title',
+    description: 'Application title',
     defaultMessage: 'TRANSLATE_ME MyCharts',
+  },
+  appSubtitle: {
+    id: 'views.app_subtitle',
+    description: 'Application subtitle',
+    defaultMessage: 'TRANSLATE_ME Make your charts online',
   },
   signInHeader: {
     id: 'views.login.header',

@@ -112,38 +112,32 @@ class Login extends Component {
     );
 
     return (
-      <div className="login-view-container">
-        <div className="login-header">
-          <AppLogoIcon width={32} height={32} />
-          <div className="app-name">{intl.formatMessage(translations.appName)}</div>
-        </div>
-        <div className="login-content">
+      <div className="login-view-wrapper">
+        {/* <div className="login-view-wrapper__header">
+          <AppLogoIcon width={54} height={54} />
+          <div className="logo-info-wrapper">
+            <div className="logo-info-wrapper__app-title">{intl.formatMessage(translations.appTitle)}</div>
+            <div className="logo-info-wrapper__app-subtitle">{intl.formatMessage(translations.appSubtitle)}</div>
+          </div>
+        </div> */}
+        <div className="login-view-wrapper__content">
+          {/* <div className="logo-wrapper">
+            <AppLogoIcon width={96} height={96} />
+            <div className="logo-info-wrapper">
+              <div className="logo-info-wrapper__app-title">{intl.formatMessage(translations.appTitle)}</div>
+              <div className="logo-info-wrapper__app-subtitle">{intl.formatMessage(translations.appSubtitle)}</div>
+            </div>
+          </div> */}
           <div className="login-form">
+            <div className="logo-wrapper">
+              <AppLogoIcon width={54} height={54} />
+              <div className="logo-info-wrapper">
+                <div className="logo-info-wrapper__app-title">{intl.formatMessage(translations.appTitle)}</div>
+                <div className="logo-info-wrapper__app-subtitle">{intl.formatMessage(translations.appSubtitle)}</div>
+              </div>
+            </div>
             <div className="login-form-header">{intl.formatMessage(translations.signInHeader)}</div>
             {isApiError ? errorBox : null}
-            <div className="login-by-social-accounts">
-              <Button
-                buttonStyle="button-social"
-                onClick={() => this.signInWithGoogle()}
-              >
-                <GoogleLogoIcon width={30} height={30} />
-              </Button>
-              <Button
-                buttonStyle="button-social"
-                onClick={() => this.signInWithFacebook()}
-              >
-                <FacebookLogoIcon width={30} height={30} />
-              </Button>
-              <Button
-                buttonStyle="button-social"
-                onClick={() => this.signInWithGithub()}
-              >
-                <GithubLogoIcon width={30} height={30} />
-              </Button>
-            </div>
-            <div className="divider">
-              {intl.formatMessage(translations.or)}
-            </div>
             <Input
               type="email"
               placeholder={intl.formatMessage(translations.emailPlaceholder)}
@@ -179,19 +173,43 @@ class Login extends Component {
                 {intl.formatMessage(translations.forgotPassword)}
               </Button>
             </div>
+            <div className="divider">
+              or continue with
+            </div>
+            <div className="login-by-social-accounts">
+              <Button
+                buttonStyle="button-social"
+                onClick={() => this.signInWithGoogle()}
+              >
+                <GoogleLogoIcon width={30} height={30} />
+              </Button>
+              <Button
+                buttonStyle="button-social"
+                onClick={() => this.signInWithFacebook()}
+              >
+                <FacebookLogoIcon width={30} height={30} />
+              </Button>
+              <Button
+                buttonStyle="button-social"
+                onClick={() => this.signInWithGithub()}
+              >
+                <GithubLogoIcon width={30} height={30} />
+              </Button>
+            </div>
+            <div className="login-footer">
+              <div className="text">
+                {intl.formatMessage(translations.doNotHaveAnAccount)}
+              </div>
+              <Button
+                textColor="pink"
+                buttonStyle="button-link"
+                onClick={() => history.push(SIGN_UP)}
+              >
+                {intl.formatMessage(translations.signUp)}
+              </Button>
+            </div>
+
           </div>
-        </div>
-        <div className="login-footer">
-          <div className="text">
-            {intl.formatMessage(translations.doNotHaveAnAccount)}
-          </div>
-          <Button
-            textColor="pink"
-            buttonStyle="button-link"
-            onClick={() => history.push(SIGN_UP)}
-          >
-            {intl.formatMessage(translations.signUp)}
-          </Button>
         </div>
       </div>
     );

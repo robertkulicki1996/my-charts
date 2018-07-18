@@ -1,38 +1,26 @@
 @import '../../common/styles/variables.scss';
 
-.login-view-container {
+.login-view-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     height: 100vh;
     background-color: $color-darkblue;
 
-    .login-header {
+    &__header {
         display: flex;
-        align-items: center;
+        height: $metric-large;
         padding: $metric-x-small;
         margin: $metric-small;
-
-        .app-name {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: $metric-x-small /2;
-            margin-left: $metric-x-small;
-            font-size: $metric-base;
-            font-weight: $font-weight-bold;
-            color: $color-lightgrey;
-        }
     }
 
-    .login-content {
+    &__content {
+        height: 100%;
         display: flex;
         justify-content: center;
-        margin: $metric-small $metric-small $metric-xx-large *2 $metric-small; 
-        padding: $metric-x-small;
+        align-items: center;
 
         .login-form {
-            width: $metric-x-large*4;
+            width: $metric-x-large*6;
 
             .login-form-header{
                 font-size: $metric-base;
@@ -49,8 +37,10 @@
             .divider {
                 display: flex;
                 align-items: center;
+                // font-size: $metric-base;
                 color: $color-lightgrey;
-                margin-bottom: $metric-small;
+                margin-top: $metric-base;
+                margin-bottom: $metric-base * 2;
             }
               
             .divider::before {
@@ -73,6 +63,20 @@
                 display: flex;
                 justify-content: flex-end;
             }
+        }
+
+        .divider2{
+            width: 1px;
+            // height: 240px;
+            background-color: $color-lightgrey;
+            margin: 0 $metric-xx-large*2 0 $metric-xx-large*2;
+        }
+
+        .logo-wrapper {
+            width: $metric-x-large*6;
+            display: flex;
+            margin-top: $metric-med;
+            margin-bottom: $metric-med;
         }
     }
 
@@ -112,4 +116,25 @@
         border-radius: 3px;
     }
 
+}
+
+.logo-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: $metric-base;
+
+    &__app-title {
+        font-size: $metric-base;
+        font-weight: $font-weight-bold;
+        font-family: $font-default;
+        color: $color-lightgrey;
+    }
+
+    &__app-subtitle {
+        font-size: $metric-small;
+        font-weight: $font-weight-medium;
+        font-family: $font-default;
+        color: $color-lightgrey;
+    } 
 }

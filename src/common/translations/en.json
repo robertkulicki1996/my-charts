@@ -1,5 +1,6 @@
 {
-    "views.app_name": "MyCharts",
+    "views.app_title": "MyCharts",
+    "views.app_subtitle": "Make your charts online",
 
     "views.login.header": "Sign in",
     "views.login.or": "or",
