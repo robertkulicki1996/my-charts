@@ -19,13 +19,13 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
+        <React.Fragment>
           <Route exact path={SIGN_IN} component={Login} />
           <Route path={SIGN_UP} component={Register} />
           <Route path={HOME} component={Home} />
           <Route path={RECOVER_PASSWORD} component={RecoverPassword} />
           <ToastContainer />
-        </div>
+        </React.Fragment>
       </Router>
     );
   }

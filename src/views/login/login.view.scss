@@ -1,140 +1,117 @@
 @import '../../common/styles/variables.scss';
 
-.login-view-wrapper {
+.signin-wrapper {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
     background-color: $color-darkblue;
+}
+
+.signin-wrapper__content {
+    width: $metric-x-large*6;
+
+    &__logo {
+        display: flex;
+        margin-top: $metric-med;
+        margin-bottom: $metric-med;
+    }
 
     &__header {
-        display: flex;
-        height: $metric-large;
-        padding: $metric-x-small;
-        margin: $metric-small;
-    }
-
-    &__content {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .login-form {
-            width: $metric-x-large*6;
-
-            .login-form-header{
-                font-size: $metric-base;
-                font-weight: $font-weight-medium;
-                color: $color-lightgrey;
-                margin-bottom: $metric-base;
-            }
-
-            .login-by-social-accounts {
-                display: flex;
-                justify-content: space-between;
-            }
-
-            .divider {
-                display: flex;
-                align-items: center;
-                // font-size: $metric-base;
-                color: $color-lightgrey;
-                margin-top: $metric-base;
-                margin-bottom: $metric-base * 2;
-            }
-              
-            .divider::before {
-                content: '';
-                flex-grow: 1;
-                background: $color-lightgrey;
-                height: 1px;
-                margin-right: $metric-base;
-            }
-              
-            .divider::after {
-                content: '';
-                flex-grow: 1;
-                background: $color-lightgrey;
-                height: 1px;
-                margin-left: $metric-base;
-            }
-
-            .forgot-password {
-                display: flex;
-                justify-content: flex-end;
-            }
-        }
-
-        .divider2{
-            width: 1px;
-            // height: 240px;
-            background-color: $color-lightgrey;
-            margin: 0 $metric-xx-large*2 0 $metric-xx-large*2;
-        }
-
-        .logo-wrapper {
-            width: $metric-x-large*6;
-            display: flex;
-            margin-top: $metric-med;
-            margin-bottom: $metric-med;
-        }
-    }
-
-    .login-footer {
-        display: flex;
-        justify-content: center;
+        font-size: $metric-base;
+        font-weight: $font-weight-medium;
         color: $color-lightgrey;
-        margin-top: $metric-base;
         margin-bottom: $metric-base;
-
-        .text {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: $metric-small;
-            font-weight: $font-weight-medium;
-            margin-right: $metric-base /2;
-            margin-bottom: $metric-base /2;
-        }
     }
 
-    .loader-container {
+    &__loader-container {
         display: flex;
         justify-content: center;
         padding-bottom: $metric-base /2;
     }
 
-    .error-box {
+    &__forgot-password {
         display: flex;
-        padding: $metric-base /2;
-        margin-bottom: $metric-base;
-        border-left: 5px solid $color-error;
-        box-shadow: 0 11px 34px 0 rgba(0,0,0,0.08);
-        color: $color-darkblue;
-        background-color: $color-white;
-        font-size: 14px;
-        border-radius: 3px;
+        justify-content: flex-end;
     }
 
+    &__social-accounts {
+        display: flex;
+        justify-content: space-between;
+    }
 }
 
-.logo-info-wrapper {
+.signin-wrapper__content__footer {
+    display: flex;
+    justify-content: center;
+    color: $color-lightgrey;
+    margin-top: $metric-base;
+    margin-bottom: $metric-base;
+
+    &__text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: $metric-small;
+        font-weight: $font-weight-medium;
+        margin-right: $metric-base /2;
+        margin-bottom: $metric-base /2;
+    }
+}
+
+.heading {
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin-left: $metric-base;
 
-    &__app-title {
+    &__title {
         font-size: $metric-base;
         font-weight: $font-weight-bold;
         font-family: $font-default;
         color: $color-lightgrey;
     }
 
-    &__app-subtitle {
+    &__subtitle {
         font-size: $metric-small;
         font-weight: $font-weight-medium;
         font-family: $font-default;
         color: $color-lightgrey;
     } 
+}
+
+.signin-wrapper__content__divider {
+    display: flex;
+    align-items: center;
+    color: $color-lightgrey;
+    margin-top: $metric-base;
+    margin-bottom: $metric-base * 2;
+
+    &::before {
+        content: '';
+        flex-grow: 1;
+        background: $color-lightgrey;
+        height: 1px;
+        margin-right: $metric-base; 
+    }
+
+    &::after {
+        content: '';
+        flex-grow: 1;
+        background: $color-lightgrey;
+        height: 1px;
+        margin-left: $metric-base; 
+    }
+}
+
+.error-box {
+    display: flex;
+    padding: $metric-base /2;
+    margin-bottom: $metric-base;
+    border-left: 5px solid $color-error;
+    box-shadow: 0 11px 34px 0 rgba(0,0,0,0.08);
+    color: $color-darkblue;
+    background-color: $color-white;
+    font-size: 14px;
+    border-radius: 3px;
 }

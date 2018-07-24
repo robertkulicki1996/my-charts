@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { Bind } from 'lodash-decorators';
+import { PropagateLoader } from 'react-spinners';
+import { HOME, RECOVER_PASSWORD, SIGN_UP } from '../../common/consts/routes';
+
+import auth from '../../firebase';
 
 import AppLogoIcon from '../../common/icons/logo.svg';
 import GoogleLogoIcon from '../../common/icons/google.svg';
@@ -8,14 +13,10 @@ import GithubLogoIcon from '../../common/icons/github.svg';
 import Input from '../../common/components/Input/Input';
 import Button from '../../common/components/Button/Button';
 
-import auth from '../../firebase';
-import { HOME, RECOVER_PASSWORD, SIGN_UP } from '../../common/consts/routes';
-
-import { PropagateLoader } from 'react-spinners';
-
 import './login.view.scss';
 import translations from './login.view.intl';
 
+@injectIntl
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -23,23 +24,18 @@ class Login extends Component {
       email: '',
       password: '',
       isApiError: false,
-      apiError: null,
+      apiError: '',
       isLoading: false
     }
     this.state = {
       ...INITIAL_STATE
     }
-    this.signInWithGoogle = this.signInWithGoogle.bind(this);
-    this.signInWithFacebook = this.signInWithFacebook.bind(this);
-    this.signInWithGithub = this.signInWithGithub.bind(this);
-    this.signInWithEmailAndPassword = this.signInWithEmailAndPassword.bind(this);
-    this.onEmailChange = this.onEmailChange.bind(this);
-    this.onPasswordChange = this.onPasswordChange.bind(this);
   }
 
   /**
    * Method to sign in with email and password
    */
+  @Bind()
   signInWithEmailAndPassword() {
     this.setState({ isLoading: true });
 
@@ -63,6 +59,7 @@ class Login extends Component {
   /**
    * Method to sign in with Google account
    */
+  @Bind()
   signInWithGoogle() {
     console.log("Sign in with Google");
   }
@@ -70,6 +67,7 @@ class Login extends Component {
   /**
    * Method to sign in with Facebook account
    */
+  @Bind()
   signInWithFacebook() {
     console.log("Sign in with Facebook");
   }
@@ -77,6 +75,7 @@ class Login extends Component {
   /**
    * Method to sign in with Github account
    */
+  @Bind()
   signInWithGithub() {
     console.log("Sign in with Github");
   }
@@ -84,6 +83,7 @@ class Login extends Component {
   /**
    * Method to set actually email to state
    */
+  @Bind()
   onEmailChange(event) {
     this.setState({
       email: event.target.value,
@@ -94,6 +94,7 @@ class Login extends Component {
   /**
    * Method to set actually password to state
    */
+  @Bind()
   onPasswordChange(event) {
     this.setState({
       password: event.target.value,
@@ -112,103 +113,86 @@ class Login extends Component {
     );
 
     return (
-      <div className="login-view-wrapper">
-        {/* <div className="login-view-wrapper__header">
-          <AppLogoIcon width={54} height={54} />
-          <div className="logo-info-wrapper">
-            <div className="logo-info-wrapper__app-title">{intl.formatMessage(translations.appTitle)}</div>
-            <div className="logo-info-wrapper__app-subtitle">{intl.formatMessage(translations.appSubtitle)}</div>
+      <div className="signin-wrapper">
+        <div className="signin-wrapper__content">
+          <div className="signin-wrapper__content__logo">
+            <AppLogoIcon width={54} height={54} />
+            <div className="heading">
+              <div className="heading__title">{intl.formatMessage(translations.appTitle)}</div>
+              <div className="heading__subtitle">{intl.formatMessage(translations.appSubtitle)}</div>
+            </div>
           </div>
-        </div> */}
-        <div className="login-view-wrapper__content">
-          {/* <div className="logo-wrapper">
-            <AppLogoIcon width={96} height={96} />
-            <div className="logo-info-wrapper">
-              <div className="logo-info-wrapper__app-title">{intl.formatMessage(translations.appTitle)}</div>
-              <div className="logo-info-wrapper__app-subtitle">{intl.formatMessage(translations.appSubtitle)}</div>
-            </div>
-          </div> */}
-          <div className="login-form">
-            <div className="logo-wrapper">
-              <AppLogoIcon width={54} height={54} />
-              <div className="logo-info-wrapper">
-                <div className="logo-info-wrapper__app-title">{intl.formatMessage(translations.appTitle)}</div>
-                <div className="logo-info-wrapper__app-subtitle">{intl.formatMessage(translations.appSubtitle)}</div>
-              </div>
-            </div>
-            <div className="login-form-header">{intl.formatMessage(translations.signInHeader)}</div>
-            {isApiError ? errorBox : null}
-            <Input
-              type="email"
-              placeholder={intl.formatMessage(translations.emailPlaceholder)}
-              value={email}
-              onChange={(event) => this.onEmailChange(event)}
-            />
-            <Input
-              type="password"
-              placeholder={intl.formatMessage(translations.passwordPlaceholder)}
-              value={password}
-              onChange={(event) => this.onPasswordChange(event)}
-            />
-            <Button
-              buttonStyle="button-primary"
-              onClick={(event) => this.signInWithEmailAndPassword()}
+          <div className="signin-wrapper__content__header">{intl.formatMessage(translations.signInHeader)}</div>
+          {isApiError ? errorBox : null}
+          <Input
+            type="email"
+            placeholder={intl.formatMessage(translations.emailPlaceholder)}
+            value={email}
+            onChange={(event) => this.onEmailChange(event)}
+          />
+          <Input
+            type="password"
+            placeholder={intl.formatMessage(translations.passwordPlaceholder)}
+            value={password}
+            onChange={(event) => this.onPasswordChange(event)}
+          />
+          <Button
+            buttonStyle="button-primary"
+            onClick={this.signInWithEmailAndPassword}
+          >
+            {isLoading ? (
+              <div className="signin-wrapper__content__loader-container">
+                <PropagateLoader
+                  size={12}
+                  color={'#ffffff'}
+                  loading={isLoading}
+                />
+              </div>)
+              : intl.formatMessage(translations.signIn)
+            }
+          </Button>
+          <div className="signin-wrapper__content__forgot-password">
+            <Button 
+              buttonStyle="button-link"
+              onClick={() => history.push(RECOVER_PASSWORD)}
             >
-              {isLoading ? (
-                <div className="loader-container">
-                  <PropagateLoader
-                    size={12}
-                    color={'#ffffff'}
-                    loading={isLoading}
-                  />
-                </div>)
-                : intl.formatMessage(translations.signIn)
-              }
+              {intl.formatMessage(translations.forgotPassword)}
             </Button>
-            <div className="forgot-password">
-              <Button
-                buttonStyle="button-link"
-                onClick={() => history.push(RECOVER_PASSWORD)}
-              >
-                {intl.formatMessage(translations.forgotPassword)}
-              </Button>
+          </div>
+          <div className="signin-wrapper__content__divider">
+            {intl.formatMessage(translations.orContinueWith)}
+          </div>
+          <div className="signin-wrapper__content__social-accounts">
+            <Button
+              buttonStyle="button-social"
+              onClick={this.signInWithGoogle}
+            >
+              <GoogleLogoIcon width={30} height={30} />
+            </Button>
+            <Button
+              buttonStyle="button-social"
+              onClick={this.signInWithFacebook}
+            >
+              <FacebookLogoIcon width={30} height={30} />
+            </Button>
+            <Button
+              buttonStyle="button-social"
+              onClick={this.signInWithGithub}
+            >
+              <GithubLogoIcon width={30} height={30} />
+            </Button>
+          </div>
+          <div className="signin-wrapper__content__footer">
+            <div className="signin-wrapper__content__footer__text">
+              {intl.formatMessage(translations.doNotHaveAnAccount)}
             </div>
-            <div className="divider">
-              or continue with
-            </div>
-            <div className="login-by-social-accounts">
-              <Button
-                buttonStyle="button-social"
-                onClick={() => this.signInWithGoogle()}
-              >
-                <GoogleLogoIcon width={30} height={30} />
-              </Button>
-              <Button
-                buttonStyle="button-social"
-                onClick={() => this.signInWithFacebook()}
-              >
-                <FacebookLogoIcon width={30} height={30} />
-              </Button>
-              <Button
-                buttonStyle="button-social"
-                onClick={() => this.signInWithGithub()}
-              >
-                <GithubLogoIcon width={30} height={30} />
-              </Button>
-            </div>
-            <div className="login-footer">
-              <div className="text">
-                {intl.formatMessage(translations.doNotHaveAnAccount)}
-              </div>
-              <Button
-                textColor="pink"
-                buttonStyle="button-link"
-                onClick={() => history.push(SIGN_UP)}
-              >
-                {intl.formatMessage(translations.signUp)}
-              </Button>
-            </div>
-
+            <Button
+              textColor="pink"
+              buttonStyle="button-link"
+              onClick={() => history.push(SIGN_UP)}
+            >
+              {intl.formatMessage(translations.signUp)}
+            </Button>
           </div>
         </div>
       </div>
@@ -216,4 +200,4 @@ class Login extends Component {
   }
 }
 
-export default injectIntl(Login);
+export default Login;

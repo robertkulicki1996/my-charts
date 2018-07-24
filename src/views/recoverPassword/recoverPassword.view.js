@@ -81,7 +81,7 @@ class RecoverPassword extends Component {
    */
   validateEmail(email) {
     if(email.length > 0) {
-      const regex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+      const regex = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/;
       return regex.test(email);
     }
     return false;

@@ -3,7 +3,7 @@
     "views.app_subtitle": "Make your charts online",
 
     "views.login.header": "Sign in",
-    "views.login.or": "or",
+    "views.login.or": "or continue with",
     "views.login.email_field.placeholder": "Email",
     "views.login.password_field.placeholder": "Password",
     "views.login.sign_in": "Sign in",

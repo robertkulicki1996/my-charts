@@ -16,10 +16,10 @@ export default defineMessages({
     description: 'Login form header',
     defaultMessage: 'TRANSLATE_ME Sign in',
   },
-  or: {
+  orContinueWith: {
     id: 'views.login.or',
     description: 'Word or between social buttons and login form by email',
-    defaultMessage: 'TRANSLATE_ME or',
+    defaultMessage: 'TRANSLATE_ME or continue with',
   },
   emailPlaceholder: {
     id: 'views.login.email_field.placeholder',
