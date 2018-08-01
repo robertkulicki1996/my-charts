@@ -1,10 +1,15 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  appName: {
-    id: 'views.app_name',
+  appTitle: {
+    id: 'views.app_title',
     description: 'Application name',
     defaultMessage: 'TRANSLATE_ME MyCharts',
+  },
+  appSubtitle: {
+    id: 'views.app_subtitle',
+    description: 'Application subtitle',
+    defaultMessage: 'TRANSLATE_ME Make your charts online',
   },
   signUpHeader: {
     id: 'views.register.header',
@@ -14,7 +19,12 @@ export default defineMessages({
   signUpSubheader: {
     id: 'views.register.subheader',
     description: 'register form subheader',
-    defaultMessage: 'TRANSLATE_ME Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris porttitor ex vel elit convallis, faucibus maximus felis sagittis. Cras eu dolor a velit gravida porttitor accumsan sed felis. Morbi tincidunt ultricies consequat. Proin elit velit, aliquam sed velit vitae, posuere porta odio. Praesent sit amet placerat mauris. In hac habitasse platea dictumst.',
+    defaultMessage: 'TRANSLATE_ME To begin creating your graph sign up now. Our main goal is to make chart creation simple and visually appealing. Complicated and boring charts should be a thing of the past. Whether you want to create a pie chart or a bar chart, we make it simple for you.',
+  },
+  namePlaceholder: {
+    id: 'views.register.name_field.placeholder',
+    description: 'Name input placeholder',
+    defaultMessage: 'TRANSLATE_ME Name',
   },
   emailPlaceholder: {
     id: 'views.register.email_field.placeholder',

@@ -16,6 +16,7 @@ import translations from './recoverPassword.view.intl';
 
 import NotificationService from '../../common/services/notifications';
 
+@injectIntl
 class RecoverPassword extends Component {
   constructor(props) {
     super(props);
@@ -61,7 +62,8 @@ class RecoverPassword extends Component {
     const { history, intl } = this.props;
     const { email } = this.state;
 
-    auth.sendPasswordResetEmail(email).then(() => {
+    auth.sendPasswordResetEmail(email)
+    .then(() => {
       NotificationService.success(intl.formatMessage(translations.emailSended));
       this.setState({
         ...this.INITIAL_STATE,
@@ -88,7 +90,7 @@ class RecoverPassword extends Component {
   }
 
   render() {
-    const { intl } = this.props;
+    const { intl, history } = this.props;
     const { isLoading, isSubmitDisabled, isApiError, apiError, email } = this.state;
 
     const errorBox = (
@@ -98,37 +100,47 @@ class RecoverPassword extends Component {
     );
 
     return (
-      <div className="recover-password-view-container">
-        <div className="recover-password-header">
-          <AppLogoIcon width={32} height={32} />
-          <div className="app-name">{intl.formatMessage(translations.appName)}</div>
-        </div>
-        <div className="recover-password-content">
-          <div className="recover-password-form">
-            <div className="recover-password-form-header">{intl.formatMessage(translations.recoverPasswordHeader)}</div>
-            <div className="recover-password-form-subheader">{intl.formatMessage(translations.recoverPasswordSubheader)}</div>
-            {isApiError ? errorBox : null}
-            <Input
-              type="email"
-              placeholder={intl.formatMessage(translations.emailPlaceholder)}
-              value={email}
-              onChange={(event) => this.onEmailChange(event)}
-            />
+      <div className="recover-password-wrapper">
+        <div className="recover-password-wrapper__content">
+          <div className="recover-password-wrapper__content__logo">
+            <AppLogoIcon width={54} height={54} />
+            <div className="heading">
+              <div className="heading__title">{intl.formatMessage(translations.appTitle)}</div>
+              <div className="heading__subtitle">{intl.formatMessage(translations.appSubtitle)}</div>
+            </div>
+          </div>
+          <div className="recover-password-wrapper__content__header">{intl.formatMessage(translations.recoverPasswordHeader)}</div>
+          <div className="recover-password-wrapper__content__subheader">{intl.formatMessage(translations.recoverPasswordSubheader)}</div>
+          {isApiError && errorBox }
+          <Input
+            type="email"
+            placeholder={intl.formatMessage(translations.emailPlaceholder)}
+            value={email}
+            onChange={(event) => this.onEmailChange(event)}
+          />
+          <Button
+            buttonStyle="button-primary"
+            disabled={isSubmitDisabled}
+            onClick={() => this.recoverPassword()}
+          >
+            {isLoading ? (
+              <div className="loader-container">
+                <PropagateLoader
+                  size={12}
+                  color={'#ffffff'}
+                  loading={isLoading}
+                />
+              </div>)
+              : intl.formatMessage(translations.submit)
+            }
+          </Button>
+          <div className="recover-password-wrapper__content__footer">
             <Button
-              buttonStyle="button-primary"
-              disabled={isSubmitDisabled}
-              onClick={() => this.recoverPassword()}
+              textColor="pink"
+              buttonStyle="button-link"
+              onClick={() => history.push(SIGN_IN)}
             >
-              {isLoading ? (
-                <div className="loader-container">
-                  <PropagateLoader
-                    size={12}
-                    color={'#ffffff'}
-                    loading={isLoading}
-                  />
-                </div>)
-                : intl.formatMessage(translations.submit)
-              }
+              {intl.formatMessage(translations.back)}
             </Button>
           </div>
         </div>
@@ -137,4 +149,4 @@ class RecoverPassword extends Component {
   }
 }
 
-export default injectIntl(RecoverPassword);
+export default RecoverPassword;

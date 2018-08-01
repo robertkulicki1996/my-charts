@@ -15,10 +15,12 @@
     "views.recover_password.subheader": "Enter the email you used to sign up.",
     "views.recover_password.email_field.placeholder": "Email",
     "views.recover_password.submit": "Submit",
+    "views.recover_password.back": "Back to sign in",
     "views.recover_password.email_sended_info": "Email was send successfully",
 
     "views.register.header": "Sign up for free",
-    "views.register.subheader": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris porttitor ex vel elit convallis, faucibus maximus felis sagittis. Cras eu dolor a velit gravida porttitor accumsan sed felis. Morbi tincidunt ultricies consequat. Proin elit velit, aliquam sed velit vitae, posuere porta odio. Praesent sit amet placerat mauris.",
+    "views.register.subheader": "To begin creating your graph sign up now. Our main goal is to make chart creation simple and visually appealing. Complicated and boring charts should be a thing of the past. Whether you want to create a pie chart or a bar chart, we make it simple for you.",
+    "views.register.name_field.placeholder": "Name",
     "views.register.email_field.placeholder": "Email",
     "views.register.password_field.placeholder": "Password",
     "views.register.sign_up": "Sign up",

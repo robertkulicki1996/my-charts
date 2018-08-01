@@ -35,10 +35,6 @@ class NotificationService {
     });
   }
 
-  notify(message, callback) {
-    this.emitNotification(message, callback);
-  }
-
   success(message, callback) {
     this.emitNotification(message, callback, 'success');
   }
@@ -57,6 +53,7 @@ class NotificationService {
 }
 
 const serviceInstance = new NotificationService();
+
 window.notifs = serviceInstance;
 
 export default serviceInstance;

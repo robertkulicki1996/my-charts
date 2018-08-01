@@ -28,6 +28,7 @@ export default class Button extends PureComponent {
      */
     onClick: PropTypes.func,
   };
+  
   static defaultProps = {
     disabled: false,
     onClick: noop,

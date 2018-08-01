@@ -1,10 +1,15 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  appName: {
-    id: 'views.app_name',
+  appTitle: {
+    id: 'views.app_title',
     description: 'Application name',
     defaultMessage: 'TRANSLATE_ME MyCharts',
+  },
+  appSubtitle: {
+    id: 'views.app_subtitle',
+    description: 'Application subtitle',
+    defaultMessage: 'TRANSLATE_ME Make your charts online',
   },
   recoverPasswordHeader: {
     id: 'views.recover_password.header',
@@ -25,6 +30,11 @@ export default defineMessages({
     id: 'views.recover_password.submit',
     description: 'Submit button text',
     defaultMessage: 'TRANSLATE_ME Submit',
+  },
+  back: {
+    id: 'views.recover_password.back',
+    description: 'Back button text',
+    defaultMessage: 'TRANSLATE_ME Back to sign in',   
   },
   emailSended: {
     id: 'views.recover_password.email_sended_info',

@@ -42,7 +42,8 @@ class Login extends Component {
     const { history } = this.props;
     const { email, password } = this.state;
 
-    auth.signInWithEmailAndPassword(email, password).then(() => {
+    auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
       this.setState({
         ...this.INITIAL_STATE,
       });
@@ -123,7 +124,7 @@ class Login extends Component {
             </div>
           </div>
           <div className="signin-wrapper__content__header">{intl.formatMessage(translations.signInHeader)}</div>
-          {isApiError ? errorBox : null}
+          {isApiError && errorBox}
           <Input
             type="email"
             placeholder={intl.formatMessage(translations.emailPlaceholder)}
