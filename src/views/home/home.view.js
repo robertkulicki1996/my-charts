@@ -1,12 +1,25 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
+import { observer, inject } from 'mobx-react';
+import { AuthStore } from '../../stores/auth.store';
+
+import Button from '../../common/components/Button/Button';
 
 // import firebase from './firebase';
 
 import './home.view.scss';
+import { Bind } from 'lodash-decorators';
+import { SIGN_IN } from '../../common/consts/routes';
 // import translations from './login.view.intl';
 
+@injectIntl
+@inject('authStore')
+@observer
 class Home extends Component {
+  static propTypes = {
+    authStore: PropTypes.instanceOf(AuthStore).isRequired
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -15,6 +28,19 @@ class Home extends Component {
     }
     // this.handleChange = this.handleChange.bind(this);
     // this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  @Bind()
+  onTrySignOut() {
+    const { authStore, history } = this.props;
+
+    authStore.signOut().then(() => {
+      console.log('zostałeś wylogowany!');
+      history.push(SIGN_IN);
+      setTimeout(() => console.log("authUserAfterSignOut",authStore.authUser),2000);
+    }).catch(() => {
+      console.log('nie zostałeś wylogowny');
+    });
   }
 
 //   componentDidMount() {
@@ -59,6 +85,7 @@ class Home extends Component {
     return (
       <div className="container">
       Home
+      <Button buttonStyle="button-primary" onClick={this.onTrySignOut} >Sign out</Button>
           {/* <section className='add-item'>
             <form onSubmit={this.handleSubmit}>
               <input type="text" name="username" placeholder={this.props.intl.formatMessage(translations.placeholder)} onChange={this.handleChange} value={this.state.username} />
@@ -71,4 +98,4 @@ class Home extends Component {
   }
 }
 
-export default injectIntl(Home);
+export default Home;

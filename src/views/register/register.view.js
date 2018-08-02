@@ -7,7 +7,7 @@ import AppLogoIcon from '../../common/icons/logo.svg';
 import Input from '../../common/components/Input/Input';
 import Button from '../../common/components/Button/Button';
 
-import auth from '../../firebase';
+// import auth from '../../firebase';
 import { SIGN_IN } from '../../common/consts/routes';
 import NotificationService from '../../common/services/notifications';
 
@@ -43,18 +43,18 @@ class Register extends Component {
     const { history, intl } = this.props;
     const { name, email, password } = this.state;
 
-    auth.createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      auth.currentUser.updateProfile({displayName: name});
-      history.push(SIGN_IN);
-      NotificationService.success(intl.formatMessage(translations.signUpSuccess));
-    }).catch((error) => {
-      this.setState({
-        isLoading: false,
-        isApiError: true,
-        apiError: error.message
-      });
-    });
+    // auth.createUserWithEmailAndPassword(email, password)
+    // .then(() => {
+    //   auth.currentUser.updateProfile({displayName: name});
+    //   history.push(SIGN_IN);
+    //   NotificationService.success(intl.formatMessage(translations.signUpSuccess));
+    // }).catch((error) => {
+    //   this.setState({
+    //     isLoading: false,
+    //     isApiError: true,
+    //     apiError: error.message
+    //   });
+    // });
   }
 
   /**

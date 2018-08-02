@@ -6,7 +6,7 @@ import AppLogoIcon from '../../common/icons/logo.svg';
 import Input from '../../common/components/Input/Input';
 import Button from '../../common/components/Button/Button';
 
-import auth from '../../firebase';
+// import auth from '../../firebase';
 import { SIGN_IN } from '../../common/consts/routes';
 
 import { PropagateLoader } from 'react-spinners';
@@ -62,20 +62,20 @@ class RecoverPassword extends Component {
     const { history, intl } = this.props;
     const { email } = this.state;
 
-    auth.sendPasswordResetEmail(email)
-    .then(() => {
-      NotificationService.success(intl.formatMessage(translations.emailSended));
-      this.setState({
-        ...this.INITIAL_STATE,
-      });
-      history.push(SIGN_IN);
-    }).catch((error) => {
-      this.setState({
-        isLoading: false,
-        isApiError: true,
-        apiError: error.message
-      });
-    });
+    // auth.sendPasswordResetEmail(email)
+    // .then(() => {
+    //   NotificationService.success(intl.formatMessage(translations.emailSended));
+    //   this.setState({
+    //     ...this.INITIAL_STATE,
+    //   });
+    //   history.push(SIGN_IN);
+    // }).catch((error) => {
+    //   this.setState({
+    //     isLoading: false,
+    //     isApiError: true,
+    //     apiError: error.message
+    //   });
+    // });
   }
 
   /**

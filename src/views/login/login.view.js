@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Bind } from 'lodash-decorators';
+import { observer, inject } from 'mobx-react';
 import { PropagateLoader } from 'react-spinners';
 import { HOME, RECOVER_PASSWORD, SIGN_UP } from '../../common/consts/routes';
 
-import auth from '../../firebase';
+// import auth from '../../firebase';
+import { AuthStore } from '../../stores/auth.store';
 
 import AppLogoIcon from '../../common/icons/logo.svg';
 import GoogleLogoIcon from '../../common/icons/google.svg';
@@ -17,7 +20,13 @@ import './login.view.scss';
 import translations from './login.view.intl';
 
 @injectIntl
+@inject('authStore')
+@observer
 class Login extends Component {
+  static propTypes = {
+    authStore: PropTypes.instanceOf(AuthStore).isRequired
+  }
+
   constructor(props) {
     super(props);
     const INITIAL_STATE = {
@@ -36,18 +45,19 @@ class Login extends Component {
    * Method to sign in with email and password
    */
   @Bind()
-  signInWithEmailAndPassword() {
+  onTrySignIn() {
     this.setState({ isLoading: true });
 
-    const { history } = this.props;
+    const { history, authStore } = this.props;
     const { email, password } = this.state;
 
-    auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
+    authStore.signIn(email, password).then(() => {
       this.setState({
         ...this.INITIAL_STATE,
       });
       history.push(HOME);
+      setTimeout(() => console.log("authUserAfterSignIn",authStore.authUser),2000);
+      setTimeout(() => console.log("authUserAfterSignIn",authStore.authUser),8000);
     }).catch(error => {
       this.setState({
         isLoading: false,
@@ -139,7 +149,7 @@ class Login extends Component {
           />
           <Button
             buttonStyle="button-primary"
-            onClick={this.signInWithEmailAndPassword}
+            onClick={this.onTrySignIn}
           >
             {isLoading ? (
               <div className="signin-wrapper__content__loader-container">

@@ -9,10 +9,12 @@ const config = {
     messagingSenderId: "1034435102832"
 };
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(config);
+export class ConfigStore {
+    constructor() {
+        firebase.initializeApp(config);
+    }
 }
 
-const auth = new firebase.auth();
+const configStore = new ConfigStore();
 
-export default auth;
+export default configStore;

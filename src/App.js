@@ -4,6 +4,8 @@ import {
   Route,
   // Link
 } from 'react-router-dom';
+import { Provider } from 'mobx-react';
+import stores from './stores/index';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,13 +21,15 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <React.Fragment>
-          <Route exact path={SIGN_IN} component={Login} />
-          <Route path={SIGN_UP} component={Register} />
-          <Route path={HOME} component={Home} />
-          <Route path={RECOVER_PASSWORD} component={RecoverPassword} />
-          <ToastContainer />
-        </React.Fragment>
+        <Provider {...stores} >
+          <React.Fragment>
+            <Route exact path={SIGN_IN} component={Login} />
+            <Route path={SIGN_UP} component={Register} />
+            <Route path={HOME} component={Home} />
+            <Route path={RECOVER_PASSWORD} component={RecoverPassword} />
+            <ToastContainer />
+          </React.Fragment>
+        </Provider>
       </Router>
     );
   }
