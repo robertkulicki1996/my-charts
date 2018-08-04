@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
+import { runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { AuthStore } from '../../stores/auth.store';
 
@@ -33,11 +34,12 @@ class Home extends Component {
   @Bind()
   onTrySignOut() {
     const { authStore, history } = this.props;
-
-    authStore.signOut().then(() => {
+    authStore.signOut().then(user => {
+      runInAction(() => {
+        authStore.authUser = user;
+      })
       console.log('zostałeś wylogowany!');
       history.push(SIGN_IN);
-      setTimeout(() => console.log("authUserAfterSignOut",authStore.authUser),2000);
     }).catch(() => {
       console.log('nie zostałeś wylogowny');
     });
