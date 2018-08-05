@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Bind } from 'lodash-decorators';
-import { runInAction } from 'mobx';
+import { observable, action, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { PropagateLoader } from 'react-spinners';
 import { HOME, RECOVER_PASSWORD, SIGN_UP } from '../../common/consts/routes';
@@ -22,23 +22,25 @@ import translations from './login.view.intl';
 @injectIntl
 @inject('authStore')
 @observer
-class Login extends Component {
+export class Login extends Component {
+  @observable email = '';
+  @observable password = '';
+  @observable isApiError = false;
+  @observable apiError = '';
+  @observable isLoading = false;
+
   static propTypes = {
     authStore: PropTypes.instanceOf(AuthStore).isRequired
   }
 
-  constructor(props) {
-    super(props);
-    const INITIAL_STATE = {
-      email: '',
-      password: '',
-      isApiError: false,
-      apiError: '',
-      isLoading: false
-    }
-    this.state = {
-      ...INITIAL_STATE
-    }
+  @action.bound
+  startLoading(){
+    this.isLoading = true;
+  }
+
+  @action.bound
+  stopLoading(){
+    this.isLoading = false;
   }
 
   /**
@@ -46,22 +48,16 @@ class Login extends Component {
    */
   @Bind()
   onTrySignIn() {
-    this.setState({ isLoading: true });
-
     const { history, authStore } = this.props;
-    const { email, password } = this.state;
-
-    authStore.signIn(email, password).then(user => {    
-      runInAction(() => {
-        authStore.authUser = user;
-      })
+    this.startLoading();
+    authStore.signIn(this.email, this.password).then(() => {    
       history.push(HOME);
     })
     .catch(error => {
-      this.setState({
-        isLoading: false,
-        isApiError: true,
-        apiError: error.message
+      this.stopLoading();
+      runInAction(() => {
+        this.isApiError = true;
+        this.apiError = error.message;
       });
     });
   }
@@ -93,28 +89,22 @@ class Login extends Component {
   /**
    * Method to set actually email to state
    */
-  @Bind()
+  @action.bound
   onEmailChange(event) {
-    this.setState({
-      email: event.target.value,
-      emailError: null
-    });
+    this.email = event.target.value;
   }
 
   /**
    * Method to set actually password to state
    */
-  @Bind()
+  @action.bound
   onPasswordChange(event) {
-    this.setState({
-      password: event.target.value,
-      passwordError: null
-    });
+    this.password = event.target.value;
   }
 
   render() {
     const { intl, history } = this.props;
-    const { isLoading, isApiError, apiError, email, password } = this.state;
+    const { isLoading, isApiError, apiError, email, password } = this;
 
     const errorBox = (
       <div className="error-box">

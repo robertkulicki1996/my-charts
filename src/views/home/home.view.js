@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
-import { runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { AuthStore } from '../../stores/auth.store';
 
+import Header from '../../common/components/Header/Header';
 import Button from '../../common/components/Button/Button';
 
 // import firebase from './firebase';
@@ -21,24 +21,11 @@ class Home extends Component {
   static propTypes = {
     authStore: PropTypes.instanceOf(AuthStore).isRequired
   }
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-    }
-    // this.handleChange = this.handleChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-  }
 
   @Bind()
   onTrySignOut() {
     const { authStore, history } = this.props;
-    authStore.signOut().then(user => {
-      runInAction(() => {
-        authStore.authUser = user;
-      })
-      console.log('zostałeś wylogowany!');
+    authStore.signOut().then(()=> {
       history.push(SIGN_IN);
     }).catch(() => {
       console.log('nie zostałeś wylogowny');
@@ -85,16 +72,9 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="container">
-      Home
-      <Button buttonStyle="button-primary" onClick={this.onTrySignOut} >Sign out</Button>
-          {/* <section className='add-item'>
-            <form onSubmit={this.handleSubmit}>
-              <input type="text" name="username" placeholder={this.props.intl.formatMessage(translations.placeholder)} onChange={this.handleChange} value={this.state.username} />
-              <input type="text" name="currentItem" placeholder="What are you bringing ?" onChange={this.handleChange} value={this.state.currentItem} />
-              <button>Add Item</button>
-            </form>
-          </section> */}
+      <div className="home-wrapper">
+        <Header />
+        <Button buttonStyle="button-primary" onClick={this.onTrySignOut} >Sign out</Button>
       </div>
     );
   }

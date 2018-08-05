@@ -1,10 +1,14 @@
 import firebase from 'firebase';
 import { observable, action } from 'mobx';
-import { Bind } from '../../node_modules/lodash-decorators';
+import { runInAction } from 'mobx';
+import { Bind } from 'lodash-decorators';
+
+export const STORAGE_KEY_FOR_USER_UID = 'USER_UID';
 
 export class AuthStore {
     // current user auth state
     @observable authUser = null;
+
 
     constructor() {
         this.setUserAuthState();
@@ -16,18 +20,39 @@ export class AuthStore {
     @action.bound
     setUserAuthState() {
         firebase.auth().onAuthStateChanged(user => {
-            this.authUser = user;
+            if (user) {
+                this.authUser = user;
+                this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, user.uid);
+            } else {
+                this.authUser = user;
+                this.removeKeyFromStorage(STORAGE_KEY_FOR_USER_UID);
+            }
         });
     }
 
     /**
-     * Method return true if user authed otherwise false
+     * Method set value to localstorage
+     * @param {string} key 
+     * @param {string} value 
      */
     @Bind()
-    isUserAuthed() {
-        if(this.authUser) return true;
-        else return false;
+    setKeyToStorage(key, value){
+        window.localStorage.setItem(key, value);
     }
+
+    /**
+     * Method remove value from localstorage
+     * @param {string} key 
+     */
+    @Bind()
+    removeKeyFromStorage(key){
+        window.localStorage.removeItem(key);
+    }
+
+    @Bind()
+    isUserAuthenticated() {
+        return !!this.authUser || !!localStorage.getItem(STORAGE_KEY_FOR_USER_UID);
+    };
 
     /**
      * Method to sign in with email and password
@@ -36,10 +61,12 @@ export class AuthStore {
      */
     @action
     signIn(email, password) {
-        if(this.authUser) {
-            return Promise.resolve(this.authUser);
-        }
-        return firebase.auth().signInWithEmailAndPassword(email, password);
+        return firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
+            runInAction(() => {
+                authStore.authUser = user;
+            })
+            this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, user.uid);
+        });
     }
 
     /**
@@ -47,10 +74,12 @@ export class AuthStore {
      */
     @action
     signOut() {
-        if(this.authUser) {
-            return firebase.auth().signOut();
-        }
-        return Promise.resolve(this.authUser);
+        return firebase.auth().signOut().then((user) => {
+            runInAction(() => {
+                authStore.authUser = user;
+            });
+            this.removeKeyFromStorage(STORAGE_KEY_FOR_USER_UID);
+        });
     }
 }
 

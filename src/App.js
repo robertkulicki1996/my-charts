@@ -5,7 +5,7 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import stores from './stores/index';
+import stores from './stores';
 
 import ApplicationRoutes from './common/consts/routes';
 

@@ -17,7 +17,6 @@ export const RECOVER_PASSWORD = '/recover-password';
 export const SIGN_UP = '/sign-up';
 export const HOME = '/home';
 
-
 // Application routes
 @inject('authStore')
 @observer
@@ -28,28 +27,34 @@ export default class ApplictionRoutes extends Component {
     
     render() {
         const { authStore } = this.props;
-        const isUserAuthorized = authStore.isUserAuthed();
 
         const publicRoutes = (
             <Switch>
                 <Route exact path={SIGN_IN} component={Login} />
                 <Route path={SIGN_UP} component={Register} />
                 <Route path={RECOVER_PASSWORD} component={RecoverPassword} />
-                <Route component={Login} />
+                <Route
+                    render={ () => {
+                        return <Redirect to={SIGN_IN} />;
+                    }}
+                />
             </Switch>
         );
-    
+
         const privateRoutes = (
             <Switch>
-                <Route exact path={SIGN_IN} component={Login} />
-                <Route path={SIGN_UP} component={Register} />
-                <Route path={RECOVER_PASSWORD} component={RecoverPassword} />
+                <Route exact path={HOME} component={Home} />
+                <Route
+                    render={ () => {
+                        return <Redirect to={HOME} />;
+                    }}
+                />
             </Switch>
         );
 
         return (
             <Router>
-                {isUserAuthorized ? privateRoutes : publicRoutes}
+                {authStore.isUserAuthenticated() ? privateRoutes : publicRoutes}
             </Router>
         );
     }
