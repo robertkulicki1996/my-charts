@@ -1,0 +1,12 @@
+@import '../../../common/styles/variables.scss';
+
+.options-sidebar {
+    padding-top: $metric-base;
+    padding-bottom: $metric-base;
+    min-width: $metric-xx-large*4;
+    background-color: $color-brighterblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+

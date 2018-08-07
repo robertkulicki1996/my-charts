@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { AuthStore } from '../../stores/auth.store';
 
-import Header from '../../common/components/Header/Header';
-import Button from '../../common/components/Button/Button';
+import ApplicationSidebar from '../../common/components/ApplicationSidebar/ApplicationSidebar';
+import OptionsSidebar from '../../common/components/OptionsSidebar/OptionsSidebar';
+// import Button from '../../common/components/Button/Button';
 
 // import firebase from './firebase';
 
@@ -73,8 +74,8 @@ class Home extends Component {
   render() {
     return (
       <div className="home-wrapper">
-        <Header />
-        <Button buttonStyle="button-primary" onClick={this.onTrySignOut} >Sign out</Button>
+        <ApplicationSidebar />
+        <OptionsSidebar />
       </div>
     );
   }
