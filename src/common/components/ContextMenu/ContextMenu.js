@@ -1,74 +1,44 @@
-import React, {Component} from 'react';
+import { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
+
 import onClickOutside from 'react-onclickoutside';
+import { noop } from 'lodash-decorators';
 
-import Button from '../Button/Button';
-
-import './ContextMenu.scss';
+const modalRoot = document.getElementById('modal-root');
 
 @observer
 class ContextMenu extends Component {
   static propTypes = {
-    /**
-     * Position of context menu
-     */
-    position: PropTypes.oneOf(['rightTop', 'rightBottom']),
-    /**
-     * Body of context menu
-     */
-    body: PropTypes.node,
-    /**
-     * Children of context menu - elements that trigger context menu
-     */
-    children: PropTypes.node
+    onClose: PropTypes.func
   }
 
   static defaultProps = {
-    body: null,
-    position: 'rightTop',
-  };
-
-  @observable visible;
+    onClose: noop
+  }
 
   constructor(props) {
     super(props);
-    this.visible = false;
+    this.element = document.createElement('div');
   }
 
-  @action.bound
-  handleTriggerClick() {
-    this.visible = !this.visible;
+  componentDidMount() {
+    modalRoot.appendChild(this.element);
   }
 
-  @action.bound
-  handleClickOutside() {
-    this.visible = false;
+  handleClickOutside = () => {
+    this.props.onClose();
   }
 
+  componentWillUnmount() {
+    modalRoot.removeChild(this.element);
+  }
+  
   render() {
-    const { position, body, children } = this.props;
-
-    return (
-      <div className="context-menu-container">
-        <Button
-          buttonStyle='button-link'
-          tabIndex={0}
-          className='trigger'
-          onClick={this.handleTriggerClick}
-        >
-          {children}
-        </Button>
-        <div
-          onClick={this.handleTriggerClick}
-          tabIndex={0}
-          role="button"
-          className={`context-menu js-menu ${position} ${this.visible ? 'context-menu--is-shown' : '' }`}
-        >
-          {body}
-        </div>
-      </div>
+    return ReactDOM.createPortal(
+      this.props.children,
+      this.element,
     );
   }
 }

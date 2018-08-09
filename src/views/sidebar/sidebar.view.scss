@@ -1,4 +1,4 @@
-@import '../../../common/styles/variables.scss';
+@import '../../common/styles/variables.scss';
 
 .header {
     padding-top: $metric-base;
@@ -17,4 +17,24 @@
 
 .user-avatar{
     cursor: pointer;
+}
+
+.user-context-menu {
+    position: absolute;
+    z-index: $zindex-context-menu;
+    width: $metric-xx-large*2;
+    height: $metric-xx-large*2;
+    display: flex;
+    flex-direction: column;
+    bottom: $metric-x-large;
+    left: $metric-x-large;
+    background-color: $color-darkblue;
+    border: 1px solid $color-lightblue;
+
+    &__user-info {
+        display: flex;
+        height: $metric-med;
+        align-items: center;
+        justify-content: center;
+    }
 }
