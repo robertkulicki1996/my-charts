@@ -1,0 +1,59 @@
+@import '../../../common/styles/variables.scss';
+
+.context-menu-container {
+  display: flex;
+  position: relative;
+}
+
+.context-menu {
+  display: none;
+  transition: opacity 5s ease-in;
+  padding: $metric-small;
+  width: $metric-xx-large*2;
+  height: $metric-x-large*3;
+  position: absolute;
+  z-index: 10000;
+  background-color: $color-darkblue;
+  color: white;
+  border: 2px solid $color-thebrightestblue;
+
+  &--is-shown {
+    display: block;
+  }
+}
+
+.trigger {
+  cursor: pointer; 
+  outline: none;
+}
+  
+
+.rightTop {
+  bottom: 0;
+  left: 120%;
+}
+  
+.rightBottom {
+  top: 100%;
+  left: 100%;
+} 
+
+.user-context-menu {
+  position: absolute;
+  z-index: $zindex-context-menu;
+  width: $metric-xx-large*2;
+  height: $metric-xx-large*2;
+  display: flex;
+  flex-direction: column;
+  bottom: $metric-x-large;
+  left: $metric-x-large;
+  background-color: $color-darkblue;
+  border: 1px solid $color-lightblue;
+
+   &__user-info {
+    display: flex;
+    height: $metric-med;
+    align-items: center;
+    justify-content: center;
+  }
+} 

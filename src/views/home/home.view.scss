@@ -3,5 +3,11 @@
 .home-wrapper {
     display: flex;
     height: 100vh;
-    background-color: $color-darkblue;
+    background-color: $color-thebrightestblue;
+}
+
+.main-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }

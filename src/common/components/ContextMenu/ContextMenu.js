@@ -1,46 +1,68 @@
-import { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
-
 import onClickOutside from 'react-onclickoutside';
-import { noop } from 'lodash-decorators';
+import Button from '../Button/Button';
 
-const modalRoot = document.getElementById('modal-root');
+import './ContextMenu.scss';
 
 @observer
 class ContextMenu extends Component {
   static propTypes = {
-    onClose: PropTypes.func
+    /**
+     * Position of context menu
+     */
+    position: PropTypes.oneOf(['rightTop', 'rightBottom']),
+    /**
+     * Body of context menu
+     */
+    body: PropTypes.node,
+    /**
+     * Children of context menu - elements that trigger context menu
+     */
+    children: PropTypes.node
   }
 
   static defaultProps = {
-    onClose: noop
-  }
+    body: null,
+    position: 'rightTop',
+  };
 
+  @observable visible;
   constructor(props) {
     super(props);
-    this.element = document.createElement('div');
+    this.visible = false;
   }
 
-  componentDidMount() {
-    modalRoot.appendChild(this.element);
+  @action.bound
+  handleTriggerClick() {
+    this.visible = !this.visible;
   }
 
-  handleClickOutside = () => {
-    this.props.onClose();
+  @action.bound
+  handleClickOutside() {
+    this.visible = false;
   }
 
-  componentWillUnmount() {
-    modalRoot.removeChild(this.element);
-  }
-  
   render() {
-    return ReactDOM.createPortal(
-      this.props.children,
-      this.element,
+    const { position, body, children } = this.props;
+     return (
+      <div className="context-menu-container">
+        <Button
+          buttonStyle='button-link'
+          tabIndex={0}
+          className='trigger'
+          onClick={this.handleTriggerClick}
+        >
+          {children}
+        </Button>
+        <div className={`context-menu js-menu ${position} ${this.visible ? 'context-menu--is-shown' : '' }`} >
+          {body}
+        </div>
+      </div>
     );
   }
 }
 
-export default onClickOutside(ContextMenu);
+export default onClickOutside(ContextMenu); 

@@ -1,0 +1,15 @@
+@import '../../../common/styles/variables.scss';
+
+.avater-with-name-wrapper {
+    display: flex;
+    justify-content: flex;
+    align-items: center;
+    padding: $metric-x-small;
+}
+
+.name {
+    font-family: $font-default;
+    font-size: $metric-small;
+    padding-right: $metric-x-small;
+    padding-left: $metric-x-small;
+}
