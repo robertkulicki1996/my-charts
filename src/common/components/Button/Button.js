@@ -7,6 +7,10 @@ import './Button.scss';
 export default class Button extends PureComponent {
   static propTypes = {
     /**
+     * Button additional class name
+     */
+    className: PropTypes.string,
+    /**
      * Button text color
      */
     textColor: PropTypes.oneOf(['dark', 'light','pink']),
@@ -33,6 +37,7 @@ export default class Button extends PureComponent {
     disabled: false,
     onClick: noop,
     children: null,
+    className: '',
     textColor: 'light',
     buttonStyle: 'button-link',
   };
@@ -43,12 +48,13 @@ export default class Button extends PureComponent {
       disabled,
       onClick,
       buttonStyle,
+      className,
       textColor
     } = this.props;
 
     return (
       <button
-        className={`button ${buttonStyle} ${textColor}`}
+        className={`button ${buttonStyle} ${textColor} ${className}`}
         onClick={onClick}
         disabled={disabled}
       >

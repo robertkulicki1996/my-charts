@@ -50,7 +50,7 @@ export class Login extends Component {
   onTrySignIn() {
     const { history, authStore } = this.props;
     this.startLoading();
-    authStore.signIn(this.email, this.password).then(() => {    
+    authStore.signIn(this.email, this.password).then((user) => {    
       history.push(HOME);
     })
     .catch(error => {

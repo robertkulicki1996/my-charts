@@ -8,17 +8,17 @@
 .context-menu {
   display: none;
   transition: opacity 5s ease-in;
-  padding: $metric-small;
   width: $metric-xx-large*2;
-  height: $metric-x-large*3;
+  min-height: $metric-x-large;
   position: absolute;
-  z-index: 10000;
+  z-index: $zindex-context-menu;
   background-color: $color-darkblue;
   color: white;
   border: 2px solid $color-thebrightestblue;
 
   &--is-shown {
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -36,24 +36,4 @@
 .rightBottom {
   top: 100%;
   left: 100%;
-} 
-
-.user-context-menu {
-  position: absolute;
-  z-index: $zindex-context-menu;
-  width: $metric-xx-large*2;
-  height: $metric-xx-large*2;
-  display: flex;
-  flex-direction: column;
-  bottom: $metric-x-large;
-  left: $metric-x-large;
-  background-color: $color-darkblue;
-  border: 1px solid $color-lightblue;
-
-   &__user-info {
-    display: flex;
-    height: $metric-med;
-    align-items: center;
-    justify-content: center;
-  }
 } 

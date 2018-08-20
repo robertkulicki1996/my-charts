@@ -9,9 +9,10 @@ import { SIGN_IN } from '../../common/consts/routes';
 import { AuthStore } from '../../stores/auth.store';
 
 import AppLogoIcon from '../../common/icons/logo.svg';
-import UserAvatar from '../../common/icons/UserAvatar.svg';
 import Button from '../../common/components/Button/Button';
 import ContextMenu from '../../common/components/ContextMenu/ContextMenu';
+import AvatarWithName from '../../common/components/AvatarWithName/AvatarWithName';
+import UserAvatar from 'react-user-avatar';
 
 // import translations from './sidebar.view.intl';
 import './sidebar.view.scss';
@@ -39,17 +40,27 @@ export default class Sidebar extends Component {
   render() {
 
     const userContextMenu = (
-      <div>
-        <div>Robert Kulicki</div>
-        <Button buttonStyle="button-link" onClick={this.onTrySignOut} >sdsd</Button>
-      </div>
+      <React.Fragment>
+        <AvatarWithName name="Robert Kulicki" bottomBorder/>
+        <div className="link">My link</div>
+        <div className="link">My another link</div>
+        <div className="link">Last hardcoded link</div>
+        <Button
+          buttonStyle="button-link" 
+          textColor="pink"
+          className="sign-out-button" 
+          onClick={this.onTrySignOut} 
+        >
+          Sign Out
+        </Button>
+      </React.Fragment>
     );
 
     return (
       <div className="header">
         <AppLogoIcon width={48} height={48} />
         <ContextMenu body={userContextMenu} position="rightTop">
-          <UserAvatar className="user-avatar" width={48} height={48} />
+          <UserAvatar size="48" name="Robert Kulicki" color="#272f40" />
         </ContextMenu>
       </div>
     );

@@ -14,26 +14,16 @@
     box-shadow: 6px -1px 86px 0px rgba(32,38,52,1);
 }
 
-.user-avatar{
-    cursor: pointer;
+.sign-out-button {
+    width: 100%;
+    margin-top: $metric-small;
+    margin-bottom: $metric-small;
+    margin-left: $metric-small;
+    text-align: left;
 }
 
-.user-context-menu {
-    position: absolute;
-    z-index: $zindex-context-menu;
-    width: $metric-xx-large*2;
-    height: $metric-xx-large*2;
-    display: flex;
-    flex-direction: column;
-    bottom: $metric-x-large;
-    left: $metric-x-large;
-    background-color: $color-darkblue;
-    border: 1px solid $color-lightblue;
-
-    &__user-info {
-        display: flex;
-        height: $metric-med;
-        align-items: center;
-        justify-content: center;
-    }
+.link {
+    padding-left: $metric-small;
+    padding-top: $metric-x-small;
+    padding-bottom: $metric-x-small;
 }
