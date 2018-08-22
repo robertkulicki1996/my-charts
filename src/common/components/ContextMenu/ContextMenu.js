@@ -13,7 +13,7 @@ class ContextMenu extends Component {
     /**
      * Position of context menu
      */
-    position: PropTypes.oneOf(['rightTop', 'rightBottom']),
+    position: PropTypes.oneOf(['rightTop', 'leftBottom']),
     /**
      * Body of context menu
      */
@@ -26,7 +26,7 @@ class ContextMenu extends Component {
 
   static defaultProps = {
     body: null,
-    position: 'rightTop',
+    position: 'leftBottom',
   };
 
   @observable visible;

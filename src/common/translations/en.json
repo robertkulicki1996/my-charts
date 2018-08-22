@@ -28,5 +28,5 @@
     "views.register.sign_in": "Sign in",
     "views.register.sign_up_success": "The account was set up correctly",
 
-    "views.sidebar.sign_out": "Sign out"
+    "views.header.sign_out": "Sign out"
 }

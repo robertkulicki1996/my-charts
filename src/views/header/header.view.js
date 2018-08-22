@@ -14,14 +14,14 @@ import ContextMenu from '../../common/components/ContextMenu/ContextMenu';
 import AvatarWithName from '../../common/components/AvatarWithName/AvatarWithName';
 import UserAvatar from 'react-user-avatar';
 
-// import translations from './sidebar.view.intl';
-import './sidebar.view.scss';
+import translations from './header.view.intl';
+import './header.view.scss';
 
 @withRouter
 @injectIntl
 @inject('authStore')
 @observer
-export default class Sidebar extends Component {
+export default class Header extends Component {
   static propTypes = {
     authStore: PropTypes.instanceOf(AuthStore).isRequired
   }
@@ -38,6 +38,7 @@ export default class Sidebar extends Component {
   }
 
   render() {
+    const { intl } = this.props;
 
     const userContextMenu = (
       <React.Fragment>
@@ -51,16 +52,16 @@ export default class Sidebar extends Component {
           className="sign-out-button" 
           onClick={this.onTrySignOut} 
         >
-          Sign Out
+          {intl.formatMessage(translations.signOut)}
         </Button>
       </React.Fragment>
     );
 
     return (
       <div className="header">
-        <AppLogoIcon width={48} height={48} />
-        <ContextMenu body={userContextMenu} position="rightTop">
-          <UserAvatar size="48" name="Robert Kulicki" color="#272f40" />
+        <AppLogoIcon width={40} height={40} />
+        <ContextMenu body={userContextMenu} >
+          <UserAvatar size="40" name="Robert Kulicki" color="#272f40" />
         </ContextMenu>
       </div>
     );

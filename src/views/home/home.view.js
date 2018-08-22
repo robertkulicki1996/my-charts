@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { AuthStore } from '../../stores/auth.store';
 
-import Sidebar from '../sidebar/sidebar.view';
+import Header from './../header/header.view';
 import OptionsSidebar from '../../common/components/OptionsSidebar/OptionsSidebar';
 
 import './home.view.scss';
@@ -17,11 +17,17 @@ class Home extends Component {
     authStore: PropTypes.instanceOf(AuthStore).isRequired
   }
 
+  state = {
+    disabled: false,
+  }
+
   render() {
     return (
       <div className="home-wrapper">
-        <Sidebar />
-        <OptionsSidebar />
+        <Header />
+        <div className="home-wrapper__main-content">
+
+        </div>
       </div>
     );
   }
