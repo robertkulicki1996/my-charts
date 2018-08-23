@@ -1,0 +1,11 @@
+@import '../../../common/styles/variables.scss';
+
+.rc-switch {
+  border: 1px solid $color-lightblue;
+  background-color: $color-lightblue;
+}
+
+.rc-switch-checked {
+  border: 1px solid $color-darkpink;
+  background-color: $color-darkpink;
+}

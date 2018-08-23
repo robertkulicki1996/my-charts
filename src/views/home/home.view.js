@@ -3,11 +3,16 @@ import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { AuthStore } from '../../stores/auth.store';
+import Switch from '../../common/components/Switch/Switch';
 
 import Header from './../header/header.view';
-import OptionsSidebar from '../../common/components/OptionsSidebar/OptionsSidebar';
 
 import './home.view.scss';
+
+function onChange(value) {
+  console.log(`switch checked: ${value}`); // eslint-disable-line
+}
+
 
 @injectIntl
 @inject('authStore')
@@ -21,12 +26,51 @@ class Home extends Component {
     disabled: false,
   }
 
+  state = {
+    disabled: false,
+  }
+
+  toggle = () => {
+    this.setState({
+      disabled: !this.state.disabled,
+    });
+  }
+
   render() {
     return (
       <div className="home-wrapper">
         <Header />
         <div className="home-wrapper__main-content">
-
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
         </div>
       </div>
     );
