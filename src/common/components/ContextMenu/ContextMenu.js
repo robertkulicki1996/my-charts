@@ -13,7 +13,7 @@ class ContextMenu extends Component {
     /**
      * Position of context menu
      */
-    position: PropTypes.oneOf(['rightTop', 'leftBottom']),
+    position: PropTypes.oneOf(['bottom', 'leftBottom']),
     /**
      * Body of context menu
      */

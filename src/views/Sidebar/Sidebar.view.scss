@@ -1,0 +1,16 @@
+@import '../../common/styles/variables.scss';
+
+.options-sidebar {
+	padding-top: $metric-base;
+	padding-bottom: $metric-base;
+	margin: $metric-small;
+	width: $metric-xx-large*4;
+	background-color: $color-darkblue;
+	display: flex;
+	flex-direction: column;
+	border-radius: 4px;
+	-webkit-box-shadow: 11px 12px 63px -13px rgba(32,38,52,1);
+	-moz-box-shadow: 11px 12px 63px -13px rgba(32,38,52,1);
+	box-shadow: 11px 12px 63px -13px rgba(32,38,52,1);
+}
+

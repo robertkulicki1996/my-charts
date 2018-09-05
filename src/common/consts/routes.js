@@ -8,7 +8,7 @@ import { AuthStore } from '../../stores/auth.store';
 // Application views
 import Login from '../../views/login/login.view';
 import Register from '../../views/register/register.view';
-import Home from '../../views/home/home.view';
+import Home from '../../views/Home/Home.view';
 import RecoverPassword from '../../views/recoverPassword/recoverPassword.view';
 
 // Routes defined in application
@@ -21,41 +21,41 @@ export const HOME = '/home';
 @inject('authStore')
 @observer
 export default class ApplictionRoutes extends Component {
-    static propTypes = {
-        authStore: PropTypes.instanceOf(AuthStore).isRequired
-    }
+	static propTypes = {
+		authStore: PropTypes.instanceOf(AuthStore).isRequired
+	}
     
-    render() {
-        const { authStore } = this.props;
+	render() {
+		const { authStore } = this.props;
 
-        const publicRoutes = (
-            <Switch>
-                <Route exact path={SIGN_IN} component={Login} />
-                <Route path={SIGN_UP} component={Register} />
-                <Route path={RECOVER_PASSWORD} component={RecoverPassword} />
-                <Route
-                    render={ () => {
-                        return <Redirect to={SIGN_IN} />;
-                    }}
-                />
-            </Switch>
-        );
+		const publicRoutes = (
+			<Switch>
+				<Route exact path={SIGN_IN} component={Login} />
+				<Route path={SIGN_UP} component={Register} />
+				<Route path={RECOVER_PASSWORD} component={RecoverPassword} />
+				<Route
+						render={ () => {
+								return <Redirect to={SIGN_IN} />;
+						}}
+				/>
+			</Switch>
+		);
 
-        const privateRoutes = (
-            <Switch>
-                <Route exact path={HOME} component={Home} />
-                <Route
-                    render={ () => {
-                        return <Redirect to={HOME} />;
-                    }}
-                />
-            </Switch>
-        );
+		const privateRoutes = (
+			<Switch>
+				<Route exact path={HOME} component={Home} />
+				<Route
+						render={ () => {
+								return <Redirect to={HOME} />;
+						}}
+				/>
+			</Switch>
+		);
 
-        return (
-            <Router>
-                {authStore.isUserAuthenticated() ? privateRoutes : publicRoutes}
-            </Router>
-        );
-    }
+		return (
+			<Router>
+				{authStore.isUserAuthenticated() ? privateRoutes : publicRoutes}
+			</Router>
+		);
+	}
 }

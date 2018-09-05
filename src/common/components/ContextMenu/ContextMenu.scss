@@ -37,3 +37,8 @@
   top: 100%;
   right: 100%;
 } 
+
+.bottom {
+  top: $metric-xx-large - $metric-small;
+  right: 0;
+}

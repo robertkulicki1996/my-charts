@@ -3,16 +3,13 @@ import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { AuthStore } from '../../stores/auth.store';
-import Switch from '../../common/components/Switch/Switch';
 
-import Header from './../header/header.view';
+import Sidebar from '../Sidebar/Sidebar.view';
+import NavBar from '../NavBar/NavBar.view';
+import ChartBox from '../ChartBox/ChartBox.view';
+import ChartDataBox from '../ChartDataBox/ChartDataBox.view';
 
-import './home.view.scss';
-
-function onChange(value) {
-  console.log(`switch checked: ${value}`); // eslint-disable-line
-}
-
+import './Home.view.scss';
 
 @injectIntl
 @inject('authStore')
@@ -20,14 +17,6 @@ function onChange(value) {
 class Home extends Component {
   static propTypes = {
     authStore: PropTypes.instanceOf(AuthStore).isRequired
-  }
-
-  state = {
-    disabled: false,
-  }
-
-  state = {
-    disabled: false,
   }
 
   toggle = () => {
@@ -39,37 +28,12 @@ class Home extends Component {
   render() {
     return (
       <div className="home-wrapper">
-        <Header />
+        <NavBar />
         <div className="home-wrapper__main-content">
-          <div style={{ margin: 20 }}>
-            <Switch
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
-          </div>
-          <div style={{ margin: 20 }}>
-            <Switch
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
-          </div>
-          <div style={{ margin: 20 }}>
-            <Switch
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
-          </div>
-          <div style={{ margin: 20 }}>
-            <Switch
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
-          </div>
-          <div style={{ margin: 20 }}>
-            <Switch
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
+          <Sidebar />
+          <div className="home-wrapper__main-content__chart-wrapper">
+            <ChartBox />
+            <ChartDataBox />
           </div>
         </div>
       </div>

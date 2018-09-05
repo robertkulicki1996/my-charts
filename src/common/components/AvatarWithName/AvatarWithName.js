@@ -29,7 +29,7 @@ export default class AvatarWithName extends Component {
   static defaultProps = {
     name: '',
     avatarUrl: '',
-    color: '#272f40',
+    color: '#EB1E64',
     bottomBorder: false
 
   }
@@ -39,8 +39,13 @@ export default class AvatarWithName extends Component {
 
     return (
       <div className={`${`avater-with-name-wrapper`} ${bottomBorder && 'with-bottom-border'}` }>
-        <UserAvatar size="48" name={name} src={avatarUrl} color={`${color}`}/>
         {name && <div className="name">{name}</div>}
+        <UserAvatar 
+          size="48" 
+          name={name} 
+          src={avatarUrl} 
+          color={`${color}`}
+        />
       </div>
     );
   }
