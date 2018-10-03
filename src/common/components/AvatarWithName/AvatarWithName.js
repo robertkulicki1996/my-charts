@@ -31,7 +31,6 @@ export default class AvatarWithName extends Component {
     avatarUrl: '',
     color: '#EB1E64',
     bottomBorder: false
-
   }
   
   render() {

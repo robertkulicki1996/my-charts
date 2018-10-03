@@ -1,28 +1,47 @@
 @import '../../common/styles/variables.scss';
 
-.header {
-    height: $metric-x-large;
-    padding: 0 $metric-small 0 $metric-small;
-    background-color: $color-darkblue;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: $zindex-header;
-    -webkit-box-shadow: 6px -1px 86px 0px rgba(32,38,52,1);
-    -moz-box-shadow: 6px -1px 86px 0px rgba(32,38,52,1);
-    box-shadow: 6px -1px 86px 0px rgba(32,38,52,1);
+.navbar {
+	width: $metric-xx-large;
+	padding: $metric-base 0 $metric-base 0;
+	background-color: $color-darkblue;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	z-index: $zindex-header;
+	-webkit-box-shadow: 6px -1px 86px 0px rgba(32, 38, 52, 1);
+	-moz-box-shadow: 6px -1px 86px 0px rgba(32, 38, 52, 1);
+	box-shadow: 6px -1px 86px 0px rgba(32, 38, 52, 1);
 }
 
 .sign-out-button {
-    width: 100%;
-    margin-top: $metric-small;
-    margin-bottom: $metric-small;
-    margin-left: $metric-small;
-    text-align: left;
+	width: 100%;
+	font-size: $metric-m-small;
+	padding-left: $metric-small;
+	text-align: left;
+
+	&:hover {
+		background-color: $color-thebrightestblue;
+		border: 2px solid $color-darkblue;
+	}
+}
+
+.header-button {
+	border-top-right-radius: $metric-x-small;
+	border-top-left-radius: $metric-x-small;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.bottom-button {
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+	border-bottom-right-radius: $metric-x-small;
+	border-bottom-left-radius: $metric-x-small;
 }
 
 .link {
-    padding-left: $metric-small;
-    padding-top: $metric-x-small;
-    padding-bottom: $metric-x-small;
+	padding-left: $metric-small;
+	padding-top: $metric-x-small;
+	padding-bottom: $metric-x-small;
 }

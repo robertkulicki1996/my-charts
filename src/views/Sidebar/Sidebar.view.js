@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import Switch from '../../common/components/Switch/Switch';
 import InputNumber from '../../common/components/InputNumber/InputNumber';
+import { SliderPicker, TwitterPicker, CirclePicker } from 'react-color';
 
 import './Sidebar.view.scss';
 
@@ -28,10 +29,7 @@ export default class Sidebar extends Component {
           />
         </div>
         <div style={{ margin: 20 }}>
-          <Switch
-            onChange={onChange}
-            disabled={this.state.disabled}
-          />
+          <SliderPicker />
         </div>
         <div style={{ margin: 20 }}>
           <Switch
@@ -44,6 +42,9 @@ export default class Sidebar extends Component {
             onChange={onChange}
             disabled={this.state.disabled}
           />
+        </div>
+        <div style={{ margin: 20 }}>
+          <TwitterPicker />
         </div>
         <div style={{ margin: 20 }}>
           <InputNumber
@@ -54,12 +55,7 @@ export default class Sidebar extends Component {
           />
         </div>
         <div style={{ margin: 20 }}>
-          <InputNumber
-            style={{ width: 120 }}
-            defaultValue={10}
-            onChange={onChange}
-            precision={2}
-          />
+          <CirclePicker />
         </div>
       </div>
     );

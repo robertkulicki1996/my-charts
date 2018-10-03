@@ -7,14 +7,13 @@
 
 .context-menu {
   display: none;
-  transition: opacity 5s ease-in;
   width: $metric-xx-large*2;
-  min-height: $metric-x-large;
+  min-height: $metric-med;
   position: absolute;
   z-index: $zindex-context-menu;
   background-color: $color-darkblue;
   color: white;
-  border: 2px solid $color-thebrightestblue;
+  border-radius: $metric-x-small;
 
   &--is-shown {
     display: flex;
@@ -30,7 +29,7 @@
 
 .rightTop {
   bottom: 0;
-  left: 120%;
+  left: $metric-x-large;
 }
   
 .leftBottom {
