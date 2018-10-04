@@ -1,17 +1,13 @@
 @import '../../common/styles/variables.scss';
 
 .chart-box {
-	padding-top: $metric-base;
-	padding-bottom: $metric-base;
-	margin: $metric-small $metric-small $metric-small 0;
-	min-width: 80%;
-	height: 60%;
-	background-color: $color-darkblue;
-	display: flex;
-	flex-direction: column;
-	border-radius: 4px;
-	-webkit-box-shadow: 11px 12px 63px -13px rgba(32,38,52,1);
-	-moz-box-shadow: 11px 12px 63px -13px rgba(32,38,52,1);
-	box-shadow: 11px 12px 63px -13px rgba(32,38,52,1);
+	width: 70vw;
+	height: 40vh;
+	padding: $metric-base;
+
+	> canvas{
+        width: 800px !important;
+        height: 400px !important;
+    }
 }
 
