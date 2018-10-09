@@ -42,16 +42,17 @@
 }
 
 .button-social {
-  width: $metric-med * 3;
-  height: $metric-med;
+  width: $metric-large;
+  height: $metric-large;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid $color-lightgrey;
-  background: transparent;
+  border: 1px solid $color-thebrightestblue;
+  background-color: $color-thebrightestblue;
 
   &:hover {
-    border: 1px solid $color-white;
+    background-color: $color-brighterblue;
   }
 }
 

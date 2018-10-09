@@ -1,8 +1,6 @@
 @import '../../common/styles/variables.scss';
 
 .chart-data-box {
-	width: 100%;
-	height: 50vh;
-	padding: $metric-base;
+	width: calc(100vw - #{$metric-xx-large*5});
+	height: 320px!important;
 }
-
