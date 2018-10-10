@@ -1,7 +1,21 @@
 @import 'common/styles/variables.scss';
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: $font-default;
+	margin: 0;
+	padding: 0;
+	font-family: $font-default;
+}
+
+::-webkit-scrollbar {
+	width: 6px !important;
+	background-color: #eb1e64 !important;
+}
+
+::-webkit-scrollbar-track {
+	background-color: inherit !important;
+}
+ 
+::-webkit-scrollbar-thumb {
+	background-color: #eb1e64 !important;
+	border-radius: 4px !important;
 }

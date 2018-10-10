@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Chart } from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 import './ChartBox.view.scss';
 
 const data = {
-  labels: ['July','dssdds', 'February', 'March', 'April', 'May', 'June', 'July','dssdds','March', 'April', 'May', 'June', 'July','dssdds','dssdds', 'sddssd','dfdfdf','dferefdf','dfde3r3er','dfdfcvcverr4'],
+  labels: ['July','dssdds', 'February', 'March', 'April', 'May', 'June', 'July','dssdds','March', 'April', 'May', 'June', 'July'],
   datasets: [
     {
       label: 'My First dataset',
@@ -26,7 +26,7 @@ const data = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [65, 59, 80, 81,23 ,123, 34, 23, 67, 89, 67, 90, 56, 55, 40]
+      data: [65, 59, 80, 81,23 ,123, 34, 23, 67, 40]
     },
     {
       label: 'My First dataset',
@@ -47,7 +47,7 @@ const data = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [65, 59, 80, 81, 56, 55,44,43,213,345,345, 40]
+      data: [65, 59, 80, 81, 56, 55,44,43, 40]
     }
   ]
 };
@@ -66,7 +66,7 @@ const scales = {
       ticks: {
           fontColor: "white",
           fontSize: 12,
-          stepSize: 10,
+          stepSize: 50,
           beginAtZero: true
       }
   }],
@@ -74,44 +74,32 @@ const scales = {
       ticks: {
           fontColor: "white",
           fontSize: 12,
-          stepSize: 10,
+          stepSize: 50,
           beginAtZero: true
       }
   }]
 }
-
-window.onload = function() {
-  var ctx = document.getElementById('canvas').getContext('2d');
-  window.myBar = new Chart(ctx, {
-    type: 'bar',
-    data: data,
-    options: {
-      responsive: true,
-      legend: {
-        position: 'top',
-        labels: {
-          fontColor: 'white',
-          fontSize: 18
-        }
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Bar Chart',
-        fontColor: 'white'
-      },
-      scales: scales
-    }
-  });
-};
 
 @observer
 export default class ChartBox extends Component {
 
   render() {
     return (
-      <div className="chart-box" >
-        <canvas id="canvas" height="140"></canvas>
-      </div>
+      <Line 
+        data={data}  
+        scales={scales}
+        options={{
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              left: 24,
+              right: 24,
+              top: 24,
+              bottom: 24
+            }
+        }
+        }} 
+      />
     );
   }
 }

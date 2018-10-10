@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect, BrowserRouter as Router, } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
-import { AuthStore } from '../../stores/auth.store';
+import { AuthStore } from '../../stores/auth';
 
 // Application views
 import Login from '../../views/login/login.view';

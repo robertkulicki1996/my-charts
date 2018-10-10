@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
-import { AuthStore } from '../../stores/auth.store';
+import SplitterLayout from 'react-splitter-layout';
+import { AuthStore } from '../../stores/auth';
 
 import Sidebar from '../Sidebar/Sidebar.view';
 import NavBar from '../NavBar/NavBar.view';
@@ -30,10 +31,10 @@ class Home extends Component {
       <div className="home-wrapper">
         <NavBar />
         <Sidebar />
-        <div class="main-content">
+        <SplitterLayout primaryIndex={0} vertical={true} customClassName="splitter-layout">
           <ChartBox />
           <ChartDataBox />
-        </div>
+        </SplitterLayout>
       </div>
     );
   }

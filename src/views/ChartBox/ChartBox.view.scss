@@ -1,11 +1,5 @@
 @import '../../common/styles/variables.scss';
 
-.chart-box {
-	position: relative;
-	// width: calc(100vw - #{$metric-xx-large*5});
-	// height: 60vh;
-}
-
 canvas {
 	-moz-user-select: none;
 	-webkit-user-select: none;

@@ -3,10 +3,18 @@
 .options-sidebar {
 	padding-top: $metric-base;
 	padding-bottom: $metric-base;
-	width: $metric-xx-large*4;
+	width: $metric-xx-large*5;
 	background-color: $color-brighterblue;
 	display: flex;
 	flex-direction: column;
 	border-radius: 4px;
+	overflow-y: scroll;
 }
 
+.opened-section {
+	color: $color-darkpink;
+}
+
+.closed-section {
+	color: $color-white;
+}

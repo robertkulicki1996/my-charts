@@ -1,0 +1,16 @@
+@import '../../../../common/styles/variables.scss';
+
+.section-header {
+	height: $metric-med;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-right: $metric-base;
+	padding-left: $metric-base;
+	color: inherit;
+	cursor: pointer;
+}
+
+.icon {
+	transform: rotate(90deg);
+}

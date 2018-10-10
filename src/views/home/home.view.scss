@@ -8,11 +8,14 @@
 	background-color: $color-thebrightestblue;
 }
 
-.main-content {
-	display: flex;
-	flex-direction: column;
-	width: calc(100vw - #{$metric-xx-large*5});
-	height: 100vh;
-	margin: 24px;
+.splitter-layout {
+	position: static!important;
 }
 
+.splitter-layout > .layout-splitter {
+  flex: 0 0 auto;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  background-color: $color-brighterblue;
+}

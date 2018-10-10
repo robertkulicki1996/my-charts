@@ -1,0 +1,46 @@
+@import '../../../common/styles/variables.scss';
+
+.settings-wrapper {
+	padding-right: $metric-base;
+  padding-left: $metric-base;
+}
+
+.option-wrapper {
+	display: flex;
+	justify-content: space-between !important;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: $metric-small;
+}
+
+.label {
+	font-size: $metric-small;
+	font-family: $font-default;
+	$font-weight: $font-weight-medium;
+	color: $color-lightgrey;
+}
+
+.option-wrapper-column {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: $metric-small;
+
+	&__label {
+		font-size: $metric-small;
+		font-family: $font-default;
+		$font-weight: $font-weight-medium;
+		color: $color-lightgrey;
+	}
+}
+
+.margin-bottom {
+	margin-bottom: $metric-small;
+}
+
+.opened-section {
+	color: $color-darkpink;
+}
+
+.closed-section {
+	color: $color-white;
+}

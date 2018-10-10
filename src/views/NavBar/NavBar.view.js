@@ -7,7 +7,7 @@ import { Bind } from 'lodash-decorators';
 import Avatar from 'react-avatar';
 import { SIGN_IN } from '../../common/consts/routes';
 
-import { AuthStore } from '../../stores/auth.store';
+import { AuthStore } from '../../stores/auth';
 
 import AppLogoIcon from '../../common/icons/logo.svg';
 import Button from '../../common/components/Button/Button';

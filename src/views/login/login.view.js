@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 import { PropagateLoader } from 'react-spinners';
 import { HOME, RECOVER_PASSWORD, SIGN_UP } from '../../common/consts/routes';
 
-import { AuthStore } from '../../stores/auth.store';
+import { AuthStore } from '../../stores/auth';
 
 import AppLogoIcon from '../../common/icons/logo.svg';
 import GoogleLogoIcon from '../../common/icons/google.svg';
