@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 
-// Radio component
 import RcInputNumber from 'rc-input-number';
-import 'rc-input-number/assets/index.css';
-
 import './InputNumber.scss';
 
 @observer

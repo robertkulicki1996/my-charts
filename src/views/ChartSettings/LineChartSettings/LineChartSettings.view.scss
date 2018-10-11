@@ -11,10 +11,12 @@
 	align-items: center;
 	justify-content: center;
 	margin-bottom: $metric-small;
+	padding-right: $metric-x-small / 2;
+	padding-left: $metric-x-small / 2;
 }
 
 .label {
-	font-size: $metric-small;
+	font-size: $metric-m-small;
 	font-family: $font-default;
 	$font-weight: $font-weight-medium;
 	color: $color-lightgrey;
@@ -24,9 +26,11 @@
 	display: flex;
 	flex-direction: column;
 	margin-bottom: $metric-small;
+	padding-right: $metric-x-small / 2;
+	padding-left: $metric-x-small / 2;
 
 	&__label {
-		font-size: $metric-small;
+		font-size: $metric-m-small;
 		font-family: $font-default;
 		$font-weight: $font-weight-medium;
 		color: $color-lightgrey;

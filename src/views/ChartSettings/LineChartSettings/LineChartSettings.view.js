@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 // import Collapsible from 'react-collapsible';
 import Collapsible from 'react-collapsible';
-import SectionHeader from '../../../views/Sidebar/components/SectionHeader/SectionHeader';
+import OptionSectionHeader from '../../../views/Sidebar/components/OptionSectionHeader/OptionSectionHeader';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
@@ -39,7 +39,7 @@ export default class LineChartSettings extends Component {
         <div className="option-wrapper">
           <div className="label">Width</div>
           <InputNumber
-            style={{ width: 120 }}
+            style={{ width: 100 }}
             defaultValue={800}
             onChange={onChange}
             precision={0}
@@ -48,7 +48,7 @@ export default class LineChartSettings extends Component {
         <div className="option-wrapper">
           <div className="label">Height</div>
           <InputNumber
-            style={{ width: 120 }}
+            style={{ width: 100 }}
             defaultValue={380}
             onChange={onChange}
             precision={0}
@@ -59,15 +59,17 @@ export default class LineChartSettings extends Component {
           <SliderPicker />
         </div>
         <Collapsible 
-          trigger={<SectionHeader title="Padding" />}
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
+          trigger={
+            <OptionSectionHeader title="Padding" />
+          }
         >
           <div className="option-wrapper">
             <div className="label">Padding top</div>
             <InputNumber
-              style={{ width: 120 }}
+              style={{ width: 100 }}
               defaultValue={380}
               onChange={onChange}
               precision={0}
@@ -76,7 +78,7 @@ export default class LineChartSettings extends Component {
           <div className="option-wrapper">
             <div className="label">Padding right</div>
             <InputNumber
-              style={{ width: 120 }}
+              style={{ width: 100 }}
               defaultValue={380}
               onChange={onChange}
               precision={0}
@@ -85,7 +87,7 @@ export default class LineChartSettings extends Component {
           <div className="option-wrapper">
             <div className="label">Padding bottom</div>
             <InputNumber
-              style={{ width: 120 }}
+              style={{ width: 100 }}
               defaultValue={380}
               onChange={onChange}
               precision={0}
@@ -94,7 +96,7 @@ export default class LineChartSettings extends Component {
           <div className="option-wrapper">
             <div className="label">Padding left</div>
             <InputNumber
-              style={{ width: 120 }}
+              style={{ width: 100 }}
               defaultValue={380}
               onChange={onChange}
               precision={0}

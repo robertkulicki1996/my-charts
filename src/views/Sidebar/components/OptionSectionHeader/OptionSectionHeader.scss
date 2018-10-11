@@ -1,0 +1,21 @@
+@import '../../../../common/styles/variables.scss';
+
+.option-section-header {
+	height: $metric-med;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: $color-lightgrey;
+  cursor: pointer;
+  padding-right: $metric-x-small / 2;
+	padding-left: $metric-x-small / 2;
+}
+
+.icon {
+	transform: rotate(90deg);
+}
+
+.option-as-header {
+  font-size: $metric-m-small;
+  color: $color-lightgrey;
+}

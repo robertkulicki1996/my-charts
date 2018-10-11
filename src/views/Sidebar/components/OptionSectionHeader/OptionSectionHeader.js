@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 
-import './SectionHeader.scss';
+import './OptionSectionHeader.scss';
 
 @observer
-export default class SectionHeader extends Component {
+export default class OptionSectionHeader extends Component {
   static propTypes = {
     /**
      * section title
@@ -16,8 +16,8 @@ export default class SectionHeader extends Component {
   render() {
     const { title } = this.props;
     return (
-      <div className='section-header'>
-        <span>{title}</span>
+      <div className='option-section-header'>
+        <span className="option-as-header">{title}</span>
         <div className="icon">&#x276F;</div>
       </div>
     );

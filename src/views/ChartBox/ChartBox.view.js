@@ -32,7 +32,7 @@ const data = {
       label: 'My First dataset',
       fill: true,
       lineTension: 0.5,
-      backgroundColor: 'orange',
+      backgroundColor: 'blue',
       borderColor: '#fff',
       borderCapStyle: 'butt',
       borderDash: [],
@@ -49,17 +49,9 @@ const data = {
       pointHitRadius: 10,
       data: [65, 59, 80, 81, 56, 55,44,43, 40]
     }
-  ]
+  ],
+  scaleFontColor: 'white',
 };
-
-const options = { 
-  legend: {
-      labels: {
-          fontColor: "#000000",
-          fontSize: 14
-      }
-  }
-}
 
 const scales = {
   yAxes: [{
@@ -89,6 +81,7 @@ export default class ChartBox extends Component {
         data={data}  
         scales={scales}
         options={{
+          scaleFontColor: 'white',
           maintainAspectRatio: false,
           layout: {
             padding: {
@@ -97,6 +90,30 @@ export default class ChartBox extends Component {
               top: 24,
               bottom: 24
             }
+          },
+          legend: {
+            labels: {
+              fontColor: "white",
+              fontSize: 14
+            }
+          },
+          scales: {
+            xAxes: [{ 
+              gridLines: {
+                  display: true,
+              },
+              ticks: {
+                fontColor: "#CCC", // this here
+              },
+            }],
+            yAxes: [{
+              gridLines: {
+                  display: true,
+              },
+              ticks: {
+                fontColor: "#CCC", // this here
+              },
+            }],
         }
         }} 
       />

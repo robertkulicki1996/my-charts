@@ -32,86 +32,100 @@ export default class Sidebar extends Component {
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
-          trigger={<SectionHeader title="Section 1" />}
+          trigger={
+            <SectionHeader title="Chart"/>
+          }
         >
           <LineChartSettings />
-      </Collapsible>
-      <Collapsible trigger={<SectionHeader title="Section 2" />} openedClassName="opened-section"
-          triggerClassName="closed-section">
-        <div style={{ margin: 20 }}>
-          <Switch
-            onChange={onChange}
-            disabled={this.state.disabled}
-          />
-        </div>
-        <div style={{ margin: 20 }}>
-          <TwitterPicker />
-        </div>
-        <div style={{ margin: 20 }}>
-          <InputNumber
-            style={{ width: 120 }}
-            defaultValue={10}
-            onChange={onChange}
-            precision={2}
-          />
-        </div>
-        <div style={{ margin: 20 }}>
-          <CirclePicker />
-        </div>
-        <div style={{ margin: 20 }}>
-          <Switch
-            onChange={onChange}
-            disabled={this.state.disabled}
-          />
-        </div>
-        <div style={{ margin: 20 }}>
-          <SliderPicker />
-        </div>
-        <div style={{ margin: 20 }}>
-          <Switch
-            onChange={onChange}
-            disabled={this.state.disabled}
-          />
-        </div>
-      </Collapsible>
-      <Collapsible trigger={<SectionHeader title="Section 3" />} openedClassName="opened-section"
-          triggerClassName="closed-section">
-        <div style={{ margin: 20 }}>
-          <Switch
-            onChange={onChange}
-            disabled={this.state.disabled}
-          />
-        </div>
-        <div style={{ margin: 20 }}>
-          <TwitterPicker />
-        </div>
-        <div style={{ margin: 20 }}>
-          <InputNumber
-            style={{ width: 120 }}
-            defaultValue={10}
-            onChange={onChange}
-            precision={2}
-          />
-        </div>
-        <div style={{ margin: 20 }}>
-          <CirclePicker />
-        </div>
-        <div style={{ margin: 20 }}>
-          <Switch
-            onChange={onChange}
-            disabled={this.state.disabled}
-          />
-        </div>
-        <div style={{ margin: 20 }}>
-          <SliderPicker />
-        </div>
-        <div style={{ margin: 20 }}>
-          <Switch
-            onChange={onChange}
-            disabled={this.state.disabled}
-          />
-        </div>
-      </Collapsible>
+        </Collapsible>
+        <Collapsible 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          trigger={
+            <SectionHeader title="Section 2" />
+          } 
+        >
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <TwitterPicker />
+          </div>
+          <div style={{ margin: 20 }}>
+            <InputNumber
+              style={{ width: 100 }}
+              defaultValue={10}
+              onChange={onChange}
+              precision={2}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <CirclePicker />
+          </div>
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <SliderPicker />
+          </div>
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+        </Collapsible>
+        <Collapsible 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          trigger={
+            <SectionHeader title="Section 3" padding={true}/>
+          } 
+        >
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <TwitterPicker />
+          </div>
+          <div style={{ margin: 20 }}>
+            <InputNumber
+              style={{ width: 120 }}
+              defaultValue={10}
+              onChange={onChange}
+              precision={2}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <CirclePicker />
+          </div>
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+          <div style={{ margin: 20 }}>
+            <SliderPicker />
+          </div>
+          <div style={{ margin: 20 }}>
+            <Switch
+              onChange={onChange}
+              disabled={this.state.disabled}
+            />
+          </div>
+        </Collapsible>
       </div>
     );
   }

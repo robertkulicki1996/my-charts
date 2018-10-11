@@ -1,16 +1,16 @@
 @import '../../../common/styles/variables.scss';
 
-
 .rc-input-number {
   margin: 0;
   padding: 0;
-  line-height: 26px;
+  line-height: 24px;
   font-size: 12px;
-  height: 26px;
+  height: 24px;
   display: inline-block;
   vertical-align: middle;
   border: 1px solid $color-lightblue;
   box-shadow: 0 !important;
+  border-radius: 5px;
 
   &-focused {
     border-color: $color-darkpink;
@@ -21,8 +21,8 @@
 
   &-handler {
     text-align: center;
-    line-height: 12px;
-    height: 12px;
+    line-height: 11px;
+    height: 11px;
     overflow: hidden;
     display:block;
     touch-action: none;
