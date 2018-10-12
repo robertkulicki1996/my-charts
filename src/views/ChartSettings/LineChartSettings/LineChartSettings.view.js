@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 // import Collapsible from 'react-collapsible';
 import Collapsible from 'react-collapsible';
+import ColorPickerSectionHeader from '../../../views/Sidebar/components/ColorPickerSectionHeader/ColorPickerSectionHeader';
 import OptionSectionHeader from '../../../views/Sidebar/components/OptionSectionHeader/OptionSectionHeader';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
@@ -9,8 +10,7 @@ import 'react-dropdown/style.css';
 import { observer } from 'mobx-react';
 // import Switch from '../../common/components/Switch/Switch';
 import InputNumber from '../../../common/components/InputNumber/InputNumber';
-// import SectionHeader from './components/SectionHeader/SectionHeader';
-import { SliderPicker } from 'react-color';
+import { SliderPicker, CompactPicker, SketchPicker} from 'react-color';
 
 import './LineChartSettings.view.scss';
 
@@ -31,9 +31,11 @@ export default class LineChartSettings extends Component {
         <div className="option-wrapper">
           <div className="label">Chart type</div>
           <Dropdown 
-            controlClassName='custom-dropdown'
             options={options} 
             placeholder="Select type" 
+            controlClassName='custom-dropdown'
+            placeholderClassName='custom-placeholder'
+            arrowClassName='custom-arrow'
           />
         </div>
         <div className="option-wrapper">
@@ -54,14 +56,24 @@ export default class LineChartSettings extends Component {
             precision={0}
           />
         </div>
-        <div className="option-wrapper-column">
-          <div className="label margin-bottom">Background color</div>
-          <SliderPicker />
-        </div>
+        <Collapsible
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          trigger={
+            <ColorPickerSectionHeader 
+              title="Background color" 
+              color="red" 
+            />
+          }
+        >
+          <CompactPicker />
+        </Collapsible>
         <Collapsible 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
+          height={300}
           trigger={
             <OptionSectionHeader title="Padding" />
           }
@@ -98,6 +110,55 @@ export default class LineChartSettings extends Component {
             <InputNumber
               style={{ width: 100 }}
               defaultValue={380}
+              onChange={onChange}
+              precision={0}
+            />
+          </div>
+        </Collapsible>
+        <Collapsible 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          trigger={
+            <OptionSectionHeader title="Margin" />
+          }
+        >
+          <div className="option-wrapper-column">
+            <div className="label margin-bottom">Color</div>
+            <SliderPicker />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Margin top</div>
+            <InputNumber
+              style={{ width: 100 }}
+              defaultValue={0}
+              onChange={onChange}
+              precision={0}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Margin right</div>
+            <InputNumber
+              style={{ width: 100 }}
+              defaultValue={0}
+              onChange={onChange}
+              precision={0}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Margin bottom</div>
+            <InputNumber
+              style={{ width: 100 }}
+              defaultValue={0}
+              onChange={onChange}
+              precision={0}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Margin left</div>
+            <InputNumber
+              style={{ width: 100 }}
+              defaultValue={0}
               onChange={onChange}
               precision={0}
             />
