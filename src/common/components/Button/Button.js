@@ -17,7 +17,7 @@ export default class Button extends PureComponent {
     /**
      * Button style
      */
-    buttonStyle: PropTypes.oneOf(['button-primary', 'button-link', 'button-social']),
+    buttonStyle: PropTypes.string,
     /**
      * React-passed children.
      */

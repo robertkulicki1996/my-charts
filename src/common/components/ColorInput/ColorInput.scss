@@ -1,0 +1,34 @@
+@import '../../../common/styles/variables.scss';
+
+.color-input-wrapper {
+	height: $metric-base;
+	display: flex;
+	align-items: center;
+	color: $color-lightgrey;
+  cursor: pointer;
+  background-color: $color-white;
+  border-top-left-radius: $metric-small;
+  border-bottom-left-radius: $metric-small;
+  border-top-right-radius: $metric-x-small;
+  border-bottom-right-radius: $metric-x-small;
+  width: $metric-xx-large;
+}
+
+.color-text{
+  font-size: $metric-m-small;
+  padding-bottom: $metric-x-small / 4;
+}
+
+.color-circle {
+  width: $metric-base - $metric-x-small /2;
+  height: $metric-base - $metric-x-small /2;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: $color-white;
+  border-radius: $metric-small;
+  margin-right: $metric-x-small / 2;
+  margin-left: $metric-x-small / 4;
+}

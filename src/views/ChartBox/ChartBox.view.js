@@ -89,9 +89,10 @@ export default class ChartBox extends Component {
               right: 24,
               top: 24,
               bottom: 24
-            }
+            },
           },
           legend: {
+            display: true,
             labels: {
               fontColor: "white",
               fontSize: 14

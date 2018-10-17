@@ -21,12 +21,17 @@ class ContextMenu extends Component {
     /**
      * Children of context menu - elements that trigger context menu
      */
-    children: PropTypes.node
+    children: PropTypes.node,
+    /**
+     * Css classname
+     */
+    className: PropTypes.string
   }
 
   static defaultProps = {
     body: null,
     position: 'leftBottom',
+    className: ''
   };
 
   @observable visible;
@@ -46,11 +51,11 @@ class ContextMenu extends Component {
   }
 
   render() {
-    const { position, body, children } = this.props;
+    const { position, body, children, className } = this.props;
      return (
       <div className="context-menu-container">
         <Button
-          buttonStyle='button-link'
+          buttonStyle={`${'button-link'} ${className}`}
           tabIndex={0}
           className='trigger'
           onClick={this.handleTriggerClick}
