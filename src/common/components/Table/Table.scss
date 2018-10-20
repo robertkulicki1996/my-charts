@@ -1,0 +1,21 @@
+@import '../../../common/styles/variables.scss';
+
+
+.table-wrapper {
+
+}
+
+table {
+  font-family: $font-default;
+  border-collapse: collapse;
+  width: 100%;
+  overflow: hidden;
+}
+
+td, th {
+  border: 1px solid $color-darkblue;
+  text-align: left;
+  padding: 8px;
+  font-size: $metric-m-small;
+  color: $color-lightgrey;
+}

@@ -1,1 +1,25 @@
 @import '../../common/styles/variables.scss';
+
+.chart-data-box {
+  padding: $metric-base;
+}
+
+.chart-data-options {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $metric-base;
+} 
+
+
+.add-button {
+  height: $metric-base + $metric-x-small;
+  width: $metric-large * 2;
+  font-size: $metric-m-small;
+  background: $color-darkblue;
+  margin-right: $metric-base;
+}
+
+.add-button:last-child {
+  margin-right: 0;
+}
