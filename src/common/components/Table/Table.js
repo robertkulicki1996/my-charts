@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
+import { observable, action } from 'mobx';
 
+// icons
+import DeleteIcon from '../../icons/delete.svg';
+
+// styles
 import './Table.scss';
 
 @observer
@@ -10,89 +15,51 @@ export default class Table extends Component {
 
   }
 
+  @observable columns = [
+    'Company',
+    'Contact',
+    'Country'
+  ];
+
+  @observable rows = [
+    [
+      'Alfreds Futterkiste',
+      'Maria Anders',
+      'Germany'
+    ],
+    [
+      'Alfreds Futterkiste',
+      'Maria Anders',
+      'Germany'
+    ],
+    [
+      'Alfreds Futterkiste',
+      'Maria Anders',
+      'Germany'
+    ],
+  ];
+
+  @action.bound
+  addRow(){
+    const { columns, rows } = this;
+    let columnsCount = columns.length;
+    const newRowData = [];
+    while(columnsCount > 0) {
+      newRowData.push(0);
+      columnsCount--;
+    }
+    rows.push(newRowData);
+  }
+
   render() {
+    const { columns, rows } = this;
     return (
-      <div className="table-wrapper">
-        <table>
-          <tr>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Country</th>
-            <th>Contact</th>
-            <th>Contact</th>
-          </tr>
-          <tr>
-            <td>Alfreds Futterkiste</td>
-            <td>Maria Anders</td>
-            <td>Germany</td>
-            <td>Maria Anders</td>
-            <td>Maria Anders</td>
-          </tr>
-          <tr>
-            <td>Centro comercial Moctezuma</td>
-            <td>Francisco Chang</td>
-            <td>Mexico</td>
-            <td>Maria Anders</td>
-            <td>Maria Anders</td>
-          </tr>
-          <tr>
-            <td>Ernst Handel</td>
-            <td>Maria Anders</td>
-            <td>Roland Mendel</td>
-            <td>Maria Anders</td>
-            <td>Austria</td>
-          </tr>
-          <tr>
-            <td>Island Trading</td>
-            <td>Maria Anders</td>
-            <td>Helen Bennett</td>
-            <td>Maria Anders</td>
-            <td>UK</td>
-          </tr>
-          <tr>
-            <td>Laughing Bacchus Winecellars</td>
-            <td>Maria Anders</td>
-            <td>Yoshi Tannamuri</td>
-            <td>Maria Anders</td>
-            <td>Canada</td>
-          </tr>
-          <tr>
-            <td>Laughing Bacchus Winecellars</td>
-            <td>Maria Anders</td>
-            <td>Yoshi Tannamuri</td>
-            <td>Maria Anders</td>
-            <td>Canada</td>
-          </tr>
-          <tr>
-            <td>Laughing Bacchus Winecellars</td>
-            <td>Maria Anders</td>
-            <td>Maria Anders</td>
-            <td>Yoshi Tannamuri</td>
-            <td>Canada</td>
-          </tr>
-          <tr>
-            <td>Maria Anders</td>
-            <td>Laughing Bacchus Winecellars</td>
-            <td>Yoshi Tannamuri</td>
-            <td>Maria Anders</td>
-            <td>Canada</td>
-          </tr>
-          <tr>
-            <td>Laughing Bacchus Winecellars</td>
-            <td>Maria Anders</td>
-            <td>Yoshi Tannamuri</td>
-            <td>Maria Anders</td>
-            <td>Canada</td>
-          </tr>
-          <tr>
-            <td>Magazzini Alimentari Riuniti</td>
-            <td>Maria Anders</td>
-            <td>Giovanni Rovelli</td>
-            <td>Maria Anders</td>
-            <td>Italy</td>
-          </tr>
-        </table>
-      </div>
+      <table>
+        <tr>{columns.map(column => (<th>{column}</th>))}</tr>
+          {rows.map((row) => (<tr>{row.map((cell) => (<td>{cell}</td>))}
+          <DeleteIcon className="remove-button" width={14} height={14} />
+        </tr>))}
+      </table>
     );
   }
 }
