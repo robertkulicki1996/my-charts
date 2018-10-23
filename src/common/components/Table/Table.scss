@@ -8,29 +8,26 @@ table {
 }
 
 td, th {
-  border: 1px solid $color-darkblue;
   text-align: left;
   padding: 8px;
   font-size: $metric-m-small;
   color: $color-lightgrey;
 }
 
-tr {
-  position: relative;
+tr:nth-child(even){
+  background-color: #38435a;
+}
 
-  &:hover {
-    .remove-button {
-      visibility: visible;
-    }
-  }
+tr:hover {
+  background-color: #38435a;
+  cursor: pointer;
+}
+
+td:last-child {
+  border: 0px;
+  width: $metric-small;
 }
 
 .remove-button {
-  visibility: hidden;
-  position: absolute;
-  left: 6px;
-  background-color: inherit;
-  border-radius: 5px;
-  margin-top: $metric-x-small + 2px;
   cursor: pointer;
 }
