@@ -14,13 +14,13 @@ td, th {
   color: $color-lightgrey;
 }
 
-tr:nth-child(even){
+tbody > tr:nth-child(odd){
   background-color: #38435a;
 }
 
-tr:hover {
+tbody > tr:hover {
   background-color: #38435a;
-  cursor: pointer;
+  cursor: default;
 }
 
 td:last-child {
@@ -29,5 +29,6 @@ td:last-child {
 }
 
 .remove-button {
+  height: $metric-small;
   cursor: pointer;
 }
