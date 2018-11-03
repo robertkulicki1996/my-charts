@@ -13,6 +13,14 @@ export default class InputNumber extends Component {
      */
     style: PropTypes.object,
     /**
+     * disable component
+     */
+    disabled: PropTypes.bool,
+    /**
+     * input value
+     */
+    value: PropTypes.number,
+    /**
      * default value 
      */
     defaultValue: PropTypes.number,
@@ -23,14 +31,21 @@ export default class InputNumber extends Component {
     /**
      * precision number
      */
-    precision: PropTypes.number
+    precision: PropTypes.number,
+    /**
+     * step
+     */
+    step: PropTypes.number
   }
   render() {
-    const { style, defaultValue, onChange, precision } = this.props;
+    const { style, value, defaultValue, onChange, step, precision, disabled } = this.props;
     return (
       <RcInputNumber
         style={style}
+        disabled={disabled}
         defaultValue={defaultValue}
+        step={step}
+        value={value}
         onChange={onChange}
         precision={precision}
       />

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'mobx-react';
 import { IntlProvider, addLocaleData } from 'react-intl';
+import Popup from 'react-popup';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,6 +22,7 @@ class App extends Component {
         <Provider {...stores} >
           <React.Fragment>
             <ApplicationRoutes />
+            <Popup closeBtn={true} escToClose={true} />
             <ToastContainer />
           </React.Fragment>
         </Provider>

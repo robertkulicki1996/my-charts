@@ -36,3 +36,23 @@
   font-size: $metric-m-small;
   margin-right: $metric-x-small;
 }
+
+.add-column-button {
+  height: $metric-base;
+  width: $metric-xx-large;
+  margin-right: $metric-small;
+  font-size: $metric-m-small;
+}
+
+.column-input {
+  padding: $metric-x-small;
+  font-family: $font-default;
+  font-size: $metric-m-small;
+  margin-bottom: $metric-small;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $metric-small;
+}

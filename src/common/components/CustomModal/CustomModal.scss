@@ -1,0 +1,51 @@
+@import '../../../common/styles/variables.scss';
+
+.custom-modal {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  background: $color-darkblue;
+  border-radius: 3px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: $metric-small;
+    padding-left: $metric-small;
+    height: $metric-med;
+    border-bottom: 1px solid $color-lightgrey;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    padding: $metric-small;
+  }
+
+  &__footer {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    bottom: 0;
+    border-top: 1px solid $color-lightgrey;
+    height: $metric-med;
+  }
+}
+
+.title {
+  font-size: $metric-small;
+  font-family: $font-default;
+  font-weight: $font-weight-medium;
+  color: $color-white;
+}
+
+.close-button {
+  color: $color-white;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

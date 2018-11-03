@@ -2,6 +2,7 @@
 
 // Colors
 $color-white: #fff;
+$color-ghostwhite: #F5F5F5;
 $color-black: #000;
 $color-darkpink: #EB1E64;
 $color-lightpink: #fde4ed;
@@ -35,5 +36,6 @@ $font-weight-demi: 600;
 $font-weight-bold: 700;
 
 // z-index
-$zindex-header: 50000;
+$zindex-header: 5000;
 $zindex-context-menu: 10000;
+$zindex-popup: 100000;

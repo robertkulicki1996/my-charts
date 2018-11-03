@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
-import { remove, includes } from 'lodash';
+import { remove, find, forEach, uniqueId, map, slice } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, runInAction } from 'mobx';
 
@@ -25,83 +25,66 @@ export default class Table extends Component {
     'Contact',
     'Field',
     'Country',
-    'Field'
+    'Field2'
   ];
 
   @observable rows = [
-    [
-      'Alfreds Futterkiste',
-      'Maria Anders',
-      'Germany',
-      'Maria Anders',
-      'Alfreds Futterkiste',
-    ],
-    [
-      'Alfreds Futterkiste',
-      'Maria Anders',
-      'Germany',
-      'Maria Anders',
-      'Alfreds Futterkiste',
-    ],
-    [
-      'Alfreds Futterkiste',
-      'Maria Anders',
-      'Germany',
-      'Maria Anders',
-      'Alfreds Futterkiste',
-    ],
-    [
-      'Alfreds Futterkiste',
-      'Maria Anders',
-      'Germany',
-      'Maria Anders',
-      'Alfreds Futterkiste',
-    ],
-    [
-      'Alfreds Futterkiste',
-      'Maria Anders',
-      'Germany',
-      'Maria Anders',
-      'Alfreds Futterkiste',
-    ],
+    {
+      id: uniqueId('row_'),
+      company: 'Alfreds Futterkiste',
+      contact: 'Maria Anders',
+      filed: 'Germany',
+      country: 'Maria Anders',
+      filed2: 'Germany'
+    },
+    {
+      id: uniqueId('row_'),
+      company: 'Alfreds Futterkiste',
+      contact: 'Maria Anders',
+      filed: 'Germany',
+      country: 'Maria Anders',
+      filed2: 'Germany'
+    },
+    {
+      id: uniqueId('row_'),
+      company: 'Alfreds Futterkiste',
+      contact: 'Maria Anders',
+      filed: 'Germany',
+      country: 'Maria Anders',
+      filed2: 'Germany'
+    },
   ];
 
-  @observable existingIndexes = [];
+  @action.bound
+  addRow(){
+    const { columns, rows } = this;
+    const newRow = {};
+    const newRowValue = 'Undefined row'
+    newRow.id = uniqueId('row_');
+    map(columns, column => {
+      newRow[column] = newRowValue;
+    })
+    rows.push(newRow);
+  }
 
-  componentDidMount() {
-    runInAction(() => {
-      this.existingIndexes = Array.from(new Array(this.rows.length),(val,index) => index);
+  @action.bound
+  addColumn(columnName="Undefined column") {
+    const { columns, rows } = this;
+    const newColumn = columnName;
+    columns.push(newColumn);
+    map(rows, row => {
+      row[newColumn] = 'Undefined row'
     })
   }
 
   @action.bound
-  addRow(){
-    const { columns, rows, existingIndexes } = this;
-    let columnsCount = columns.length;
-    const newRowData = [];
-    while(columnsCount > 0) {
-      newRowData.push(0);
-      columnsCount--;
-    }
-    rows.push(newRowData);
-    existingIndexes.push(existingIndexes.length);
-
-    console.log(existingIndexes);
-  }
-
-  @action.bound
   removeRow(index) {
-    const { rows, existingIndexes } = this;
-    remove(this.rows[index]);
-    // rows.splice(rows.indexOf(index),1);
-    // console.log(index);
-    // console.log(this.rows);
-    // console.log(this.existingIndexes);
-    existingIndexes.splice(existingIndexes.indexOf(index),1);
+    const objectToRemove = find(this.rows, {id: index})
+    remove(this.rows,objectToRemove);
   }
 
   render() {
-    const { columns, rows, existingIndexes } = this;
+    const { columns, rows } = this;
 
     const removeRowButton = (index) => (
       <Button key={index} className="remove-button" onClick={() => this.removeRow(index)}>
@@ -119,12 +102,13 @@ export default class Table extends Component {
           <tr>{columns.map((column, index)=> (<th key={index}>{column}</th>))}</tr>
         </thead>
         <tbody>
-          {rows.map((row,index) => (<tr key={index}>{row.map((cell,index) => (<td key={index}>{cell}</td>))}
-            {includes(existingIndexes, index) && (
-              <td key={index}>
-                {removeRowButton(index)}
-              </td>
-            )}
+          {map(rows, (row,index) => (<tr key={index}>{
+            map(Object.values(row), (val, index) => {
+              if (index > 0) return <td key={index}>{val}</td>
+            })}
+            <td key={index}>
+              {removeRowButton(row.id)}
+            </td>
           </tr>))}
         </tbody>
       </table>
