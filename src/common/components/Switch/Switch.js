@@ -20,6 +20,10 @@ export default class Switch extends Component {
      */
     disabled: PropTypes.bool,
     /**
+     * Swicth checked value
+     */
+    checked: PropTypes.bool,
+    /**
      * checkedChilderen node
      */
     checkedChildren: PropTypes.node,
@@ -29,10 +33,11 @@ export default class Switch extends Component {
     uncheckedChildren: PropTypes.node
   }
   render() {
-    const { onChange, disabled, checkedChildren, uncheckedChildren } = this.props;
+    const { onChange, checked, disabled, checkedChildren, uncheckedChildren } = this.props;
     return (
       <RcSwitch
         onChange={onChange}
+        checked={checked}
         disabled={disabled}
         checkedChildren={checkedChildren}
         unCheckedChildren={uncheckedChildren}

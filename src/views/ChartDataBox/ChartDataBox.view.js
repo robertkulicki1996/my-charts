@@ -30,12 +30,7 @@ export default class ChartDataBox extends Component {
   @observable isRandomValuesDisabled = true;
   @observable randomFrom = 0;
   @observable randomTo = 100;
-
-  componentDidMount() {
-    runInAction(() => {
-      this.newColumnName = 'Column-' + (this.table.current.columns.length + 1);
-    })
-  }
+  @observable initialRowValue = 0;
 
   @action.bound
   handleColumnName(event) {
@@ -43,13 +38,18 @@ export default class ChartDataBox extends Component {
   }
 
   @action.bound
+  handleInitialRowValue(event) {
+    this.initialRowValue = event.target.value;
+  }
+
+  @action.bound
   onRandomValuesChange() {
+    this.initialRowValue = 0;
     this.isRandomValuesDisabled = !this.isRandomValuesDisabled;
   }
 
   @action.bound
   onRandomFromChange(value) {
-    console.log(value);
     this.randomFrom = value;
   }
 
@@ -65,12 +65,19 @@ export default class ChartDataBox extends Component {
 
   @action.bound
   addColumn() {
-    this.showAddColumnPopup();
-    // this.table.current.addColumn();
+    const { newColumnName, randomFrom, randomTo, initialRowValue } = this; 
+    if(this.isRandomValuesDisabled) {
+      this.table.current.addColumn(newColumnName, null, null, initialRowValue);
+    } else {
+      this.table.current.addColumn(newColumnName, randomFrom, randomTo);
+    }
+    this.isRandomValuesDisabled = true;
+    this.hideAddColumnPopup();
   }
 
   @action.bound
   showAddColumnPopup() {
+    this.newColumnName = 'Column' + (this.table.current.columns.length + 1);
     this.isAddColumnPopupShown = true;
   }
 
@@ -84,7 +91,7 @@ export default class ChartDataBox extends Component {
       <CustomModal
         title="Create data column"
         width="300" 
-        height="320" 
+        height="368" 
         effect="fadeInDown" 
         visible={this.isAddColumnPopupShown} 
         onClose={this.hideAddColumnPopup}
@@ -111,11 +118,22 @@ export default class ChartDataBox extends Component {
             inputClassName="column-input"
           />
           <div className="option">
+            <div className="label">Initial row value</div>
+          </div>
+          <Input 
+            type="text" 
+            disabled={!this.isRandomValuesDisabled}
+            value={this.initialRowValue}
+            onChange={this.handleInitialRowValue} 
+            inputClassName="column-input"
+          />
+          <div className="option">
             <div className="label">Generate random values</div>
             <Switch
               style={{ width: 80 }}
               defaultValue={800}
               onChange={this.onRandomValuesChange}
+              checked={!this.isRandomValuesDisabled}
               precision={0}
             />
           </div>
@@ -155,7 +173,7 @@ export default class ChartDataBox extends Component {
             </Button>
             <Button 
               className="add-button"
-              onClick={this.addColumn}
+              onClick={this.showAddColumnPopup}
             >
               Add Column
             </Button>
@@ -166,7 +184,7 @@ export default class ChartDataBox extends Component {
               onClick={() => {}}
             >
             <div className="button-label">
-              <div className="label">Import data</div>
+              <div className="label">Import CSV file</div>
               <ImportIcon width={14} height={14} />
             </div>
             </Button>

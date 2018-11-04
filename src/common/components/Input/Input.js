@@ -35,7 +35,7 @@ class Input extends Component {
     /**
      * Initial value
      */
-    value: PropTypes.string,
+    value: PropTypes.number,
     /**
      * Input placeholder
      */
@@ -86,6 +86,7 @@ class Input extends Component {
           className={`input ${inputClassName} ${displayBorder ? 'bordered' : ''}`}
           type={type}
           disabled={disabled}
+          step={1}
           required={required}
           onChange={onChange}
           readOnly={readonly}

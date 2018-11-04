@@ -10,8 +10,8 @@ import './CustomModal.scss';
 class CustomModal extends Component {
   static propTypes = {
     visible: PropTypes.bool,
-    width: PropTypes.number,
-    height: PropTypes.number,
+    width: PropTypes.string,
+    height: PropTypes.string,
     effect: PropTypes.oneOf(['fadeInDown', 'fadeInUp','fadeInLeft', 'fadeInRight']),
     onClose: PropTypes.func,
     title: PropTypes.string,

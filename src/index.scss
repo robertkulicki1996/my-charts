@@ -7,15 +7,16 @@ body {
 }
 
 ::-webkit-scrollbar {
-	width: 6px !important;
+	width: 4px !important;
+	height: 4px !important;
 	background-color: #eb1e64 !important;
 }
 
 ::-webkit-scrollbar-track {
-	background-color: inherit !important;
+	background-color: #272f40;
 }
  
 ::-webkit-scrollbar-thumb {
 	background-color: #eb1e64 !important;
-	border-radius: 4px !important;
+	border-radius: 6px !important;
 }

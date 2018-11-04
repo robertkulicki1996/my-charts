@@ -14,7 +14,7 @@
 
 .add-button {
   height: $metric-base + $metric-x-small;
-  width: $metric-large * 2;
+  width: $metric-large * 2 + $metric-small;
   font-family: $font-default;
   font-size: $metric-m-small;
   background: $color-darkblue;

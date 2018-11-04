@@ -18,9 +18,10 @@
   }
 
   &__body {
-    display: flex;
+    height: calc(100% - #{$metric-med * 2 + $metric-small}); 
     flex-direction: column;
     padding: $metric-small;
+    overflow-y: auto;
   }
 
   &__footer {
@@ -32,6 +33,7 @@
     bottom: 0;
     border-top: 1px solid $color-lightgrey;
     height: $metric-med;
+    background-color: $color-darkblue;
   }
 }
 

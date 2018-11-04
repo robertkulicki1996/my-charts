@@ -28,7 +28,47 @@ td:last-child {
   width: $metric-small;
 }
 
+td:nth-last-child(2) {
+  border: 0px;
+  width: $metric-small;
+}
+
 .remove-button {
   height: $metric-small;
   cursor: pointer;
+}
+
+.edit-button {
+  height: $metric-small;
+  cursor: pointer;
+}
+
+.remove-column-button {
+  height: $metric-small;
+  cursor: pointer;
+  margin-left: $metric-x-small;
+}
+
+.column-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  font-family: $font-default;
+  font-size: $metric-m-small;
+  margin-right: $metric-x-small;
+}
+
+.input-n {
+  padding: $metric-x-small;
+  font-family: $font-default;
+  font-size: $metric-m-small;
+  margin-bottom: $metric-small;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $metric-x-small;
 }
