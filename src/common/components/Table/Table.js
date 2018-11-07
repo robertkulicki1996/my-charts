@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { remove, find, indexOf, uniqueId, map, capitalize, toLower } from 'lodash';
+import { remove, find, indexOf, uniqueId, map, capitalize, toLower, forEach } from 'lodash';
 import { Bind } from 'lodash-decorators';
-import { observable, action } from 'mobx';
+import { observable, action, extendObservable } from 'mobx';
 
 // services
 import NotificationService from '../../services/notifications';
@@ -32,24 +32,24 @@ export default class Table extends Component {
   @observable rows = [
     {
       id: uniqueId('row_'),
-      column1: 110,
-      column2: 320,
-      column3: 320,
-      column4: 420
+      column1: '110',
+      column2: '320',
+      column3: '320',
+      column4: '420'
     },
     {
       id: uniqueId('row_'),
-      column1: 150,
-      column2: 420,
-      column3: 330,
-      column4: 420
+      column1: '150',
+      column2: '420',
+      column3: '330',
+      column4: '420'
     },
     {
       id: uniqueId('row_'),
-      column1: 150,
-      column2: 320,
-      column3: 340,
-      column4: 420
+      column1: '150',
+      column2: '320',
+      column3: '340',
+      column4: '420'
     }
   ];
 
@@ -68,7 +68,7 @@ export default class Table extends Component {
     this.isRowEditPopupShown = false;
   }
 
-  @Bind()
+  @action.bound
   getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
@@ -80,7 +80,7 @@ export default class Table extends Component {
       const newRow = {};
       newRow.id = uniqueId('row_');
       map(columns, column => {
-        newRow[column] = this.getRandomInt(1,100);
+        newRow[column] = this.getRandomInt(1,100).toString();
       })
       rows.push(newRow);
     } else {
@@ -89,25 +89,24 @@ export default class Table extends Component {
   }
 
   @action.bound
-  handleRowChange(event,key) {
-    console.log(key);
-    console.log(this.editingRow[key]);
+  handleRowChange(event, key) {
     this.editingRow[key] = event.target.value;
   } 
 
   @action.bound
   addColumn(columnName="Undefined column", randomFrom=null, randomTo=null, initialRowValue) {
-    const { columns, rows } = this;
-    const newColumn = columnName;
-    columns.push(newColumn);
+    const newColumn = toLower(columnName);
+    this.columns.push(newColumn);
     if(randomFrom !== null && randomTo !== null) {
-      map(rows, row => {
-        row[toLower(newColumn)] = this.getRandomInt(randomFrom, randomTo);
-        console.log(row[newColumn]);
+      map(this.rows, row => {
+        extendObservable(row, { 
+            [newColumn]: this.getRandomInt(randomFrom, randomTo).toString() 
+          }
+        );
       })
     } else {
-      map(rows, row => {
-        row[toLower(newColumn)] = initialRowValue;
+      map(this.rows, row => {
+        row[toLower(newColumn)] = initialRowValue.toString();
       })
     }
   }
@@ -118,7 +117,7 @@ export default class Table extends Component {
       if(row.id === this.editingRow.id) {
         row = this.editingRow;
       }
-    })
+    });
     this.editingRow = {};
     this.hideEditRowPopup();
   }
@@ -136,6 +135,25 @@ export default class Table extends Component {
     map(this.rows, row => {
       delete row[columnName];
     })
+  }
+
+  @Bind()
+  renderEditRowPopupBody(){
+    return Object.keys(this.editingRow).map((key,index) => 
+      key !== 'id' && (
+        <div key={index-1}>
+          <div className="option">
+            <div className="label">{capitalize(key)}</div>
+          </div>
+          <Input
+            key={index-1}
+            type="number"
+            value={this.editingRow[key]}
+            onChange={event => this.handleRowChange(event,key)} 
+            inputClassName="input-n"
+          />
+        </div>
+    ))
   }
 
   render() {
@@ -161,22 +179,7 @@ export default class Table extends Component {
           </Button>
         }
       >
-        {Object.keys(this.editingRow).map((key,index) => 
-          key !== 'id' && (
-            <div key={index}>
-              <div className="option">
-                <div className="label">{capitalize(key)}</div>
-              </div>
-              <Input
-                key={index} 
-                type="number" 
-                value={this.editingRow[key]}
-                onChange={event => this.handleRowChange(event,key)} 
-                inputClassName="input-n"
-              />
-            </div>
-          ))}
-          {console.log(this.rows)}
+        {this.renderEditRowPopupBody()}
       </CustomModal>
     );
 
