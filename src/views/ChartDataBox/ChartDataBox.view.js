@@ -7,6 +7,7 @@ import Table from './../../common/components/Table/Table';
 import Button from './../../common/components/Button/Button';
 import Input from './../../common/components/Input/Input';
 import InputNumber from './../../common/components/InputNumber/InputNumber';
+import FileInput from './../../common/components/FileInput/FileInput';
 import Switch from './../../common/components/Switch/Switch';
 import CustomModal from './../../common/components/CustomModal/CustomModal';
 
@@ -179,7 +180,7 @@ export default class ChartDataBox extends Component {
             </Button>
           </div>
           <div className="table-buttons">
-            <Button 
+            {/* <Button 
               className="add-button"
               onClick={() => {}}
             >
@@ -187,7 +188,14 @@ export default class ChartDataBox extends Component {
               <div className="label">Import CSV file</div>
               <ImportIcon width={14} height={14} />
             </div>
-            </Button>
+            </Button> */}
+            <FileInput 
+              name="csvFile"
+              accept=".csv"
+              placeholder="Import CSV file"
+              className="add-button"
+              onChange={this.handleFileChange} 
+            />
             <Button 
               className="add-button"
               onClick={() => {}}

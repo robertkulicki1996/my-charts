@@ -1,0 +1,33 @@
+@import '../../../common/styles/variables.scss';
+
+.upload-btn {
+  position: relative;
+  display: inline-block;
+}
+
+.btn {
+  height: $metric-base + $metric-x-small;
+  width: $metric-large * 2 + $metric-small;
+  font-family: $font-default;
+  font-size: $metric-m-small;
+  background: $color-darkblue;
+  margin-right: $metric-base;
+  border-radius: $metric-x-small / 2;
+  border: 0;
+  color: $color-lightgrey;
+  user-select: none;
+}
+
+.upload-btn input[type=file] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  height: 32px;
+  width: 144px;
+}
+
+input[type=file], /* FF, IE7+, chrome (except button) */
+input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
+    cursor: pointer; 
+}
