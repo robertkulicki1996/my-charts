@@ -29,5 +29,9 @@
     "views.register.sign_up_success": "The account was set up correctly",
 
     "views.navbar.sign_out": "Sign out",
-    "views.navbar.dashboard": "Your dashboard"
+    "views.navbar.dashboard": "Your dashboard",
+
+    "views.choose_chart_type.title": "Select a chart type",
+    "views.choose_chart_type.subtitle": "This application comes with built-in chart types like line, bar, radar, doughnut and pie, polar area, bubble, scatter",
+    "views.choose_chart_type.my_saved_charts": "My saved charts"
 }

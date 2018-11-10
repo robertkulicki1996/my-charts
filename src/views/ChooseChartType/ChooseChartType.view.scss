@@ -1,0 +1,96 @@
+@import '../../common/styles/variables.scss';
+
+.choose-chart-type-wrapper {
+  display: flex;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+	background-color: $color-brighterblue;
+}
+
+.choose-chart-type {
+	padding: $metric-base;
+  width: 100%;
+	background-color: $color-brighterblue;
+	display: flex;
+	flex-direction: column;
+}
+
+.title-block {
+  padding: $metric-large;
+  font-family: $font-default;
+  color: $color-lightgrey;
+
+  &__title {
+    font-size: $metric-base;
+    margin-top: $metric-x-small;
+    margin-bottom: $metric-x-small;
+  }
+
+  &__subtitle {
+    font-size: $metric-small;
+  }
+}
+
+.chart-types {
+  margin-top: $metric-x-large;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.chart-box {
+  width: $metric-xx-large * 4;
+  height: $metric-xx-large * 2.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: $metric-x-small;
+  margin-right: $metric-base;
+  margin-bottom: $metric-base;
+  border: 1px solid $color-lightgrey;
+
+  &:hover {
+    border: 1px solid $color-darkpink;
+    cursor: pointer;
+  }
+
+  &--saved {
+    border: 1px dashed $color-darkpink;
+    color: $color-darkpink;
+  }
+}
+
+.chart-label {
+  font-family: $font-default;
+  font-size: $metric-small;
+  margin-top: $metric-small;
+  color: $color-darkpink;
+}
+
+.chart-sublabel {
+  font-family: $font-default;
+  font-size: $metric-base / 2 + 2px;
+  text-align: justify;
+  margin: $metric-x-small $metric-base $metric-x-small $metric-base;
+}
+
+.chart-box-saved {
+  width: $metric-xx-large * 4;
+  height: $metric-xx-large * 2.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: $metric-x-small;
+  margin-right: $metric-base;
+  margin-bottom: $metric-base;
+  border: 1px solid $color-lightgrey;
+  border: 1px dashed $color-darkpink;
+  color: $color-darkpink;
+
+  &:hover {
+    border: 1px solid $color-darkpink;
+    cursor: pointer;
+  }
+}

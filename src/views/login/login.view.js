@@ -5,7 +5,7 @@ import { Bind } from 'lodash-decorators';
 import { observable, action, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { PropagateLoader } from 'react-spinners';
-import { HOME, RECOVER_PASSWORD, SIGN_UP } from '../../common/consts/routes';
+import { RECOVER_PASSWORD, SIGN_UP, CHOOSE_CHART_TYPE } from '../../common/consts/routes';
 
 import { AuthStore } from '../../stores/auth';
 
@@ -51,7 +51,7 @@ export class Login extends Component {
     const { history, authStore } = this.props;
     this.startLoading();
     authStore.signIn(this.email, this.password).then((user) => {    
-      history.push(HOME);
+      history.push(CHOOSE_CHART_TYPE);
     })
     .catch(error => {
       this.stopLoading();

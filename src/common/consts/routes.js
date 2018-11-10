@@ -10,12 +10,14 @@ import Login from '../../views/login/login.view';
 import Register from '../../views/register/register.view';
 import Home from '../../views/Home/Home.view';
 import RecoverPassword from '../../views/recoverPassword/recoverPassword.view';
+import ChooseChartType from '../../views/ChooseChartType/ChooseChartType.view';
 
 // Routes defined in application
 export const SIGN_IN = '/';
 export const RECOVER_PASSWORD = '/recover-password';
 export const SIGN_UP = '/sign-up';
 export const HOME = '/home';
+export const CHOOSE_CHART_TYPE = '/choose-chart-type'
 
 // Application routes
 @inject('authStore')
@@ -34,20 +36,21 @@ export default class ApplictionRoutes extends Component {
 				<Route path={SIGN_UP} component={Register} />
 				<Route path={RECOVER_PASSWORD} component={RecoverPassword} />
 				<Route
-						render={ () => {
-								return <Redirect to={SIGN_IN} />;
-						}}
+					render={ () => {
+						return <Redirect to={SIGN_IN} />;
+					}}
 				/>
 			</Switch>
 		);
 
 		const privateRoutes = (
 			<Switch>
-				<Route exact path={HOME} component={Home} />
+				<Route exact path={CHOOSE_CHART_TYPE} component={ChooseChartType} />
+				<Route path={HOME} component={Home} />
 				<Route
-						render={ () => {
-								return <Redirect to={HOME} />;
-						}}
+					render={ () => {
+						return <Redirect to={CHOOSE_CHART_TYPE} />;
+					}}
 				/>
 			</Switch>
 		);
