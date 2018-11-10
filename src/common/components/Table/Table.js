@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 import { remove, find, indexOf, uniqueId, map, capitalize, toLower, forEach } from 'lodash';
 import { Bind } from 'lodash-decorators';
@@ -22,14 +23,19 @@ import './Table.scss';
 
 @observer
 export default class Table extends Component {
-  @observable columns = [
+  static propTypes = {
+    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
+    columns: PropTypes.arrayOf(PropTypes.string).isRequired
+  }
+
+  @observable columns = this.props.columns || [
     'column1',
     'column2',
     'column3',
     'column4'
-  ];
+  ] ;
 
-  @observable rows = [
+  @observable rows = this.props.rows || [
     {
       id: uniqueId('row_'),
       column1: '110',

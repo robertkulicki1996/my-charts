@@ -1,21 +1,13 @@
 import firebase from 'firebase';
-import {
-	observable,
-	action
-} from 'mobx';
-import {
-	runInAction
-} from 'mobx';
-import {
-	Bind
-} from 'lodash-decorators';
+import { observable, action } from 'mobx';
+import { runInAction } from 'mobx';
+import { Bind } from 'lodash-decorators';
 
 export const STORAGE_KEY_FOR_USER_UID = 'USER_UID';
 
 export class AuthStore {
 	// current user auth state
 	@observable authUser = null;
-
 
 	constructor() {
 		this.setUserAuthState();

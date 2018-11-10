@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
+import PropTypes from 'prop-types';
 import { action, observable, runInAction } from 'mobx';
+import { PulseLoader } from 'react-spinners';
+
+// stores
+import { DataStore } from '../../stores/data';
 
 // components
 import Table from './../../common/components/Table/Table';
@@ -19,8 +24,13 @@ import SaveIcon from './../../common/icons/save.svg';
 // styles
 import './ChartDataBox.view.scss';
 
+@inject('dataStore')
 @observer
 export default class ChartDataBox extends Component {
+  static propTypes = {
+    dataStore: PropTypes.instanceOf(DataStore).isRequired
+  }
+
   constructor(props) {
     super(props);
     this.table = React.createRef();
@@ -32,6 +42,10 @@ export default class ChartDataBox extends Component {
   @observable randomFrom = 0;
   @observable randomTo = 100;
   @observable initialRowValue = 0;
+
+  @observable isFileLoading = false;
+  @observable isFileParsed = false;
+  @observable fileName = null;
 
   @action.bound
   handleColumnName(event) {
@@ -85,6 +99,48 @@ export default class ChartDataBox extends Component {
   @action.bound
   hideAddColumnPopup() {
     this.isAddColumnPopupShown = false;
+  }
+
+  @action.bound
+  async handleFileChange(event) {
+    const { dataStore } = this.props;
+    this.isFileLoading = true;
+    this.isFileParsed = false;
+
+    // User cancelled
+    if (!event.target.files[0]) {
+      this.isFileLoading = false;
+      this.isFileParsed = false;
+      return;
+    }
+
+    const file = event.target.files[0];
+
+    setTimeout(async() => {
+      await dataStore.parseFile(file);
+      dataStore.csvFile = file;
+      this.isFileParsed = true;
+      this.isFileLoading = false;
+    }, 1000)
+  }
+
+  @action.bound
+  showButtonContent() {
+    const { dataStore } = this.props;
+    const { isFileLoading, isFileParsed } = this;
+    if(!isFileLoading && !isFileParsed) {
+      return 'Import CSV file';
+    } else if(isFileLoading && !isFileParsed) {
+      return(
+        <PulseLoader
+          size={8}
+          color={'#eb1e64'}
+          loading={true}
+        />
+      );
+    } else if(isFileLoading === false && isFileParsed) {
+      return dataStore.csvFile.name;
+    } 
   }
 
   render() {
@@ -180,20 +236,10 @@ export default class ChartDataBox extends Component {
             </Button>
           </div>
           <div className="table-buttons">
-            {/* <Button 
-              className="add-button"
-              onClick={() => {}}
-            >
-            <div className="button-label">
-              <div className="label">Import CSV file</div>
-              <ImportIcon width={14} height={14} />
-            </div>
-            </Button> */}
             <FileInput 
-              name="csvFile"
-              accept=".csv"
-              placeholder="Import CSV file"
-              className="add-button"
+              buttonContent={this.showButtonContent()}
+              isFileLoading={this.isFileLoading}
+              isFileParsed={this.isFileParsed}
               onChange={this.handleFileChange} 
             />
             <Button 
@@ -216,7 +262,11 @@ export default class ChartDataBox extends Component {
             </Button>
           </div>
         </div>
-        <Table ref={this.table}/>
+        <Table 
+          ref={this.table} 
+          rows={this.props.dataStore.rows} 
+          columns={this.props.dataStore.columns}
+        />
         {AddColumnPopup}
       </div>
     );
