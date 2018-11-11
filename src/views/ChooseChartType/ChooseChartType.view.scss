@@ -21,10 +21,21 @@
   font-family: $font-default;
   color: $color-lightgrey;
 
+  &__huge-title {
+    font-size: $metric-med;
+    margin-bottom: $metric-med;
+  }
+
   &__title {
     font-size: $metric-base;
     margin-top: $metric-x-small;
     margin-bottom: $metric-x-small;
+
+    &--saved {
+      font-size: $metric-base;
+      margin-bottom: $metric-med;
+      margin-top: $metric-med - $metric-small;
+    }
   }
 
   &__subtitle {
@@ -32,27 +43,42 @@
   }
 }
 
+@media only screen and (max-width: 1024px) {
+  .title-block {
+    padding: $metric-x-small;
+  }
+
+  .choose-chart-type {
+    margin-top: $metric-med;
+  }
+}
+
 .chart-types {
-  margin-top: $metric-x-large;
+  margin-top: $metric-med;
+  margin-bottom: $metric-base;
   display: flex;
   flex-wrap: wrap;
 }
 
 .chart-box {
-  width: $metric-xx-large * 4;
-  height: $metric-xx-large * 2.5;
+  width: $metric-xx-large * 2;
+  height: $metric-xx-large * 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: $metric-x-small;
-  margin-right: $metric-base;
-  margin-bottom: $metric-base;
-  border: 1px solid $color-lightgrey;
+  margin-right: $metric-small;
+  margin-bottom: $metric-small;
+  background-color: $color-thebrightestblue;
+
+  transition: background-color 1s linear;
 
   &:hover {
-    border: 1px solid $color-darkpink;
+    font-size: $metric-base;
     cursor: pointer;
+    background-color: $color-darkpink;
+    opacity: 0.8;
   }
 
   &--saved {
@@ -65,7 +91,7 @@
   font-family: $font-default;
   font-size: $metric-small;
   margin-top: $metric-small;
-  color: $color-darkpink;
+
 }
 
 .chart-sublabel {
@@ -76,21 +102,22 @@
 }
 
 .chart-box-saved {
-  width: $metric-xx-large * 4;
-  height: $metric-xx-large * 2.5;
+  width: $metric-xx-large * 2;
+  height: $metric-xx-large * 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: $metric-x-small;
-  margin-right: $metric-base;
-  margin-bottom: $metric-base;
-  border: 1px solid $color-lightgrey;
-  border: 1px dashed $color-darkpink;
+  margin-right: $metric-small;
+  margin-bottom: $metric-small;
+  background-color: $color-thebrightestblue;
   color: $color-darkpink;
+  transition: background-color 1s linear;
 
   &:hover {
-    border: 1px solid $color-darkpink;
     cursor: pointer;
+    background-color: $color-darkblue;
+    opacity: 0.8;
   }
 }

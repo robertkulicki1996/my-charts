@@ -2,11 +2,23 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
+import { Bind } from 'lodash-decorators';
+
 import { AuthStore } from '../../stores/auth';
 import NavBar from '../NavBar/NavBar.view';
 
+// routes
+import { HOME, DASHBOARD, LINE_CHART } from '../../common/consts/routes';
+
+// icons
 import FloppyDisc from '../../common/icons/floppy-disk.svg';
 import LineChart from '../../common/icons/line-chart.svg';
+import BarChart from '../../common/icons/stats.svg';
+import RadarChart from '../../common/icons/radar-chart.svg';
+import PieChart from '../../common/icons/pie-chart-1.svg';
+import PolarAreaChart from '../../common/icons/area-chart.svg';
+import BubbleChart from '../../common/icons/bubble-chart.svg';
+import ScatterChart from '../../common/icons/scatter-chart.svg';
 
 import './ChooseChartType.view.scss';
 import translations from './ChooseChartType.view.intl';
@@ -19,10 +31,12 @@ class ChooseChartType extends Component {
     authStore: PropTypes.instanceOf(AuthStore).isRequired
   }
 
-  toggle = () => {
-    this.setState({
-      disabled: !this.state.disabled,
-    });
+  @Bind()
+  onLineChartClick() {
+    const { history } = this.props;
+    const { location } = history;
+    console.log(location);
+    history.push(HOME);
   }
 
   render() {
@@ -33,48 +47,43 @@ class ChooseChartType extends Component {
         <NavBar />
         <div className="choose-chart-type">
           <div className="title-block">
-            <div className="title-block__title">{intl.formatMessage(translations.title)}</div>
-            <div className="title-block__subtitle">{intl.formatMessage(translations.subtitle)}</div>
+            <div className="title-block__huge-title">{intl.formatMessage(translations.title)}</div>
+            <div className="title-block__title">{intl.formatMessage(translations.firstSectionTitle)}</div>
+            <div className="title-block__subtitle">{intl.formatMessage(translations.firstSectionSubtitle)}</div>
             <div className="chart-types">
-              <div className="chart-box-saved">
-                <FloppyDisc width={36} height={36} />
-                <div className="chart-label">{intl.formatMessage(translations.mySavedCharts)}</div>
-              </div>
-              <div className="chart-box">
+              <div role="button" className="chart-box" onClick={this.onLineChartClick}>
                 <LineChart width={48} height={48} />
-                <div className="chart-label">Line</div>
-                <div className="chart-sublabel">A line chart is a way of plotting data points on a line. Often, it is used to show trend data, or the comparison of two data sets.</div>
+                <div className="chart-label">{intl.formatMessage(translations.lineChart)}</div>
               </div>
-              <div className="chart-box">
-                <LineChart width={48} height={48} />
-                <div className="chart-label">Bar</div>
-                <div className="chart-sublabel">A bar chart provides a way of showing data values represented as vertical bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side.</div>
+              <div role="button" className="chart-box">
+                <BarChart width={48} height={48} />
+                <div className="chart-label">{intl.formatMessage(translations.barChart)}</div>        
               </div>
-              <div className="chart-box">
-                <LineChart width={48} height={48} />
-                <div className="chart-label">Radar</div>
-                <div className="chart-sublabel">A radar chart is a way of showing multiple data points and the variation between them. They are often useful for comparing the points of two or more different data sets.</div>
+              <div role="button" className="chart-box">
+                <RadarChart width={48} height={48} />
+                <div className="chart-label">Radar chart</div>              
               </div>
-              <div className="chart-box">
-                <LineChart width={48} height={48} />
-                <div className="chart-label">Doughnut and pie</div>
-                <div className="chart-sublabel">Pie and doughnut charts are probably the most commonly used charts. They are divided into segments, the arc of each segment shows the proportional value of each piece of data. They are excellent at showing the relational proportions between data.</div>
+              <div role="button" className="chart-box">
+                <PieChart width={48} height={48} />
+                <div className="chart-label">Doughnut and pie chart</div> 
               </div>
-              <div className="chart-box">
-                <LineChart width={48} height={48} />
-                <div className="chart-label">Polar area</div>
-                <div className="chart-sublabel">Polar area charts are similar to pie charts, but each segment has the same angle - the radius of the segment differs depending on the value. This type of chart is often useful when we want to show a comparison data similar to a pie chart, but also show a scale of values for context.</div>
+              <div role="button" className="chart-box">
+                <PolarAreaChart width={64} height={64} />
+                <div className="chart-label">Polar area chart</div> 
               </div>
-              <div className="chart-box">
-                <LineChart width={48} height={48} />
-                <div className="chart-label">Bubble</div>
-                <div className="chart-sublabel">A bubble chart is used to display three dimensions of data at the same time. The location of the bubble is determined by the first two dimensions and the corresponding horizontal and vertical axes. The third dimension is represented by the size of the individual bubbles.</div>
+              <div role="button" className="chart-box">
+                <BubbleChart width={48} height={48} />
+                <div className="chart-label">Bubble chart</div>  
               </div>
-              <div className="chart-box">
-                <LineChart width={48} height={48} />
-                <div className="chart-label">Scatter</div>
-                <div className="chart-sublabel">Scatter charts are based on basic line charts with the x axis changed to a linear axis. To use a scatter chart, data must be passed as objects containing X and Y properties.</div>
+              <div role="button" className="chart-box">
+                <ScatterChart width={48} height={48} />
+                <div className="chart-label">Scatter chart</div>        
               </div>
+            </div>
+            <div className="title-block__title--saved">Your saved charts</div>
+            <div role="button" className="chart-box-saved">
+              <FloppyDisc width={48} height={48} />
+              <div className="chart-label">My charts</div>
             </div>
           </div>
         </div>

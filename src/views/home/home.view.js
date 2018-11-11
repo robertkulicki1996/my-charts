@@ -20,12 +20,6 @@ class Home extends Component {
     authStore: PropTypes.instanceOf(AuthStore).isRequired
   }
 
-  toggle = () => {
-    this.setState({
-      disabled: !this.state.disabled,
-    });
-  }
-
   render() {
     return (
       <div className="home-wrapper">

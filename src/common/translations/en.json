@@ -31,7 +31,10 @@
     "views.navbar.sign_out": "Sign out",
     "views.navbar.dashboard": "Your dashboard",
 
-    "views.choose_chart_type.title": "Select a chart type",
-    "views.choose_chart_type.subtitle": "This application comes with built-in chart types like line, bar, radar, doughnut and pie, polar area, bubble, scatter",
-    "views.choose_chart_type.my_saved_charts": "My saved charts"
+    "views.choose_chart_type.title": "Create your own chart",
+    "views.choose_chart_type.first_section.title": "Select a chart type",
+    "views.choose_chart_type.first_section.subtitle": "This application comes with built-in chart types like line, bar, radar, doughnut and pie, polar area, bubble, scatter",
+    "views.choose_chart_type.my_saved_charts": "My saved charts",
+    "views.choose_chart_type.line_chart": "Line chart",
+    "views.choose_chart_type.bar_chart": "Bar chart"
 }
