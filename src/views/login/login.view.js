@@ -83,7 +83,19 @@ export class Login extends Component {
    */
   @Bind()
   signInWithGithub() {
-    console.log("Sign in with Github");
+    const { history, authStore } = this.props;
+    this.startLoading();
+    authStore.signInWithGitHub()
+    .then(() => {    
+      history.push(CHOOSE_CHART_TYPE);
+    })
+    .catch(error => {
+      this.stopLoading();
+      runInAction(() => {
+        this.isApiError = true;
+        this.apiError = error.message;
+      });
+    });
   }
 
   /**

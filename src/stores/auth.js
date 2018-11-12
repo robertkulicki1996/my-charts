@@ -5,6 +5,10 @@ import { Bind } from 'lodash-decorators';
 
 export const STORAGE_KEY_FOR_USER_UID = 'USER_UID';
 
+export const provider = new firebase.auth.GithubAuthProvider();
+provider.addScope('repo');
+provider.setCustomParameters({'allow_signup': 'false'});
+
 export class AuthStore {
 	// current user auth state
 	@observable authUser = null;
@@ -58,13 +62,33 @@ export class AuthStore {
 	 * @param {string} email 
 	 * @param {string} password 
 	 */
-	@action
+	@action.bound
 	signIn(email, password) {
 		return firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
 			runInAction(() => {
 				authStore.authUser = user;
 			})
 			this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, user.uid);
+		});
+	}
+
+	@action.bound
+	signInWithGitHub() {
+		return firebase.auth().signInWithPopup(provider).then(function(result) {
+			// This gives you a GitHub Access Token. You can use it to access the GitHub API.
+			var token = result.credential.accessToken;
+			// The signed-in user info.
+			var user = result.user;
+			console.log(token, user);
+		}).catch(function(error) {
+			// Handle Errors here.
+			// var errorCode = error.code;
+		  // var errorMessage = error.message;
+			// The email of the user's account used.
+			// var email = error.email;
+			// The firebase.auth.AuthCredential type that was used.
+			// var credential = error.credential;
+			console.log(error);
 		});
 	}
 

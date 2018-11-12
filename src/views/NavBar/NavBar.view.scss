@@ -1,7 +1,7 @@
 @import '../../common/styles/variables.scss';
 
 .navbar {
-	width: $metric-xx-large;
+	min-width: $metric-xx-large;
 	padding: $metric-base 0 $metric-base 0;
 	background-color: $color-darkblue;
 	display: flex;

@@ -1,0 +1,28 @@
+@import '../../common/styles/variables.scss';
+
+.dashboard-wrapper {
+  display: flex;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+	background-color: $color-brighterblue;
+}
+
+.dashboard-content {
+	padding: $metric-base + $metric-large;
+  width: 100%;
+	background-color: $color-brighterblue;
+	display: flex;
+	flex-direction: column;
+}
+
+.title {
+	font-family: $font-default;
+  color: $color-lightgrey;
+	font-size: $metric-med;
+	margin-bottom: $metric-med;
+}
+
+.user-info-section {
+	display: flex;
+}

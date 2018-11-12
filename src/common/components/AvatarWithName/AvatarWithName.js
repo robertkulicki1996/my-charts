@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
-import UserAvatar from 'react-user-avatar';
+import Avatar from 'react-avatar';
 
 import './AvatarWithName.scss';
 
@@ -38,13 +38,14 @@ export default class AvatarWithName extends Component {
 
     return (
       <div className={`${`avater-with-name-wrapper`} ${bottomBorder && 'with-bottom-border'}` }>
-        {name && <div className="name">{name}</div>}
-        <UserAvatar 
-          size="48" 
+        <Avatar 
+          size="120" 
+          round={true}
           name={name} 
           src={avatarUrl} 
           color={`${color}`}
         />
+        {name && <div className="name">{name}</div>}
       </div>
     );
   }

@@ -5,14 +5,13 @@ import { injectIntl } from 'react-intl';
 import { observer, inject } from 'mobx-react';
 import { Bind } from 'lodash-decorators';
 import Avatar from 'react-avatar';
-import { SIGN_IN } from '../../common/consts/routes';
+import { SIGN_IN, DASHBOARD } from '../../common/consts/routes';
 
 import { AuthStore } from '../../stores/auth';
 
 import AppLogoIcon from '../../common/icons/logo.svg';
 import Button from '../../common/components/Button/Button';
 import ContextMenu from '../../common/components/ContextMenu/ContextMenu';
-// import AvatarWithName from '../../common/components/AvatarWithName/AvatarWithName';
 
 import translations from './NavBar.view.intl';
 import './NavBar.view.scss';
@@ -32,9 +31,13 @@ export default class NavBar extends Component {
     authStore.signOut().then(()=> {
       history.push(SIGN_IN);
     }).catch(e => {
-      // TODO: Handle error
       window.console.error(e);
     });
+  }
+
+  @Bind()
+  goToDashboard() {
+    this.props.history.push(DASHBOARD);
   }
 
   render() {
@@ -46,7 +49,7 @@ export default class NavBar extends Component {
           buttonStyle="button-link" 
           textColor="light"    
           className="sign-out-button header-button" 
-          onClick={() => {}} 
+          onClick={this.goToDashboard} 
         >
           {intl.formatMessage(translations.dashboard)}
         </Button>

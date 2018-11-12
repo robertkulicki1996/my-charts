@@ -13,10 +13,11 @@
   width: 100%;
 	background-color: $color-brighterblue;
 	display: flex;
-	flex-direction: column;
+  flex-direction: column;
+  overflow-y: scroll;
 }
 
-.title-block {
+.content {
   padding: $metric-large;
   font-family: $font-default;
   color: $color-lightgrey;
@@ -113,6 +114,7 @@
   margin-bottom: $metric-small;
   background-color: $color-thebrightestblue;
   color: $color-darkpink;
+  border: 1px solid;
   transition: background-color 1s linear;
 
   &:hover {

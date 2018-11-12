@@ -11,6 +11,7 @@ import Register from '../../views/register/register.view';
 import Home from '../../views/Home/Home.view';
 import RecoverPassword from '../../views/recoverPassword/recoverPassword.view';
 import ChooseChartType from '../../views/ChooseChartType/ChooseChartType.view';
+import Dashboard from '../../views/Dashboard/Dashboard.view';
 
 // Routes defined in application
 export const SIGN_IN = '/';
@@ -20,6 +21,11 @@ export const HOME = '/home';
 export const DASHBOARD = '/dashboard';
 export const LINE_CHART = '/line-chart';
 export const BAR_CHART = '/bar-chart';
+export const RADAR_CHART = '/radar-chart';
+export const PIE_CHART = '/pie';
+export const POLAR_AREA_CHART = '/polar-area-chart';
+export const BUBBLE_CHART = '/bubble-chart';
+export const SCATTER_CHART = '/scatter-chart';
 export const CHOOSE_CHART_TYPE = '/choose-chart-type'
 
 // Application routes
@@ -50,6 +56,7 @@ export default class ApplictionRoutes extends Component {
 			<Switch>
 				<Route exact path={CHOOSE_CHART_TYPE} component={ChooseChartType} />
 				<Route path={HOME} component={Home} />
+				<Route path={DASHBOARD} component={Dashboard} />
 				<Route
 					render={ () => {
 						return <Redirect to={CHOOSE_CHART_TYPE} />;

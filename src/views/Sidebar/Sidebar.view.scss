@@ -3,7 +3,7 @@
 .options-sidebar {
 	padding-top: $metric-base;
 	padding-bottom: $metric-base;
-	width: $metric-xx-large*5;
+	min-width: $metric-xx-large*4;
 	background-color: $color-brighterblue;
 	display: flex;
 	flex-direction: column;
