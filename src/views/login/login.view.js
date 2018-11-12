@@ -81,11 +81,11 @@ export class Login extends Component {
   /**
    * Method to sign in with Github account
    */
-  @Bind()
-  signInWithGithub() {
+  @action.bound
+  async signInWithGithub() {
     const { history, authStore } = this.props;
     this.startLoading();
-    authStore.signInWithGitHub()
+    await authStore.signInWithGitHub()
     .then(() => {    
       history.push(CHOOSE_CHART_TYPE);
     })

@@ -51,7 +51,7 @@ class ChooseChartType extends Component {
 
     return (
       <div className="choose-chart-type-wrapper">
-        <NavBar />
+        <NavBar isNewChartButton={false} />
         <div className="choose-chart-type">
           <div className="content">
             <div className="content__huge-title">{intl.formatMessage(translations.title)}</div>

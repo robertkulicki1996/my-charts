@@ -45,3 +45,29 @@
 	padding-top: $metric-x-small;
 	padding-bottom: $metric-x-small;
 }
+
+.new-chart-button {
+	width: 32px;
+	height: 32px;
+	background-color: $color-thebrightestblue;
+	margin-bottom: $metric-small;
+	border-radius: 50%;
+	transition: all .3s ease-in-out;
+
+	&:hover {
+		transform: scale(1.2);
+	}
+}
+
+.navbar-buttons {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+}
+
+.new-chart-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
