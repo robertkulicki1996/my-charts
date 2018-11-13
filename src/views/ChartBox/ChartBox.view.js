@@ -82,6 +82,10 @@ const options = {
   scaleFontColor: 'white',
   responsive: true,
   maintainAspectRatio: false,
+  animation: {
+    duration: 8000,
+    easing: 'easeInElastic'
+  },
   layout: {
     padding: {
       left: 24,
@@ -133,14 +137,11 @@ export default class ChartBox extends Component {
 
   componentDidMount() {
     this.context = this.lineChartRef.current.getContext('2d');
-    // this.lineChartRef.current.width = 700;
-    // this.lineChartRef.current.height = 700;
     this.init();
   }
  
   componentWillMount() {
     const { lineChartSettingsStore } = this.props;
-
     Chart.pluginService.register({
       beforeDraw: chartInstance => {
         var ctx = chartInstance.chart.ctx;
@@ -155,7 +156,7 @@ export default class ChartBox extends Component {
     this.lineChart = new Chart(this.context,{
       type: 'line',
       data: data,
-      options: options
+      options: options,
     });
     // set observable chart object
     this.props.lineChartSettingsStore.lineChartObject = this.lineChart;

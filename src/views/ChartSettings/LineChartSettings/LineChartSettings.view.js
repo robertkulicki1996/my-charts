@@ -91,22 +91,30 @@ export default class LineChartSettings extends Component {
     lineChartSettingsStore.lineChartObject.update();
   }
 
+  @action.bound
+  onAnimationChange(option, value) {
+    const { lineChartSettingsStore } = this.props;
+    lineChartSettingsStore.animation[option] = value;
+    console.log(lineChartSettingsStore.animation);
+    lineChartSettingsStore.lineChartObject.update();
+  }
+
   render() {
     const { lineChartSettingsStore } = this.props;
 
     return (
       <div className="settings-wrapper">
         <div className="option-wrapper">
-        <div className="label-wrapper">
-          <div className="label-wrapper__label">Responsive</div>
-          <Button
-            className="label-info" 
-            textColor="pink"    
-            onClick={this.goToNewChart} 
-          >
-            <InfoIcon width={10} height={10}/>
-          </Button>
-        </div>
+          <div className="label-wrapper">
+            <div className="label-wrapper__label">Responsive</div>
+            <Button
+              className="label-info" 
+              textColor="pink"    
+              onClick={this.goToNewChart} 
+            >
+              <InfoIcon width={10} height={10}/>
+            </Button>
+          </div>
           <Switch
             style={{ width: 80 }}
             checked={lineChartSettingsStore.responsive}
@@ -125,16 +133,16 @@ export default class LineChartSettings extends Component {
           />
         </div>
         <div className="option-wrapper">
-        <div className="label-wrapper">
-          <div className="label-wrapper__label">Maintain aspect ratio</div>
-          <Button
-            className="label-info" 
-            textColor="pink"    
-            onClick={this.goToNewChart} 
-          >
-            <InfoIcon width={10} height={10}/>
-          </Button>
-        </div>
+          <div className="label-wrapper">
+            <div className="label-wrapper__label">Maintain aspect ratio</div>
+            <Button
+              className="label-info" 
+              textColor="pink"    
+              onClick={this.goToNewChart} 
+            >
+              <InfoIcon width={10} height={10}/>
+            </Button>
+          </div>
           <Switch
             style={{ width: 80 }}
             checked={lineChartSettingsStore.maintainAspectRatio}
@@ -221,17 +229,40 @@ export default class LineChartSettings extends Component {
           }
         >
           <div className="option-wrapper">
-            <div className="label">Duration</div>
+          <div className="label-wrapper">
+            <div className="label-wrapper__label">Duration</div>
+            <Button
+              className="label-info" 
+              textColor="pink"    
+              onClick={this.goToNewChart} 
+            >
+              <InfoIcon width={10} height={10}/>
+            </Button>
+          </div>
             <InputNumber
               style={{ width: 80 }}
-              defaultValue={380}
               precision={0}
+              step={1000}
+              defaultValue={lineChartSettingsStore.animation.duration}
+              value={lineChartSettingsStore.animation.duration}
+              onChange={value => this.onAnimationChange('duration',value)}
             />
           </div>
           <div className="option-wrapper">
-            <div className="label">Easing</div>
+          <div className="label-wrapper">
+            <div className="label-wrapper__label">Easing</div>
+            <Button
+              className="label-info" 
+              textColor="pink"    
+              onClick={this.goToNewChart} 
+            >
+              <InfoIcon width={10} height={10}/>
+            </Button>
+          </div>
             <Dropdown 
               options={options} 
+              value={lineChartSettingsStore.animation.easing}
+              onChange={value => this.onAnimationChange('easing',value.value)}
               placeholder="Select" 
               controlClassName='custom-dropdown'
               placeholderClassName='custom-placeholder'
