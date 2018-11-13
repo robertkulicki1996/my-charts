@@ -27,7 +27,7 @@ export default class InputNumber extends Component {
     /**
      * onChange callback functions
      */
-    onChange: PropTypes.fun,
+    onChange: PropTypes.func,
     /**
      * precision number
      */

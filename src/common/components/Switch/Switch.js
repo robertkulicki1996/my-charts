@@ -14,7 +14,7 @@ export default class Switch extends Component {
     /**
      * onChange callback functions
      */
-    onChange: PropTypes.fun,
+    onChange: PropTypes.func,
     /**
      * disabled state 
      */

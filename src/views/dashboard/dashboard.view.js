@@ -34,7 +34,7 @@ class Dashboard extends Component {
       <div className="dashboard-wrapper">
         <NavBar />
         <div className="dashboard-content">
-          <div className="title">{intl.formatMessage(translations.title)}</div>
+          <div className="dashboard-content__title">{intl.formatMessage(translations.title)}</div>
           <div className="user-info-section">
             <AvatarWithName name="Robert Kulicki" />
           </div>

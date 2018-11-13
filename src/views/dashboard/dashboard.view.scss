@@ -14,13 +14,13 @@
 	background-color: $color-brighterblue;
 	display: flex;
 	flex-direction: column;
-}
 
-.title {
-	font-family: $font-default;
-  color: $color-lightgrey;
-	font-size: $metric-med;
-	margin-bottom: $metric-med;
+	&__title {
+		font-family: $font-default;
+		color: $color-lightgrey;
+		font-size: $metric-med;
+		margin-bottom: $metric-med;
+	}
 }
 
 .user-info-section {

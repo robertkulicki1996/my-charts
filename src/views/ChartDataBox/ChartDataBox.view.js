@@ -41,7 +41,7 @@ export default class ChartDataBox extends Component {
   @observable isRandomValuesDisabled = true;
   @observable randomFrom = 0;
   @observable randomTo = 100;
-  @observable initialRowValue = 0;
+  @observable initialRowValue = '0';
 
   @observable isFileLoading = false;
   @observable isFileParsed = false;

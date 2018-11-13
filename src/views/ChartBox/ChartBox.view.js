@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
-import { Line } from 'react-chartjs-2';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import { observer, inject } from 'mobx-react';
+import { Bind } from 'lodash-decorators';
+import { action } from 'mobx';
+import Chart from 'chart.js';
+import {  LineChartSettingsStore } from '../../stores/lineChartSettings';
 
 import './ChartBox.view.scss';
+
 
 const data = {
   labels: ['July','dssdds', 'February', 'March', 'April', 'May', 'June', 'July','dssdds','March', 'April', 'May', 'June', 'July'],
@@ -56,68 +62,114 @@ const data = {
 const scales = {
   yAxes: [{
       ticks: {
-          fontColor: "white",
-          fontSize: 12,
-          stepSize: 50,
-          beginAtZero: true
+        fontColor: "white",
+        fontSize: 12,
+        stepSize: 50,
+        beginAtZero: true
       }
   }],
   xAxes: [{
       ticks: {
-          fontColor: "white",
-          fontSize: 12,
-          stepSize: 50,
-          beginAtZero: true
+        fontColor: "white",
+        fontSize: 12,
+        stepSize: 50,
+        beginAtZero: true
       }
   }]
 }
 
+const options = {
+  scaleFontColor: 'white',
+  responsive: true,
+  maintainAspectRatio: false,
+  layout: {
+    padding: {
+      left: 24,
+      right: 24,
+      top: 24,
+      bottom: 24
+    },
+  },
+  legend: {
+    display: true,
+    labels: {
+      fontColor: "white",
+      fontSize: 14
+    }
+  },
+  scales: {
+    xAxes: [{ 
+      gridLines: {
+          display: true,
+      },
+      ticks: {
+        fontColor: "#CCC", // this here
+      },
+    }],
+    yAxes: [{
+      gridLines: {
+          display: true,
+      },
+      ticks: {
+        fontColor: "#CCC", // this here
+      },
+    }],
+}
+}
+
+@withRouter
+@inject('lineChartSettingsStore')
 @observer
 export default class ChartBox extends Component {
+  static propTypes = {
+    lineChartSettingsStore: PropTypes.instanceOf(LineChartSettingsStore).isRequired
+  }
+
+  constructor(props) {
+    super(props);
+    this.lineChartRef = React.createRef();
+    this.lineChart = null;
+  }
+
+  componentDidMount() {
+    this.context = this.lineChartRef.current.getContext('2d');
+    // this.lineChartRef.current.width = 700;
+    // this.lineChartRef.current.height = 700;
+    this.init();
+  }
+ 
+  componentWillMount() {
+    const { lineChartSettingsStore } = this.props;
+
+    Chart.pluginService.register({
+      beforeDraw: chartInstance => {
+        var ctx = chartInstance.chart.ctx;
+        ctx.fillStyle = lineChartSettingsStore.backgroundColor.rgba;
+        ctx.fillRect(0, 0, chartInstance.width, chartInstance.height);
+      }
+    });
+  }
+
+  @action.bound
+  init() {
+    this.lineChart = new Chart(this.context,{
+      type: 'line',
+      data: data,
+      options: options
+    });
+    // set observable chart object
+    this.props.lineChartSettingsStore.lineChartObject = this.lineChart;
+  }
+
+  @Bind()
+  toggleChart() {
+    this.lineChart.destroy();
+    this.init();
+  }
 
   render() {
     return (
-      <Line 
-        data={data}  
-        scales={scales}
-        options={{
-          scaleFontColor: 'white',
-          maintainAspectRatio: false,
-          layout: {
-            padding: {
-              left: 24,
-              right: 24,
-              top: 24,
-              bottom: 24
-            },
-          },
-          legend: {
-            display: true,
-            labels: {
-              fontColor: "white",
-              fontSize: 14
-            }
-          },
-          scales: {
-            xAxes: [{ 
-              gridLines: {
-                  display: true,
-              },
-              ticks: {
-                fontColor: "#CCC", // this here
-              },
-            }],
-            yAxes: [{
-              gridLines: {
-                  display: true,
-              },
-              ticks: {
-                fontColor: "#CCC", // this here
-              },
-            }],
-        }
-        }} 
-      />
+      <canvas ref={this.lineChartRef} />
     );
   }
 }

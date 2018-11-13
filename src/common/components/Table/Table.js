@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { observer } from 'mobx-react';
+import { observer, PropTypes as MobxPropTypes } from 'mobx-react';
 import { remove, find, indexOf, uniqueId, map, capitalize, toLower, forEach } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
@@ -24,8 +24,8 @@ import './Table.scss';
 @observer
 export default class Table extends Component {
   static propTypes = {
-    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
-    columns: PropTypes.arrayOf(PropTypes.string).isRequired
+    rows: MobxPropTypes.observableArray.isRequired,
+    columns: MobxPropTypes.observableArray.isRequired
   }
 
   @observable columns = this.props.columns || [

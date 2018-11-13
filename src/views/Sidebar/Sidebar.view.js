@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import Collapsible from 'react-collapsible';
 import 'react-dropdown/style.css';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import Switch from '../../common/components/Switch/Switch';
 import InputNumber from '../../common/components/InputNumber/InputNumber';
 import SectionHeader from './components/SectionHeader/SectionHeader';
@@ -14,7 +14,6 @@ import './Sidebar.view.scss';
 function onChange(value) {
   console.log(`switch checked: ${value}`);
 }
-
 
 @observer
 export default class Sidebar extends Component {
@@ -38,7 +37,7 @@ export default class Sidebar extends Component {
         >
           <LineChartSettings />
         </Collapsible>
-        <Collapsible 
+        {/* <Collapsible 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -125,7 +124,7 @@ export default class Sidebar extends Component {
               disabled={this.state.disabled}
             />
           </div>
-        </Collapsible>
+        </Collapsible> */}
       </div>
     );
   }

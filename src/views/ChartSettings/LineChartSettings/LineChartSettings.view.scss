@@ -15,6 +15,33 @@
 	padding-left: $metric-x-small / 2;
 }
 
+.label-wrapper {
+	display: flex;
+
+	&__label {
+		margin-right: $metric-small;
+		font-size: $metric-m-small;
+		font-family: $font-default;
+		$font-weight: $font-weight-medium;
+		color: $color-lightgrey;
+	}
+} 
+
+.label-info {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: $metric-small + $metric-x-small/2;
+	height: $metric-small + $metric-x-small/2;;
+	background-color: #38435a;
+	border-radius: $metric-x-small;
+	transition: all .3s ease-in-out;
+
+	&:hover {
+		transform: scale(1.3);
+	}
+}
+
 .label {
 	font-size: $metric-m-small;
 	font-family: $font-default;
