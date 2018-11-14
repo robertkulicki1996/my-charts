@@ -35,6 +35,34 @@ export class LineChartSettingsStore {
     easing: 'easeOutQuart'
   }
 
+  // The chart legend displays data about the datasets that are appearing on the chart.
+  @observable legend = {
+    // Is the legend shown
+    display: true,
+    // Position of the legend - 'top', 'right, 'bottom', 'left'
+    position: 'top',
+    // The legend label
+    labels: {
+      // Width of coloured box
+      boxWidth: 40,
+      // Size of text
+      fontSize: 12,
+      // Font style of text
+      fontStyle: 'normal',
+      // Color of text
+      fontColor: '#ffffff',
+      // Font family of legend text
+      fontFamily: "Arial",
+      // Padding between rows of colored boxes
+      padding: 10,
+      // Label style will match corresponding point style (size is based on fontSize, boxWidth is not used in this case).
+      usePointStyle: false
+    },
+    // Marks that this box should take the full width of the canvas (pushing down other boxes). This is unlikely to need to be changed in day-to-day use.
+    fullWidth: true,
+    // Legend will show datasets in reverse order.
+    reverse: false,
+  }
 }
 
 const lineChartSettingsStore = new LineChartSettingsStore();

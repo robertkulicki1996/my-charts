@@ -96,10 +96,18 @@ const options = {
   },
   legend: {
     display: true,
+    position: 'top',
     labels: {
+      boxWidth: 40,
       fontColor: "white",
-      fontSize: 14
-    }
+      fontStyle: 'normal',
+      fontFamily: 'Ubuntu',
+      fontSize: 12,
+      padding: 10,
+      usePointStyle: true,
+    },
+    reverse: false,
+    fullWidth: true
   },
   scales: {
     xAxes: [{ 

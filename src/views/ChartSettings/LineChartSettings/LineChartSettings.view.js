@@ -21,7 +21,7 @@ import { LineChartSettingsStore } from '../../../stores/lineChartSettings';
 
 import './LineChartSettings.view.scss';
 
-const options = [
+const animationOptions = [
   'linear',
   'easeInQuad',
   'easeOutQuad',
@@ -53,7 +53,9 @@ const options = [
   'easeInBounce',
   'easeOutBounce',
   'easeInOutBounce',
-]
+];
+
+const labelsPositionOptions = ['top','right','bottom','left'];
 
 @inject('lineChartSettingsStore')
 @observer
@@ -97,6 +99,27 @@ export default class LineChartSettings extends Component {
     lineChartSettingsStore.animation[option] = value;
     console.log(lineChartSettingsStore.animation);
     lineChartSettingsStore.lineChartObject.update();
+  }
+
+  @action.bound
+  onLegendOptionChange(option, value) {
+    const { lineChartSettingsStore } = this.props;
+    lineChartSettingsStore.legend[option] = value;
+    console.log(lineChartSettingsStore.legend);
+  }
+
+  @action.bound
+  onLabelsOptionChange(option, value) {
+    const { lineChartSettingsStore } = this.props;
+    lineChartSettingsStore.legend.labels[option] = value;
+    console.log(lineChartSettingsStore.legend);
+  }
+
+  @action.bound
+  onFontColorChange(value) {
+    const { lineChartSettingsStore } = this.props;
+    lineChartSettingsStore.legend.labels.fontColor = value.hex;
+    console.log(lineChartSettingsStore.legend.labels.fontColor);
   }
 
   render() {
@@ -229,16 +252,16 @@ export default class LineChartSettings extends Component {
           }
         >
           <div className="option-wrapper">
-          <div className="label-wrapper">
-            <div className="label-wrapper__label">Duration</div>
-            <Button
-              className="label-info" 
-              textColor="pink"    
-              onClick={this.goToNewChart} 
-            >
-              <InfoIcon width={10} height={10}/>
-            </Button>
-          </div>
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Duration</div>
+              <Button
+                className="label-info" 
+                textColor="pink"    
+                onClick={this.goToNewChart} 
+              >
+                <InfoIcon width={10} height={10}/>
+              </Button>
+            </div>
             <InputNumber
               style={{ width: 80 }}
               precision={0}
@@ -260,7 +283,7 @@ export default class LineChartSettings extends Component {
             </Button>
           </div>
             <Dropdown 
-              options={options} 
+              options={animationOptions} 
               value={lineChartSettingsStore.animation.easing}
               onChange={value => this.onAnimationChange('easing',value.value)}
               placeholder="Select" 
@@ -277,77 +300,162 @@ export default class LineChartSettings extends Component {
           triggerClassName="closed-section"
           height={300}
           trigger={
-            <OptionSectionHeader title="Legend" />
+            <OptionSectionHeader title="Legend configuration" />
           }
         >
           <div className="option-wrapper">
             <div className="label">Display</div>
             <Switch
               style={{ width: 80 }}
-              defaultValue={800}
-              precision={0}
+              checked={lineChartSettingsStore.legend.display}
+              onChange={value => this.onLegendOptionChange('display', value)}
             />
           </div>
           <div className="option-wrapper">
             <div className="label">Position</div>
             <Dropdown 
-              options={options} 
-              placeholder="Select" 
+              options={labelsPositionOptions} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.legend.position}
+              onChange={value => this.onLegendOptionChange('position',value.value)}
               controlClassName='custom-dropdown'
               placeholderClassName='custom-placeholder'
               arrowClassName='custom-arrow'
             />
           </div>
+          <div className="option-wrapper">
+            <div className="label">Box width</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1000}
+              defaultValue={lineChartSettingsStore.legend.labels.boxWidth}
+              value={lineChartSettingsStore.legend.labels.boxWidth}
+              onChange={value => this.onLabelsOptionChange('boxWidth',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font size</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1000}
+              defaultValue={lineChartSettingsStore.legend.labels.fontSize}
+              value={lineChartSettingsStore.legend.labels.fontSize}
+              onChange={value => this.onLabelsOptionChange('fontSize',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font style</div>
+            <Dropdown 
+              options={['normal','bold', 'italic']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.legend.labels.fontStyle}
+              onChange={value => this.onLegendOptionChange('fontStyle',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.legend.labels.fontColor} 
+                  onChange={color => this.onFontColorChange(color)}  
+                />
+              }
+            >
+            <ColorInput color={lineChartSettingsStore.legend.labels.fontColor} />
+          </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font family</div>
+            <Dropdown 
+              options={['Helvetica', 'Arial','Ubuntu', 'Cambria']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.legend.labels.fontFamily}
+              onChange={value => this.onLegendOptionChange('fontFamily',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Padding</div>
+              <Button
+                className="label-info" 
+                textColor="pink"    
+                onClick={this.goToNewChart} 
+              >
+                <InfoIcon width={10} height={10}/>
+              </Button>
+            </div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.legend.labels.padding}
+              value={lineChartSettingsStore.animation.duration}
+              onChange={value => this.onAnimationChange('duration',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Use point style</div>
+              <Button
+                className="label-info" 
+                textColor="pink"    
+                onClick={this.goToNewChart} 
+              >
+                <InfoIcon width={10} height={10}/>
+              </Button>
+            </div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.legend.labels.usePointStyle}
+              onChange={value => this.onLabelsOptionChange('usePointStyle', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Full width</div>
+              <Button
+                className="label-info" 
+                textColor="pink"    
+                onClick={this.goToNewChart} 
+              >
+                <InfoIcon width={10} height={10}/>
+              </Button>
+            </div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.legend.fullWidth}
+              onChange={value => this.onLegendOptionChange('fullWidth', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Reverse legend datasets</div>
+              <Button
+                className="label-info" 
+                textColor="pink"    
+                onClick={this.goToNewChart} 
+              >
+                <InfoIcon width={10} height={10}/>
+              </Button>
+            </div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.legend.reverse}
+              onChange={value => this.onLegendOptionChange('reverse', value)}
+            />
+          </div>
         </Collapsible>
-        {/* <Collapsible 
-          overflowWhenOpen='visible' 
-          openedClassName="opened-section"
-          triggerClassName="closed-section"
-          trigger={
-            <OptionSectionHeader title="Margin" />
-          }
-        >
-          <div className="option-wrapper-column">
-            <div className="label margin-bottom">Color</div>
-            <SliderPicker />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Margin top</div>
-            <InputNumber
-              style={{ width: 100 }}
-              defaultValue={0}
-              onChange={onChange}
-              precision={0}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Margin right</div>
-            <InputNumber
-              style={{ width: 100 }}
-              defaultValue={0}
-              onChange={onChange}
-              precision={0}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Margin bottom</div>
-            <InputNumber
-              style={{ width: 100 }}
-              defaultValue={0}
-              onChange={onChange}
-              precision={0}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Margin left</div>
-            <InputNumber
-              style={{ width: 100 }}
-              defaultValue={0}
-              onChange={onChange}
-              precision={0}
-            />
-          </div>
-        </Collapsible> */}
         
       </div>
     );
