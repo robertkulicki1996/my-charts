@@ -32,7 +32,7 @@ export default class Sidebar extends Component {
           openedClassName="opened-section"
           triggerClassName="closed-section"
           trigger={
-            <SectionHeader title="Chart"/>
+            <SectionHeader title="Chart settings"/>
           }
         >
           <LineChartSettings />

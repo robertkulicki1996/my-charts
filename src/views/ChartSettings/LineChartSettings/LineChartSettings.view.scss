@@ -103,3 +103,19 @@
 .option-settings {
 	height: $metric-base;
 }
+
+.title-input {
+	margin: 0;
+	padding: $metric-x-small / 4;
+	padding-left: $metric-x-small;
+	padding-right: $metric-x-small;
+	height: $metric-base;
+	border: 0;
+	color: $color-white;
+	font-size: 14px;
+	margin-left: $metric-base;
+
+	&:focus {
+		border: 0;
+	}
+}

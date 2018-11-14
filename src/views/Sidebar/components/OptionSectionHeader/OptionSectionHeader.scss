@@ -9,7 +9,9 @@
   cursor: pointer;
   padding-right: $metric-x-small / 2;
 	padding-left: $metric-x-small / 2;
+	padding-bottom: $metric-x-small / 2;
 	margin-bottom: $metric-small;
+	border-bottom: 1px solid $color-lightgrey;
 }
 
 .icon {
@@ -17,6 +19,7 @@
 }
 
 .option-as-header {
-  font-size: $metric-m-small;
+	font-size: $metric-m-small;
+	font-weight: bold;
   color: $color-lightgrey;
 }

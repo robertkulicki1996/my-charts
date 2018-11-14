@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { action } from 'mobx';
+import { observable, action } from 'mobx';
 import Collapsible from 'react-collapsible';
 import ColorInput from '../../../common/components/ColorInput/ColorInput';
 import OptionSectionHeader from '../../../views/Sidebar/components/OptionSectionHeader/OptionSectionHeader';
@@ -12,10 +12,10 @@ import ContextMenu from '../../../common/components/ContextMenu/ContextMenu';
 import InputNumber from '../../../common/components/InputNumber/InputNumber';
 import Switch from '../../../common/components/Switch/Switch';
 import Button from '../../../common/components/Button/Button';
-import InfoIcon from '../../../common/icons/info.svg';
-import { SliderPicker, ChromePicker } from 'react-color';
+import Input from '../../../common/components/Input/Input';
 
-import Chart from 'chart.js';
+import InfoIcon from '../../../common/icons/info.svg';
+import { ChromePicker } from 'react-color';
 
 import { LineChartSettingsStore } from '../../../stores/lineChartSettings';
 
@@ -62,6 +62,11 @@ const labelsPositionOptions = ['top','right','bottom','left'];
 export default class LineChartSettings extends Component {
   static propTypes = {
     lineChartSettingsStore: PropTypes.instanceOf(LineChartSettingsStore).isRequired
+  }
+
+  @action.bound
+  onTitleChange(event) {
+    this.props.lineChartSettingsStore.title.text = event.target.value;
   }
 
   @action.bound
@@ -120,6 +125,13 @@ export default class LineChartSettings extends Component {
     const { lineChartSettingsStore } = this.props;
     lineChartSettingsStore.legend.labels.fontColor = value.hex;
     console.log(lineChartSettingsStore.legend.labels.fontColor);
+  }
+
+  @action.bound
+  onTitleOptionChange(option,value) {
+    const { lineChartSettingsStore } = this.props;
+    lineChartSettingsStore.title[option] = value;
+    console.log(lineChartSettingsStore.title);
   }
 
   render() {
@@ -328,7 +340,7 @@ export default class LineChartSettings extends Component {
             <InputNumber
               style={{ width: 80 }}
               precision={0}
-              step={1000}
+              step={1}
               defaultValue={lineChartSettingsStore.legend.labels.boxWidth}
               value={lineChartSettingsStore.legend.labels.boxWidth}
               onChange={value => this.onLabelsOptionChange('boxWidth',value)}
@@ -339,7 +351,7 @@ export default class LineChartSettings extends Component {
             <InputNumber
               style={{ width: 80 }}
               precision={0}
-              step={1000}
+              step={1}
               defaultValue={lineChartSettingsStore.legend.labels.fontSize}
               value={lineChartSettingsStore.legend.labels.fontSize}
               onChange={value => this.onLabelsOptionChange('fontSize',value)}
@@ -400,7 +412,7 @@ export default class LineChartSettings extends Component {
               precision={0}
               step={1}
               defaultValue={lineChartSettingsStore.legend.labels.padding}
-              value={lineChartSettingsStore.animation.duration}
+              value={lineChartSettingsStore.legend.labels.padding}
               onChange={value => this.onAnimationChange('duration',value)}
             />
           </div>
@@ -453,6 +465,116 @@ export default class LineChartSettings extends Component {
               style={{ width: 80 }}
               checked={lineChartSettingsStore.legend.reverse}
               onChange={value => this.onLegendOptionChange('reverse', value)}
+            />
+          </div>
+        </Collapsible>
+        <Collapsible 
+          open={true} 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          height={300}
+          trigger={
+            <OptionSectionHeader title="Chart title" />
+          }
+        >
+          <div className="option-wrapper">
+            <div className="label">Display</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.title.display}
+              onChange={value => this.onTitleOptionChange('display', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Text</div>
+            <Input
+              type="text"
+              inputClassName="title-input"
+              value={lineChartSettingsStore.title.text}
+              onChange={value => this.onTitleChange(value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Position</div>
+            <Dropdown 
+              options={labelsPositionOptions} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.legend.position}
+              onChange={value => this.onTitleOptionChange('position',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font size</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.title.fontSize}
+              value={lineChartSettingsStore.title.fontSize}
+              onChange={value => this.onTitleOptionChange('fontSize',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Line height</div>
+              <Button
+                className="label-info" 
+                textColor="pink"    
+                onClick={this.goToNewChart} 
+              >
+                <InfoIcon width={10} height={10}/>
+              </Button>
+            </div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={1}
+              step={0.1}
+              defaultValue={lineChartSettingsStore.title.lineHeight}
+              value={lineChartSettingsStore.title.lineHeight}
+              onChange={value => this.onTitleOptionChange('lineHeight',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font style</div>
+            <Dropdown 
+              options={['normal','bold', 'italic']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.title.fontStyle}
+              onChange={value => this.onTitleOptionChange('fontStyle',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.title.fontColor} 
+                  onChange={color => this.onTitleOptionChange('fontColor',color.hex)}  
+                />
+              }
+            >
+            <ColorInput color={lineChartSettingsStore.title.fontColor} />
+          </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font family</div>
+            <Dropdown 
+              options={['Helvetica', 'Arial','Ubuntu', 'Cambria']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.title.fontFamily}
+              onChange={value => this.onTitleOptionChange('fontFamily',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
             />
           </div>
         </Collapsible>

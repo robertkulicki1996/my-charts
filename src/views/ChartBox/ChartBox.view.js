@@ -109,6 +109,16 @@ const options = {
     reverse: false,
     fullWidth: true
   },
+  title: {
+    display: false,
+    position: 'top',
+    fontSize: 12,
+    fontFamily: "Arial",
+    fontStyle: 'normal',
+    fontColor: '#ffffff',
+    lineHeight: 1.2,
+    text: 'Example title'
+  },
   scales: {
     xAxes: [{ 
       gridLines: {

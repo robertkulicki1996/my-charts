@@ -63,6 +63,26 @@ export class LineChartSettingsStore {
     // Legend will show datasets in reverse order.
     reverse: false,
   }
+
+  // The chart title defines text to draw at the top of the chart.
+  @observable title = {
+    // Is the title shown
+    display: false,
+    // Position of title
+    position: 'top',
+    // Font size
+    fontSize: 12,
+    // Font family of legend text
+    fontFamily: "Arial",
+    // Font style of text
+    fontStyle: 'normal',
+    // Color of text
+    fontColor: '#ffffff',
+    // Height of an individual line of text 
+    lineHeight: 1.2,
+    // Title text to display. If specified as an array, text is rendered on multiple lines.
+    text: 'Example title'
+  }
 }
 
 const lineChartSettingsStore = new LineChartSettingsStore();
