@@ -86,7 +86,7 @@ export class Login extends Component {
     const { history, authStore } = this.props;
     this.startLoading();
     await authStore.signInWithGitHub()
-    .then(() => {    
+    .then(() => {  
       history.push(CHOOSE_CHART_TYPE);
     })
     .catch(error => {

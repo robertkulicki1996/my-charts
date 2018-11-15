@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
+import { map, uniqueId } from 'lodash';
 import { action, observable, runInAction } from 'mobx';
 import { PulseLoader } from 'react-spinners';
+import { Bind } from 'lodash-decorators';
 
 // stores
 import { DataStore } from '../../stores/data';
+import { LineChartSettingsStore } from '../../stores/lineChartSettings';
 
 // components
 import Table from './../../common/components/Table/Table';
@@ -24,11 +27,12 @@ import SaveIcon from './../../common/icons/save.svg';
 // styles
 import './ChartDataBox.view.scss';
 
-@inject('dataStore')
+@inject('dataStore', 'lineChartSettingsStore')
 @observer
 export default class ChartDataBox extends Component {
   static propTypes = {
-    dataStore: PropTypes.instanceOf(DataStore).isRequired
+    dataStore: PropTypes.instanceOf(DataStore).isRequired,
+    lineChartSettingsStore: PropTypes.instanceOf(LineChartSettingsStore).isRequired
   }
 
   constructor(props) {
@@ -116,12 +120,53 @@ export default class ChartDataBox extends Component {
 
     const file = event.target.files[0];
 
-    setTimeout(async() => {
-      await dataStore.parseFile(file);
+    await dataStore.parseFile(file).then(result => {
+      const { data, meta, errors } = result;
+      const { fields } = meta;
+      dataStore.errors = errors;
+      dataStore.columns.clear();
+      dataStore.rows.clear();
+      map(fields, field => {
+        dataStore.columns.push(field);
+      });
+      map(data, row => {
+        const rowObject = JSON.parse(JSON.stringify(row));
+        if(Object.keys(rowObject).length === fields.length) {
+          rowObject.id = uniqueId('row_');
+          dataStore.rows.push(rowObject);
+        }
+      });
       dataStore.csvFile = file;
       this.isFileParsed = true;
       this.isFileLoading = false;
-    }, 1000)
+    })
+  }
+
+  @Bind()
+  download(filename='chart') {
+    /// create an "off-screen" anchor tag
+    var lnk = document.createElement('a'), e;
+
+    /// the key here is to set the download attribute of the a tag
+    lnk.download = 'chart';
+
+    /// convert canvas content to data-uri for link. When download
+    /// attribute is set the content pointed to by link will be
+    /// pushed as "download" in HTML5 capable browsers
+    lnk.href = this.props.lineChartSettingsStore.canvasRef.current.toDataURL("image/png;base64");
+
+    /// create a "fake" click-event to trigger the download
+    if (document.createEvent) {
+      e = document.createEvent("MouseEvents");
+      e.initMouseEvent("click", true, true, window,
+        0, 0, 0, 0, 0, false, false, false,
+        false, 0, null
+      );
+
+      lnk.dispatchEvent(e);
+    } else if (lnk.fireEvent) {
+      lnk.fireEvent("onclick");
+    }
   }
 
   @action.bound
@@ -253,7 +298,7 @@ export default class ChartDataBox extends Component {
             </Button>
             <Button 
               className="add-button"
-              onClick={() => {}}
+              onClick={this.download}
             >
             <div className="button-label">
               <div className="label">Export chart</div>

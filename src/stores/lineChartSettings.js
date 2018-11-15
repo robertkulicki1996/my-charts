@@ -1,6 +1,8 @@
 import { observable } from 'mobx';
 
 export class LineChartSettingsStore {
+  @observable canvasRef = null;
+  
   // Observable current line chart object required to globaly update
   @observable lineChartObject = null;
 

@@ -59,25 +59,6 @@ const data = {
   scaleFontColor: 'white',
 };
 
-const scales = {
-  yAxes: [{
-      ticks: {
-        fontColor: "white",
-        fontSize: 12,
-        stepSize: 50,
-        beginAtZero: true
-      }
-  }],
-  xAxes: [{
-      ticks: {
-        fontColor: "white",
-        fontSize: 12,
-        stepSize: 50,
-        beginAtZero: true
-      }
-  }]
-}
-
 const options = {
   scaleFontColor: 'white',
   responsive: true,
@@ -176,6 +157,8 @@ export default class ChartBox extends Component {
       data: data,
       options: options,
     });
+    // set observable canvas node
+    this.props.lineChartSettingsStore.canvasRef = this.lineChartRef;
     // set observable chart object
     this.props.lineChartSettingsStore.lineChartObject = this.lineChart;
   }

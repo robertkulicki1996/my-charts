@@ -1,6 +1,5 @@
 import Papa from 'papaparse';
 import { observable, action } from 'mobx';
-import { map } from 'lodash';
 
 export class DataStore {
   // current chart data columns
@@ -14,23 +13,17 @@ export class DataStore {
 
   @observable errors = [];
 
-  // method to parse csv file to JSON and then to JS objects required to display in table
   @action.bound
   async parseFile(file) {
-    await Papa.parse(file, {
-      header: true,
-      complete: results => {
-        const { data, meta, errors } = results; 
-        const { fields } = meta;
-        this.columns = fields;
-        this.errors = errors;
-        map(data, row => {
-          const rowObject = JSON.parse(JSON.stringify(row));
-          this.rows.push(rowObject);
-        })
-      }
+    return new Promise((complete, error) => {
+      Papa.parse(file, {
+        header: true,
+        complete, 
+        error
+      });
     });
   }
+
 }
 
 const dataStore = new DataStore();

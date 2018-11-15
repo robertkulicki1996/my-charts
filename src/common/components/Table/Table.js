@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer, PropTypes as MobxPropTypes } from 'mobx-react';
-import { remove, find, indexOf, uniqueId, map, capitalize, toLower, forEach } from 'lodash';
+import { remove, find, indexOf, uniqueId, map, capitalize, toLower, includes } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
 
@@ -112,8 +112,10 @@ export default class Table extends Component {
       })
     } else {
       map(this.rows, row => {
-        row[toLower(newColumn)] = initialRowValue.toString();
-      })
+        extendObservable(row, { 
+          [newColumn]: initialRowValue.toString()
+        });
+      });
     }
   }
 
@@ -222,7 +224,7 @@ export default class Table extends Component {
       <React.Fragment>
         <table>
           <thead>
-            <tr>{columns.map(column => (
+            <tr>{map(columns,column => (
               <th key={uniqueId()}>
                 {capitalize(column)}
                 {removeColumnButton(column)}
@@ -230,20 +232,18 @@ export default class Table extends Component {
             </tr>
           </thead>
           <tbody>
-            {map(rows, (row,index) => (<tr key={uniqueId()}>{
+            {map(rows, row => (<tr key={uniqueId()}>{
               map(Object.values(row), (val, index) => {
-                if (index > 0) return <td key={index}>{val}</td>
+                if (!includes(val,'row_')) return <td key={index}>{val}</td>
               })}
-              {this.columns.length > 0 && (
-                <React.Fragment>
-                  <td key={index + 1}>
-                    {editRowButton(row)}
-                  </td>
-                  <td key={index + 2}>
-                    {removeRowButton(row.id)}
-                  </td>
-                </React.Fragment>
-              )}
+              <React.Fragment>
+                <td key={uniqueId()}>
+                  {editRowButton(row)}
+                </td>
+                <td key={uniqueId()}>
+                  {removeRowButton(row.id)}
+                </td>
+              </React.Fragment>
             </tr>))}
           </tbody>
         </table>
