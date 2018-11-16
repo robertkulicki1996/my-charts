@@ -66,72 +66,97 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onTitleChange(event) {
-    this.props.lineChartSettingsStore.title.text = event.target.value;
+    const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
+    lineChartSettingsStore.title.text = event.target.value;
+    lineChartObject.options.title.text = event.target.value;
+    lineChartObject.update();
   }
 
   @action.bound
   onOptionChange(option, value) {
     const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
     lineChartSettingsStore[option] = value;
-    console.log(value);
-    console.log(this.props.lineChartSettingsStore);
+    lineChartObject.options[option] = value;
+    lineChartObject.update();
   }
 
   @action.bound
   onPaddingChange(option,value) {
     const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
     lineChartSettingsStore.padding[option] = value;
-    console.log(value);
-    console.log(this.props.lineChartSettingsStore.padding);
+    lineChartObject.options.layout.padding[option] = value;
+    lineChartObject.update();
   }
 
   @action.bound
   onRGBColorChange(color) {
     const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
     const rgbColor = color.rgb;
     const hexColor = color.hex;
     const formatedRgbToString = `rgba(${rgbColor.r},${rgbColor.g},${rgbColor.b},${rgbColor.a})`;
+
     lineChartSettingsStore.backgroundColor.rgba = formatedRgbToString;
     lineChartSettingsStore.backgroundColor.hex = hexColor;
-    console.log(this.props.lineChartSettingsStore.backgroundColor);
-    console.log(lineChartSettingsStore.lineChartObject);
-    lineChartSettingsStore.lineChartObject.update();
+
+    lineChartObject.update();
   }
 
   @action.bound
   onAnimationChange(option, value) {
     const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
     lineChartSettingsStore.animation[option] = value;
-    console.log(lineChartSettingsStore.animation);
-    lineChartSettingsStore.lineChartObject.update();
+    lineChartObject.options.animation[option] = value;
+    lineChartObject.update();
   }
 
   @action.bound
   onLegendOptionChange(option, value) {
     const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
     lineChartSettingsStore.legend[option] = value;
-    console.log(lineChartSettingsStore.legend);
+    lineChartObject.options.legend[option] = value;
+    lineChartObject.update();
   }
 
   @action.bound
   onLabelsOptionChange(option, value) {
     const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
     lineChartSettingsStore.legend.labels[option] = value;
-    console.log(lineChartSettingsStore.legend);
+    lineChartObject.options.legend.labels[option] = value;
+    lineChartObject.update();
   }
 
   @action.bound
   onFontColorChange(value) {
     const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
     lineChartSettingsStore.legend.labels.fontColor = value.hex;
-    console.log(lineChartSettingsStore.legend.labels.fontColor);
+    lineChartObject.options.legend.labels.fontColor = value.hex;
+    lineChartObject.update();
   }
 
   @action.bound
   onTitleOptionChange(option,value) {
     const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
     lineChartSettingsStore.title[option] = value;
-    console.log(lineChartSettingsStore.title);
+    lineChartObject.options.title[option] = value;
+    lineChartObject.update();
   }
 
   render() {
@@ -363,7 +388,7 @@ export default class LineChartSettings extends Component {
               options={['normal','bold', 'italic']} 
               placeholder="Select position" 
               value={lineChartSettingsStore.legend.labels.fontStyle}
-              onChange={value => this.onLegendOptionChange('fontStyle',value.value)}
+              onChange={value => this.onLabelsOptionChange('fontStyle',value.value)}
               controlClassName='custom-dropdown'
               placeholderClassName='custom-placeholder'
               arrowClassName='custom-arrow'
@@ -390,7 +415,7 @@ export default class LineChartSettings extends Component {
               options={['Helvetica', 'Arial','Ubuntu', 'Cambria']} 
               placeholder="Select position" 
               value={lineChartSettingsStore.legend.labels.fontFamily}
-              onChange={value => this.onLegendOptionChange('fontFamily',value.value)}
+              onChange={value => this.onLabelsOptionChange('fontFamily',value.value)}
               controlClassName='custom-dropdown'
               placeholderClassName='custom-placeholder'
               arrowClassName='custom-arrow'
@@ -413,7 +438,7 @@ export default class LineChartSettings extends Component {
               step={1}
               defaultValue={lineChartSettingsStore.legend.labels.padding}
               value={lineChartSettingsStore.legend.labels.padding}
-              onChange={value => this.onAnimationChange('duration',value)}
+              onChange={value => this.onLabelsOptionChange('padding',value)}
             />
           </div>
           <div className="option-wrapper">

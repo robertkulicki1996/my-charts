@@ -11,7 +11,7 @@ import './ChartBox.view.scss';
 
 
 const data = {
-  labels: ['July','dssdds', 'February', 'March', 'April', 'May', 'June', 'July','dssdds','March', 'April', 'May', 'June', 'July'],
+  labels: ['July', 'February', 'March', 'April', 'May', 'June', 'July','March', 'April', 'May'],
   datasets: [
     {
       label: 'My First dataset',
@@ -59,67 +59,6 @@ const data = {
   scaleFontColor: 'white',
 };
 
-const options = {
-  scaleFontColor: 'white',
-  responsive: true,
-  maintainAspectRatio: false,
-  animation: {
-    duration: 8000,
-    easing: 'easeInElastic'
-  },
-  layout: {
-    padding: {
-      left: 24,
-      right: 24,
-      top: 24,
-      bottom: 24
-    },
-  },
-  legend: {
-    display: true,
-    position: 'top',
-    labels: {
-      boxWidth: 40,
-      fontColor: "white",
-      fontStyle: 'normal',
-      fontFamily: 'Ubuntu',
-      fontSize: 12,
-      padding: 10,
-      usePointStyle: true,
-    },
-    reverse: false,
-    fullWidth: true
-  },
-  title: {
-    display: false,
-    position: 'top',
-    fontSize: 12,
-    fontFamily: "Arial",
-    fontStyle: 'normal',
-    fontColor: '#ffffff',
-    lineHeight: 1.2,
-    text: 'Example title'
-  },
-  scales: {
-    xAxes: [{ 
-      gridLines: {
-          display: true,
-      },
-      ticks: {
-        fontColor: "#CCC", // this here
-      },
-    }],
-    yAxes: [{
-      gridLines: {
-          display: true,
-      },
-      ticks: {
-        fontColor: "#CCC", // this here
-      },
-    }],
-}
-}
-
 @withRouter
 @inject('lineChartSettingsStore')
 @observer
@@ -155,7 +94,66 @@ export default class ChartBox extends Component {
     this.lineChart = new Chart(this.context,{
       type: 'line',
       data: data,
-      options: options,
+      options: {
+        scaleFontColor: 'white',
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1000,
+          easing: 'easeOutQuart'
+        },
+        layout: {
+          padding: {
+            top: this.props.lineChartSettingsStore.padding.top,
+            left: this.props.lineChartSettingsStore.padding.left,
+            right: this.props.lineChartSettingsStore.padding.right,
+            bottom: this.props.lineChartSettingsStore.padding.bottom,
+          }
+        },
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            boxWidth: 40,
+            fontColor: "white",
+            fontStyle: 'normal',
+            fontFamily: 'Ubuntu',
+            fontSize: 12,
+            padding: 10,
+            usePointStyle: true,
+          },
+          reverse: false,
+          fullWidth: true
+        },
+        title: {
+          display: false,
+          position: 'top',
+          fontSize: 12,
+          fontFamily: "Arial",
+          fontStyle: 'normal',
+          fontColor: '#ffffff',
+          lineHeight: 1.2,
+          text: 'Example title'
+        },
+        scales: {
+          xAxes: [{ 
+            gridLines: {
+                display: true,
+            },
+            ticks: {
+              fontColor: "#CCC", // this here
+            },
+          }],
+          yAxes: [{
+            gridLines: {
+                display: true,
+            },
+            ticks: {
+              fontColor: "#CCC", // this here
+            },
+          }],
+        }
+      },
     });
     // set observable canvas node
     this.props.lineChartSettingsStore.canvasRef = this.lineChartRef;

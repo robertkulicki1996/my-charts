@@ -62,27 +62,27 @@ class ChooseChartType extends Component {
                 <LineChart width={48} height={48} />
                 <div className="chart-label">{intl.formatMessage(translations.lineChart)}</div>
               </div>
-              <div role="button" className="chart-box" onClick={() => this.onButtonClick(BAR_CHART)}>
+              <div role="button" className="chart-box" onClick={() => this.onButtonClick(HOME)}>
                 <BarChart width={48} height={48} />
                 <div className="chart-label">{intl.formatMessage(translations.barChart)}</div>        
               </div>
-              <div role="button" className="chart-box" onClick={() => this.onButtonClick(RADAR_CHART)}>
+              <div role="button" className="chart-box" onClick={() => this.onButtonClick(HOME)}>
                 <RadarChart width={48} height={48} />
                 <div className="chart-label">Radar chart</div>              
               </div>
-              <div role="button" className="chart-box" onClick={() => this.onButtonClick(PIE_CHART)}>
+              <div role="button" className="chart-box" onClick={() => this.onButtonClick(HOME)}>
                 <PieChart width={48} height={48} />
                 <div className="chart-label">Doughnut and pie chart</div> 
               </div>
-              <div role="button" className="chart-box" onClick={() => this.onButtonClick(POLAR_AREA_CHART)}>
+              <div role="button" className="chart-box" onClick={() => this.onButtonClick(HOME)}>
                 <PolarAreaChart width={64} height={64} />
                 <div className="chart-label">Polar area chart</div> 
               </div>
-              <div role="button" className="chart-box" onClick={() => this.onButtonClick(BUBBLE_CHART)}>
+              <div role="button" className="chart-box" onClick={() => this.onButtonClick(HOME)}>
                 <BubbleChart width={48} height={48} />
                 <div className="chart-label">Bubble chart</div>  
               </div>
-              <div role="button" className="chart-box" onClick={() =>this.onButtonClick(SCATTER_CHART)}> 
+              <div role="button" className="chart-box" onClick={() =>this.onButtonClick(HOME)}> 
                 <ScatterChart width={48} height={48} />
                 <div className="chart-label">Scatter chart</div>        
               </div>
