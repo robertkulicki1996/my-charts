@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { map, uniqueId } from 'lodash';
+import jsPDF from 'jspdf';
 import { action, observable, runInAction } from 'mobx';
 import { PulseLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
@@ -41,6 +42,7 @@ export default class ChartDataBox extends Component {
   }
 
   @observable isAddColumnPopupShown = false;
+  @observable isExportChartPopupShown = false;
   @observable newColumnName = '';
   @observable isRandomValuesDisabled = true;
   @observable randomFrom = 0;
@@ -50,10 +52,16 @@ export default class ChartDataBox extends Component {
   @observable isFileLoading = false;
   @observable isFileParsed = false;
   @observable fileName = null;
+  @observable exportFileName = `chart_${uniqueId()}`;
 
   @action.bound
   handleColumnName(event) {
     this.newColumnName = event.target.value;
+  }
+
+  @action.bound
+  handleExportFileNameChange(event) {
+    this.exportFileName = event.target.value;
   }
 
   @action.bound
@@ -106,6 +114,16 @@ export default class ChartDataBox extends Component {
   }
 
   @action.bound
+  showExportPopup() {
+    this.isExportChartPopupShown = true;
+  }
+
+  @action.bound
+  hideExportPopup() {
+    this.isExportChartPopupShown = false;
+  }
+
+  @action.bound
   async handleFileChange(event) {
     const { dataStore } = this.props;
     this.isFileLoading = true;
@@ -143,17 +161,17 @@ export default class ChartDataBox extends Component {
   }
 
   @Bind()
-  download(filename='chart') {
+  downloadPNG() {
     /// create an "off-screen" anchor tag
     var lnk = document.createElement('a'), e;
 
     /// the key here is to set the download attribute of the a tag
-    lnk.download = 'chart';
+    lnk.download = this.exportFileName;
 
     /// convert canvas content to data-uri for link. When download
     /// attribute is set the content pointed to by link will be
     /// pushed as "download" in HTML5 capable browsers
-    lnk.href = this.props.lineChartSettingsStore.canvasRef.current.toDataURL("image/png;base64");
+    lnk.href = this.props.lineChartSettingsStore.canvasRef.current.toDataURL("image/png");
 
     /// create a "fake" click-event to trigger the download
     if (document.createEvent) {
@@ -167,6 +185,16 @@ export default class ChartDataBox extends Component {
     } else if (lnk.fireEvent) {
       lnk.fireEvent("onclick");
     }
+  }
+
+  @Bind()
+  downloadPDF() {
+    const imgData = this.props.lineChartSettingsStore.canvasRef.current.toDataURL("image/jpeg",1.0);
+    const pdf = new jsPDF({orientation: 'landscape',});
+    var width = pdf.internal.pageSize.getWidth();
+    var height = pdf.internal.pageSize.getHeight();
+    pdf.addImage(imgData, 'JPEG', 0, 25, width, height-100);
+    pdf.save(`${this.exportFileName}`);
   }
 
   @action.bound
@@ -263,6 +291,50 @@ export default class ChartDataBox extends Component {
       </CustomModal>
     );
 
+    const ExportChartPopup = (
+      <CustomModal
+        title="Export chart"
+        width="430" 
+        height="220" 
+        effect="fadeInDown" 
+        visible={this.isExportChartPopupShown} 
+        onClose={this.hideExportPopup}
+        isFooter={true}
+        buttonLeft={
+          <Button
+            buttonStyle="button-primary"
+            textColor="light"
+            className="export-button"
+            onClick={this.downloadPDF}
+          >
+            Export to PDF
+          </Button> 
+        }
+        buttonRight={
+          <Button
+            buttonStyle="button-primary"
+            textColor="light"
+            className="export-button"
+            onClick={this.downloadPNG}
+          >
+            Export to PNG
+          </Button>
+        }
+      >
+        <React.Fragment>
+          <div className="option">
+            <div className="label">File name</div>
+          </div>
+          <Input 
+            type="text" 
+            value={this.exportFileName}
+            onChange={this.handleExportFileNameChange} 
+            inputClassName="column-input"
+          />
+        </React.Fragment>
+      </CustomModal>
+    );
+
     return (
       <div className="chart-data-box">
         <div className="chart-data-options">
@@ -298,7 +370,7 @@ export default class ChartDataBox extends Component {
             </Button>
             <Button 
               className="add-button"
-              onClick={this.download}
+              onClick={this.showExportPopup}
             >
             <div className="button-label">
               <div className="label">Export chart</div>
@@ -313,6 +385,7 @@ export default class ChartDataBox extends Component {
           columns={this.props.dataStore.columns}
         />
         {AddColumnPopup}
+        {ExportChartPopup}
       </div>
     );
   }

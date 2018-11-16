@@ -28,14 +28,14 @@ export default class Table extends Component {
     columns: MobxPropTypes.observableArray.isRequired
   }
 
-  @observable columns = this.props.columns || [
+  @observable columns = [
     'column1',
     'column2',
     'column3',
     'column4'
-  ] ;
+  ];
 
-  @observable rows = this.props.rows || [
+  @observable rows = [
     {
       id: uniqueId('row_'),
       column1: '110',
@@ -55,9 +55,14 @@ export default class Table extends Component {
       column1: '150',
       column2: '320',
       column3: '340',
-      column4: '420'
+      column4: '421'
     }
   ];
+
+  componentWillReceiveProps() {
+    this.rows = this.props.rows;
+    this.columns = this.props.columns;
+  }
 
   @observable isRowEditPopupShown = false;
   
