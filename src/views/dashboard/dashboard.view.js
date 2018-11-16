@@ -11,10 +11,6 @@ import NavBar from '../NavBar/NavBar.view';
 // components
 import AvatarWithName from '../../common/components/AvatarWithName/AvatarWithName';
 
-
-// icons
-
-
 import './Dashboard.view.scss';
 import translations from './Dashboard.view.intl';
 
@@ -33,10 +29,14 @@ class Dashboard extends Component {
     return (
       <div className="dashboard-wrapper">
         <NavBar />
-        <div className="dashboard-content">
-          <div className="dashboard-content__title">{intl.formatMessage(translations.title)}</div>
-          <div className="user-info-section">
-            <AvatarWithName name="Robert Kulicki" />
+        <div className="user-info-section">
+          <AvatarWithName name="Robert Kulicki" email="robert.kulicki@gmail.com"/>
+          <span className="temp1">User info</span>
+        </div>
+        <div className="user-charts">
+          <div className="user-charts__title">{intl.formatMessage(translations.title)}</div>
+          <div className="user-charts">
+            <span className="temp2">My saved charts objects</span>
           </div>
         </div>
       </div>

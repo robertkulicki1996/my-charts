@@ -13,6 +13,10 @@ export default class AvatarWithName extends Component {
      */
     name: PropTypes.string,
     /**
+     * User displayed email
+     */
+    email: PropTypes.string,
+    /**
      * User avatar url
      */
     avatarUrl: PropTypes.string,
@@ -28,24 +32,26 @@ export default class AvatarWithName extends Component {
 
   static defaultProps = {
     name: '',
+    email: '',
     avatarUrl: '',
     color: '#EB1E64',
     bottomBorder: false
   }
   
   render() {
-    const { name, avatarUrl, color, bottomBorder } = this.props;
+    const { name, email, avatarUrl, color, bottomBorder } = this.props;
 
     return (
       <div className={`${`avater-with-name-wrapper`} ${bottomBorder && 'with-bottom-border'}` }>
         <Avatar 
-          size="120" 
-          round={true}
+          size="60" 
+          round="20%"
           name={name} 
           src={avatarUrl} 
           color={`${color}`}
         />
         {name && <div className="name">{name}</div>}
+        {email && <div className="email">{email}</div>}
       </div>
     );
   }

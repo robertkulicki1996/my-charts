@@ -59,6 +59,16 @@ export class AuthStore {
 		return !!this.authUser || !!localStorage.getItem(STORAGE_KEY_FOR_USER_UID);
 	};
 
+	@action.bound
+	async signUp(name, email,password) {
+		await firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      firebase.auth().currentUser.updateProfile({displayName: name});
+    }).catch((error) => {
+			window.console.log(error);
+    });
+	}
+
 	/**
 	 * Method to sign in with email and password
 	 * @param {string} email 

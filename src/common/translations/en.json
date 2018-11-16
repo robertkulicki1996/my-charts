@@ -38,5 +38,5 @@
     "views.choose_chart_type.line_chart": "Line chart",
     "views.choose_chart_type.bar_chart": "Bar chart",
 
-    "views.dashboard.title": "Your dashboard"
+    "views.dashboard.title": "Dashboard overview"
 }

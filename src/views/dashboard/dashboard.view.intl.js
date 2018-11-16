@@ -4,6 +4,6 @@ export default defineMessages({
   title: {
     id: 'views.dashboard.title',
     description: 'Dshboard title',
-    defaultMessage: 'TRANSLATE_ME Your dashboard',
+    defaultMessage: 'TRANSLATE_ME Dashboard overview',
   },
 });

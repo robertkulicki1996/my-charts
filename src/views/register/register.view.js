@@ -13,6 +13,7 @@ import NotificationService from '../../common/services/notifications';
 
 import './register.view.scss';
 import translations from './register.view.intl';
+import authStore from '../../stores/auth';
 
 @injectIntl
 class Register extends Component {
@@ -40,21 +41,12 @@ class Register extends Component {
   signUpWithEmailAndPassword() {
     this.setState({ isLoading: true });
 
-    const { history, intl } = this.props;
+    const { history } = this.props;
     const { name, email, password } = this.state;
 
-    // auth.createUserWithEmailAndPassword(email, password)
-    // .then(() => {
-    //   auth.currentUser.updateProfile({displayName: name});
-    //   history.push(SIGN_IN);
-    //   NotificationService.success(intl.formatMessage(translations.signUpSuccess));
-    // }).catch((error) => {
-    //   this.setState({
-    //     isLoading: false,
-    //     isApiError: true,
-    //     apiError: error.message
-    //   });
-    // });
+    authStore.signUp(name, email, password).then(() => {
+      history.push(SIGN_IN);
+    }) 
   }
 
   /**
