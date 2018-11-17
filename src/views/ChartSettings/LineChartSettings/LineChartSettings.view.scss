@@ -119,3 +119,22 @@
 		border: 0;
 	}
 }
+
+.tooltips-input {
+	margin: 0;
+	padding: $metric-x-small / 4;
+	padding-left: $metric-x-small;
+	padding-right: $metric-x-small;
+	height: $metric-base;
+	border: 0;
+	color: $color-white;
+	font-size: 14px;
+
+	&:focus {
+		border: 0;
+	}
+}
+
+.tooltips-input-container {
+	width: $metric-x-large * 2;
+}

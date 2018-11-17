@@ -32,7 +32,7 @@ const data = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [65, 59, 80, 81,23 ,123, 34, 23, 67, 40]
+      data: [65, 259, 80, 81,23 ,123, 34, 323, 67, 240]
     },
     {
       label: 'My First dataset',
@@ -53,7 +53,7 @@ const data = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [65, 59, 80, 81, 56, 55,44,43, 40]
+      data: [65, 359, 80, 81, 56, 255,44,43, 40,223]
     }
   ],
   scaleFontColor: 'white',
@@ -126,14 +126,39 @@ export default class ChartBox extends Component {
           fullWidth: true
         },
         title: {
-          display: false,
+          display: true,
           position: 'top',
-          fontSize: 12,
+          fontSize: 20,
           fontFamily: "Arial",
           fontStyle: 'normal',
           fontColor: '#ffffff',
           lineHeight: 1.2,
           text: 'Example title'
+        },
+        tooltips: {
+          enabled: true,
+          mode: 'nearest',
+          intersect: true,
+          position: 'average',
+          callbacks: {
+            beforeTitle: () => {
+              return 'sdsd'
+            },
+            labelColor: () => {
+              return {
+                borderColor: this.props.lineChartSettingsStore.tooltips.callbacks.borderColor,
+                backgroundColor: this.props.lineChartSettingsStore.tooltips.callbacks.backgroundColor
+              }
+            }
+          },
+          backgroundColor: 'blue'
+        },
+        elements: {
+          point: {
+            pointStyle: 'cross',
+            backgroundColor: 'blue',
+            borderColor: 'blue'
+          }
         },
         scales: {
           xAxes: [{ 

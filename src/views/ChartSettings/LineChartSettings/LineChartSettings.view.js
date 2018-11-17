@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { observable, action } from 'mobx';
+import { action } from 'mobx';
 import Collapsible from 'react-collapsible';
 import ColorInput from '../../../common/components/ColorInput/ColorInput';
 import OptionSectionHeader from '../../../views/Sidebar/components/OptionSectionHeader/OptionSectionHeader';
@@ -159,6 +159,58 @@ export default class LineChartSettings extends Component {
     lineChartObject.update();
   }
 
+  @action.bound
+  onTooltipsOptionChange(option,value) {
+    const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
+    lineChartSettingsStore.tooltips[option] = value;
+    lineChartObject.options.tooltips[option] = value;
+    lineChartObject.update();
+  }
+
+  @action.bound
+  onTooltipsCallbacksChange(option,value) {
+    const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
+    lineChartSettingsStore.tooltips.callbacks[option] = value;
+    lineChartObject.options.tooltips.callbacks[option] = () => {
+      return value
+    }
+    lineChartObject.update();
+  }
+
+  @action.bound
+  onTooltipsCallbacksLabelBorderColorChange(option,value) {
+    const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
+    lineChartSettingsStore.tooltips.callbacks.labelColor[option] = value;
+    lineChartObject.options.tooltips.callbacks.labelColor = () => {
+      return {
+        borderColor: value,
+        backgroundColor: lineChartSettingsStore.tooltips.callbacks.labelColor.backgroundColor
+      }
+    }
+    lineChartObject.update();
+  }
+
+  @action.bound
+  onTooltipsCallbacksLabelBackgroundColorChange(option,value) {
+    const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
+    lineChartSettingsStore.tooltips.callbacks.labelColor[option] = value;
+    lineChartObject.options.tooltips.callbacks.labelColor = () => {
+      return {
+        borderColor: lineChartSettingsStore.tooltips.callbacks.labelColor.borderColor,
+        backgroundColor: value
+      }
+    }
+    lineChartObject.update();
+  }
+
   render() {
     const { lineChartSettingsStore } = this.props;
 
@@ -224,7 +276,7 @@ export default class LineChartSettings extends Component {
           </ContextMenu>
         </div>
         <Collapsible 
-          open={true} 
+          open={false} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -279,7 +331,7 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible 
-          open={true} 
+          open={false} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -331,7 +383,7 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible 
-          open={true} 
+          open={false} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -406,8 +458,8 @@ export default class LineChartSettings extends Component {
                 />
               }
             >
-            <ColorInput color={lineChartSettingsStore.legend.labels.fontColor} />
-          </ContextMenu>
+              <ColorInput color={lineChartSettingsStore.legend.labels.fontColor} />
+            </ContextMenu>
           </div>
           <div className="option-wrapper">
             <div className="label">Font family</div>
@@ -494,7 +546,7 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible 
-          open={true} 
+          open={false} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -601,6 +653,118 @@ export default class LineChartSettings extends Component {
               placeholderClassName='custom-placeholder'
               arrowClassName='custom-arrow'
             />
+          </div>
+        </Collapsible>
+
+        <Collapsible 
+          open={false} 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          height={300}
+          trigger={
+            <OptionSectionHeader title="Tooltip configuration for web use" />
+          }
+        >
+          <div className="option-wrapper">
+            <div className="label">Enabled</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.tooltips}
+              onChange={value => this.onTooltipsOptionChange('enabled', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Mode</div>
+            <Dropdown 
+              options={['nearest', 'point', 'single', 'label', 'index','dataset', 'x','y']} 
+              placeholder="Select mode" 
+              value={lineChartSettingsStore.tooltips.mode}
+              onChange={value => this.onTooltipsOptionChange('mode',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Intersect</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.tooltips.intersect}
+              onChange={value => this.onTooltipsOptionChange('intersect', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Position</div>
+            <Dropdown 
+              options={['average', 'nearest']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.tooltips.position}
+              onChange={value => this.onTooltipsOptionChange('position',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Text before title</div>
+            <Input
+              type="text"
+              className="tooltips-input-container"
+              inputClassName="tooltips-input"
+              value={lineChartSettingsStore.tooltips.callbacks.beforeTitle}
+              onChange={event => this.onTooltipsCallbacksChange('beforeTitle',event.target.value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Text before body</div>
+            <Input
+              type="text"
+              className="tooltips-input-container"
+              inputClassName="tooltips-input"
+              value={lineChartSettingsStore.tooltips.callbacks.beforeBody}
+              onChange={event => this.onTooltipsCallbacksChange('beforeBody',event.target.value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Footer text</div>
+            <Input
+              type="text"
+              className="tooltips-input-container"
+              inputClassName="tooltips-input"
+              value={lineChartSettingsStore.tooltips.callbacks.footer}
+              onChange={event => this.onTooltipsCallbacksChange('footer',event.target.value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Label border color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.tooltips.callbacks.labelColor.borderColor} 
+                  onChange={color => this.onTooltipsCallbacksLabelBorderColorChange('borderColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.tooltips.callbacks.labelColor.borderColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Label background color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.tooltips.callbacks.labelColor.backgroundColor} 
+                  onChange={color => this.onTooltipsCallbacksLabelBackgroundColorChange('backgroundColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.tooltips.callbacks.labelColor.backgroundColor} />
+            </ContextMenu>
           </div>
         </Collapsible>
         

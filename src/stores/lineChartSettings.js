@@ -1,5 +1,6 @@
 import { observable } from 'mobx';
 
+
 export class LineChartSettingsStore {
   @observable canvasRef = null;
   
@@ -23,10 +24,10 @@ export class LineChartSettingsStore {
 
   // The padding to add inside the chart.
   @observable padding = {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0
+    left: 30,
+    right: 60,
+    top: 30,
+    bottom: 30
   }
 
   // Animation on chart update
@@ -85,6 +86,92 @@ export class LineChartSettingsStore {
     // Title text to display. If specified as an array, text is rendered on multiple lines.
     text: 'Example title'
   }
+
+  // The tooltip configuration
+  @observable tooltips = {
+    // Are on-canvas tooltips enabled
+    enabled: true,
+    // Sets which elements appear in the tooltip.
+    mode: 'nearest',
+    // if true, the tooltip mode applies only when the mouse position intersects with an element. If false, the mode will be applied at all times.
+    intersect: true,
+    // The mode for positioning the tooltip. 
+    position: 'average',
+    // ---> Callbacks section 
+    callbacks: {
+      // Text before tooltip title
+      beforeTitle: '',
+      // Returns text to render before the body section.
+      beforeBody: '',
+      // Returns the colors to render for the tooltip item
+      labelColor: {
+        borderColor: 'blue',
+        backgroundColor: 'red'
+      },
+      // Returns the colors for the text of the label for the tooltip item.
+      labelTextColor: 'red',
+      // Returns text after the body section
+      footer: ''
+    },
+    // ---> End callbacks section
+    // Background color of the tooltip.
+    backgroundColor: 'black',
+    // Title font
+    titleFontFamily: 'Arial',
+    // Title font size
+    titleFontSize: 12,
+    // Title font style
+    titleFontStyle: 'bold',
+    // Title font color
+    titleFontColor: '#ffffff',
+    // Spacing to add to top and bottom of each title line.
+    titleSpacing: 2,
+    // 	Margin to add on bottom of title section.
+    titleMarginBottom: 6,
+    // Body line font
+    bodyFontFamily: 'Arial',
+    // Body font size
+    bodyFontSize: 12,
+    // Body font style
+    bodyFontStyle: 'normal',
+    // Body font color
+    bodyFontColor: '#ffffff',
+    // Spacing to add to top and bottom of each tooltip item.
+    bodySpacing: 2,
+    // Footer font
+    footerFontFamily: 'Arial',
+    // Footer font size
+    footerFontSize: 12,
+    // Footer font style
+    footerFontStyle: 'normal',
+    // Footer font color
+    footerFontColor: '#ffffff',
+    // Spacing to add to top and bottom of each footer line.
+    footerSpacing: 2,
+    // Margin to add before drawing the footer.
+    footerMarginTop: 6,
+    // Padding to add on left and right of tooltip.
+    xPadding: 6,
+    // Padding to add on top and bottom of tooltip.
+    yPadding: 6,
+    // 	Extra distance to move the end of the tooltip arrow away from the tooltip point.
+    caretPadding: 2,
+    // Size, in px, of the tooltip arrow.
+    caretSize: 5,
+    // Radius of tooltip corner curves.
+    cornerRadius: 6,
+    // Color to draw behind the colored boxes when multiple items are in the tooltip
+    multiKeyBackground: '#ffffff',
+    // if true, color boxes are shown in the tooltip
+    displayColors: true,
+    // Color of the border
+    borderColor: 'black',
+    // Size of the border
+    borderWidth: 0
+  }
+
+  // Point Configuration
+  @observable point
 }
 
 const lineChartSettingsStore = new LineChartSettingsStore();

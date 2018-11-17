@@ -3,7 +3,6 @@ import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
-import { Bind } from 'lodash-decorators';
 
 import { AuthStore } from '../../stores/auth';
 import NavBar from '../NavBar/NavBar.view';
@@ -24,14 +23,13 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { intl } = this.props;
-
+    const { intl, authStore } = this.props;
+    const { authUser } = authStore;
     return (
       <div className="dashboard-wrapper">
         <NavBar />
         <div className="user-info-section">
-          <AvatarWithName name="Robert Kulicki" email="robert.kulicki@gmail.com"/>
-          <span className="temp1">User info</span>
+          <AvatarWithName avatarUrl={authUser.photoURL} name={!!authUser.displayName ? authUser.displayName : authUser.email} email={authUser.email} />
         </div>
         <div className="user-charts">
           <div className="user-charts__title">{intl.formatMessage(translations.title)}</div>
