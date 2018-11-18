@@ -50,8 +50,10 @@ export default class AvatarWithName extends Component {
           src={avatarUrl} 
           color={`${color}`}
         />
-        {name && <div className="name">{name}</div>}
-        {email && <div className="email">{email}</div>}
+        <div className="name-wrapper">
+          {name && <div className="name-wrapper__name">{name}</div>}
+          {email && <div className="name-wrapper__email">{email}</div>}
+        </div>
       </div>
     );
   }

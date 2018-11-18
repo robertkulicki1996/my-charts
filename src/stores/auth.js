@@ -23,17 +23,28 @@ export class AuthStore {
 	 * Method set current user auth state
 	 */
 	@action.bound
-	setUserAuthState() {
-		firebase.auth().onAuthStateChanged(user => {
-			{console.log(user)}
-			if (user) {
-				this.authUser = user;
-				this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, user.uid);
-			} else {
-				this.authUser = user;
-				this.removeKeyFromStorage(STORAGE_KEY_FOR_USER_UID);
-			}
+  setUserAuthState() {
+		return new Promise((resolve, reject) => {
+			firebase.auth().onAuthStateChanged(user => {
+				if (user) {
+					this.authUser = user;
+					this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, user.uid);
+					resolve(user);
+				} else {
+					this.authUser = user;
+					this.removeKeyFromStorage(STORAGE_KEY_FOR_USER_UID);
+					reject('error');
+				}
+			});
 		});
+	}
+
+	/**
+	 * Get current signed in user info
+	 */
+	@action.bound
+	async getCurrentUserInfo() {
+		return firebase.auth().currentUser;
 	}
 
 	/**

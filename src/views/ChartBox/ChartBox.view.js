@@ -9,56 +9,6 @@ import {  LineChartSettingsStore } from '../../stores/lineChartSettings';
 
 import './ChartBox.view.scss';
 
-
-const data = {
-  labels: ['July', 'February', 'March', 'April', 'May', 'June', 'July','March', 'April', 'May'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      fill: true,
-      lineTension: 0.5,
-      backgroundColor: '#EB1E64',
-      borderColor: '#fff',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'red',
-      pointBorderColor: '#EB1E64',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: [65, 259, 80, 81,23 ,123, 34, 323, 67, 240]
-    },
-    {
-      label: 'My First dataset',
-      fill: true,
-      lineTension: 0.5,
-      backgroundColor: 'blue',
-      borderColor: '#fff',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'red',
-      pointBorderColor: '#EB1E64',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: [65, 359, 80, 81, 56, 255,44,43, 40,223]
-    }
-  ],
-  scaleFontColor: 'white',
-};
-
 @withRouter
 @inject('lineChartSettingsStore')
 @observer
@@ -93,7 +43,54 @@ export default class ChartBox extends Component {
   init() {
     this.lineChart = new Chart(this.context,{
       type: 'line',
-      data: data,
+      data: {
+        labels: ['July', 'February', 'March', 'April', 'May', 'June', 'July','March', 'April', 'May'],
+        datasets: [
+          {
+            label: 'My First dataset',
+            fill: true,
+            lineTension: 0.5,
+            backgroundColor: '#EB1E64',
+            borderColor: '#fff',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'red',
+            pointBorderColor: '#EB1E64',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: [65, 259, 80, 81,23 ,123, 34, 323, 67, 240]
+          },
+          {
+            label: 'My First dataset',
+            fill: true,
+            lineTension: 0.5,
+            backgroundColor: 'blue',
+            borderColor: '#fff',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'red',
+            pointBorderColor: '#EB1E64',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: [65, 359, 80, 81, 56, 255,44,43, 40,223]
+          }
+        ],
+        scaleFontColor: 'white',
+      },
       options: {
         scaleFontColor: 'white',
         responsive: true,

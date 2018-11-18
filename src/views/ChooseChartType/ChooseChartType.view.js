@@ -41,6 +41,11 @@ class ChooseChartType extends Component {
     authStore: PropTypes.instanceOf(AuthStore).isRequired
   }
 
+  async componentDidMount() {
+    const a = await this.props.authStore.getCurrentUserInfo()
+    console.log(a);
+  }
+
   @Bind()
   onButtonClick(location) {
     this.props.history.push(location);

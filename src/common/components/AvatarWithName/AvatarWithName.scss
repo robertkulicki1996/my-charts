@@ -3,29 +3,34 @@
 .avater-with-name-wrapper {
 	display: flex;
 	justify-content: flex;
-	flex-direction: column;
 	align-items: center;
 	margin-top: $metric-med - $metric-x-small;
+	margin-bottom: $metric-med - $metric-x-small;
+	margin-left: $metric-base;
 }
 
 .with-bottom-border {
 	border-bottom: 2px solid $color-thebrightestblue;
 }
 
-.name {
-	font-family: $font-default;
-	font-size: $metric-small;
-	padding-right: $metric-small;
-	padding-left: $metric-x-small;
-	color: $color-lightgrey;
-	margin-top: $metric-small;
-}
+.name-wrapper {
+	display: flex;
+	flex-direction: column;
 
-.email {
-	font-family: $font-default;
-	font-size: $metric-small;
-	padding-right: $metric-small;
-	padding-left: $metric-x-small;
-	color: $color-lightgrey;
-	margin-top: $metric-x-small;
+	&__name {
+		font-family: $font-default;
+		font-size: $metric-small;
+		padding-right: $metric-small;
+		padding-left: $metric-x-small;
+		color: $color-lightgrey;
+	}
+
+	&__email {
+		font-family: $font-default;
+		font-size: $metric-x-small *1.5;
+		padding-right: $metric-small;
+		padding-left: $metric-x-small;
+		color: $color-lightgrey;
+	}
+
 }

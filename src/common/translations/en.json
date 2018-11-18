@@ -38,5 +38,6 @@
     "views.choose_chart_type.line_chart": "Line chart",
     "views.choose_chart_type.bar_chart": "Bar chart",
 
-    "views.dashboard.title": "Dashboard overview"
+    "views.dashboard.title": "Dashboard overview",
+    "views.dashboard.subtitle": "Your saved charts"
 }
