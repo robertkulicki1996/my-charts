@@ -110,8 +110,6 @@ export class LineChartSettingsStore {
       },
       // Returns the colors for the text of the label for the tooltip item.
       labelTextColor: 'red',
-      // Returns text after the body section
-      footer: ''
     },
     // ---> End callbacks section
     // Background color of the tooltip.
@@ -138,18 +136,6 @@ export class LineChartSettingsStore {
     bodyFontColor: '#ffffff',
     // Spacing to add to top and bottom of each tooltip item.
     bodySpacing: 2,
-    // Footer font
-    footerFontFamily: 'Arial',
-    // Footer font size
-    footerFontSize: 12,
-    // Footer font style
-    footerFontStyle: 'normal',
-    // Footer font color
-    footerFontColor: '#ffffff',
-    // Spacing to add to top and bottom of each footer line.
-    footerSpacing: 2,
-    // Margin to add before drawing the footer.
-    footerMarginTop: 6,
     // Padding to add on left and right of tooltip.
     xPadding: 6,
     // Padding to add on top and bottom of tooltip.
@@ -171,7 +157,9 @@ export class LineChartSettingsStore {
   }
 
   // Point Configuration
-  @observable point
+  @observable point = {
+    
+  }
 }
 
 const lineChartSettingsStore = new LineChartSettingsStore();

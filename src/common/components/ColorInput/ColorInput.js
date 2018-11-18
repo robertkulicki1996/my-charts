@@ -18,7 +18,7 @@ export default class ColorInput extends Component {
     return (
       <div className='color-input-wrapper'>
         <div className="color-circle" style={{backgroundColor: color}} />
-        <span className="color-text" style={{color: color}}>{color}</span>
+        <span className="color-text" style={{color: '#272f40'}}>{color}</span>
       </div>
     );
   }

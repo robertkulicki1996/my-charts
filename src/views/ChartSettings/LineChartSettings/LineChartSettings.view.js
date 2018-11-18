@@ -6,6 +6,8 @@ import ColorInput from '../../../common/components/ColorInput/ColorInput';
 import OptionSectionHeader from '../../../views/Sidebar/components/OptionSectionHeader/OptionSectionHeader';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import { Tooltip } from 'react-tippy';
+import 'react-tippy/dist/tippy.css';
 
 import { observer, inject } from 'mobx-react';
 import ContextMenu from '../../../common/components/ContextMenu/ContextMenu';
@@ -216,7 +218,7 @@ export default class LineChartSettings extends Component {
 
     return (
       <div className="settings-wrapper">
-        <div className="option-wrapper">
+        {/* <div className="option-wrapper">
           <div className="label-wrapper">
             <div className="label-wrapper__label">Responsive</div>
             <Button
@@ -232,7 +234,7 @@ export default class LineChartSettings extends Component {
             checked={lineChartSettingsStore.responsive}
             onChange={value => this.onOptionChange('responsive', value)}
           />
-        </div>
+        </div> */}
         <div className="option-wrapper">
           <div className="label">Responsive animation duration</div>
           <InputNumber
@@ -247,13 +249,18 @@ export default class LineChartSettings extends Component {
         <div className="option-wrapper">
           <div className="label-wrapper">
             <div className="label-wrapper__label">Maintain aspect ratio</div>
-            <Button
-              className="label-info" 
-              textColor="pink"    
-              onClick={this.goToNewChart} 
+            <Tooltip
+              title="Maintain the original canvas aspect ratio (width / height) when resizing."
+              position="top"
+              arrow={true}
+              size="regular"
+              trigger="click"
+              theme="transparent"
             >
-              <InfoIcon width={10} height={10}/>
-            </Button>
+              <div className="label-info" >
+                <InfoIcon width={10} height={10}/>
+              </div>
+            </Tooltip>
           </div>
           <Switch
             style={{ width: 80 }}
@@ -276,7 +283,7 @@ export default class LineChartSettings extends Component {
           </ContextMenu>
         </div>
         <Collapsible 
-          open={false} 
+          open={true} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -331,7 +338,7 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible 
-          open={false} 
+          open={true} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -343,34 +350,44 @@ export default class LineChartSettings extends Component {
           <div className="option-wrapper">
             <div className="label-wrapper">
               <div className="label-wrapper__label">Duration</div>
-              <Button
-                className="label-info" 
-                textColor="pink"    
-                onClick={this.goToNewChart} 
+              <Tooltip
+                title="The number of milliseconds an animation takes."
+                position="top"
+                arrow={true}
+                size="regular"
+                trigger="click"
+                theme="transparent"
               >
-                <InfoIcon width={10} height={10}/>
-              </Button>
+                <div className="label-info" >
+                  <InfoIcon width={10} height={10}/>
+                </div>
+              </Tooltip>
             </div>
-            <InputNumber
-              style={{ width: 80 }}
-              precision={0}
-              step={1000}
-              defaultValue={lineChartSettingsStore.animation.duration}
-              value={lineChartSettingsStore.animation.duration}
-              onChange={value => this.onAnimationChange('duration',value)}
-            />
+              <InputNumber
+                style={{ width: 80 }}
+                precision={0}
+                step={1000}
+                defaultValue={lineChartSettingsStore.animation.duration}
+                value={lineChartSettingsStore.animation.duration}
+                onChange={value => this.onAnimationChange('duration',value)}
+              />
           </div>
           <div className="option-wrapper">
-          <div className="label-wrapper">
-            <div className="label-wrapper__label">Easing</div>
-            <Button
-              className="label-info" 
-              textColor="pink"    
-              onClick={this.goToNewChart} 
-            >
-              <InfoIcon width={10} height={10}/>
-            </Button>
-          </div>
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Easing</div>
+              <Tooltip
+                title="Easing function to use."
+                position="top"
+                arrow={true}
+                size="regular"
+                trigger="click"
+                theme="transparent"
+              >
+                <div className="label-info" >
+                  <InfoIcon width={10} height={10}/>
+                </div>
+              </Tooltip>
+            </div>
             <Dropdown 
               options={animationOptions} 
               value={lineChartSettingsStore.animation.easing}
@@ -383,7 +400,7 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible 
-          open={false} 
+          open={true} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -546,7 +563,7 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible 
-          open={false} 
+          open={true} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -657,7 +674,7 @@ export default class LineChartSettings extends Component {
         </Collapsible>
 
         <Collapsible 
-          open={false} 
+          open={true} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -727,16 +744,6 @@ export default class LineChartSettings extends Component {
             />
           </div>
           <div className="option-wrapper">
-            <div className="label">Footer text</div>
-            <Input
-              type="text"
-              className="tooltips-input-container"
-              inputClassName="tooltips-input"
-              value={lineChartSettingsStore.tooltips.callbacks.footer}
-              onChange={event => this.onTooltipsCallbacksChange('footer',event.target.value)}
-            />
-          </div>
-          <div className="option-wrapper">
             <div className="label">Label border color</div>
             <ContextMenu 
               className="option-settings"
@@ -764,6 +771,273 @@ export default class LineChartSettings extends Component {
               }
             >
               <ColorInput color={lineChartSettingsStore.tooltips.callbacks.labelColor.backgroundColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Label text color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.tooltips.callbacks.labelTextColor} 
+                  onChange={color => this.onTooltipsCallbacksChange('labelTextColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.tooltips.callbacks.labelTextColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Tooltip background color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.tooltips.backgroundColor} 
+                  onChange={color => this.onTooltipsOptionChange('backgroundColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.tooltips.backgroundColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Title font family</div>
+            <Dropdown 
+              options={['Helvetica', 'Arial','Ubuntu', 'Cambria']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.tooltips.titleFontFamily}
+              onChange={value => this.onTooltipsOptionChange('titleFontFamily',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Title font size</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.titleFontSize}
+              value={lineChartSettingsStore.tooltips.titleFontSize}
+              onChange={value => this.onTooltipsOptionChange('titleFontSize',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Title font style</div>
+            <Dropdown 
+              options={['normal','bold', 'italic']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.tooltips.titleFontStyle}
+              onChange={value => this.onTooltipsOptionChange('titleFontStyle',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Title font color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.tooltips.titleFontColor} 
+                  onChange={color => this.onTooltipsOptionChange('titleFontColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.tooltips.titleFontColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Title spacing</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.titleSpacing}
+              value={lineChartSettingsStore.tooltips.titleSpacing}
+              onChange={value => this.onTooltipsOptionChange('titleSpacing',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Title margin bottom</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.titleMarginBottom}
+              value={lineChartSettingsStore.tooltips.titleMarginBottom}
+              onChange={value => this.onTooltipsOptionChange('titleMarginBottom',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Body font family</div>
+            <Dropdown 
+              options={['Helvetica', 'Arial','Ubuntu', 'Cambria']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.tooltips.bodyFontFamily}
+              onChange={value => this.onTooltipsOptionChange('bodyFontFamily',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Body font size</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.bodyFontSize}
+              value={lineChartSettingsStore.tooltips.bodyFontSize}
+              onChange={value => this.onTooltipsOptionChange('bodyFontSize',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Body font style</div>
+            <Dropdown 
+              options={['normal','bold', 'italic']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.tooltips.bodyFontStyle}
+              onChange={value => this.onTooltipsOptionChange('bodyFontStyle',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Body font color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.tooltips.bodyFontColor} 
+                  onChange={color => this.onTooltipsOptionChange('bodyFontColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.tooltips.titleFontColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Body spacing</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.bodySpacing}
+              value={lineChartSettingsStore.tooltips.bodySpacing}
+              onChange={value => this.onTooltipsOptionChange('bodySpacing',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">X padding</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.xPadding}
+              value={lineChartSettingsStore.tooltips.xPadding}
+              onChange={value => this.onTooltipsOptionChange('xPadding',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Y padding</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.yPadding}
+              value={lineChartSettingsStore.tooltips.yPadding}
+              onChange={value => this.onTooltipsOptionChange('yPadding',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Caret padding</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.caretPadding}
+              value={lineChartSettingsStore.tooltips.caretPadding}
+              onChange={value => this.onTooltipsOptionChange('caretPadding',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Caret size</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.caretSize}
+              value={lineChartSettingsStore.tooltips.caretSize}
+              onChange={value => this.onTooltipsOptionChange('caretSize',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Corner radius</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.cornerRadius}
+              value={lineChartSettingsStore.tooltips.cornerRadius}
+              onChange={value => this.onTooltipsOptionChange('cornerRadius',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Multi key background</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.tooltips.multiKeyBackground} 
+                  onChange={color => this.onTooltipsOptionChange('multiKeyBackground',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.tooltips.multiKeyBackground} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Display colors</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.tooltips.displayColors}
+              onChange={value => this.onTooltipsOptionChange('displayColors', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Border width</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.tooltips.borderWidth}
+              value={lineChartSettingsStore.tooltips.borderWidth}
+              onChange={value => this.onTooltipsOptionChange('borderWidth',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Border color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.tooltips.borderColor} 
+                  onChange={color => this.onTooltipsOptionChange('borderColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.tooltips.borderColor} />
             </ContextMenu>
           </div>
         </Collapsible>

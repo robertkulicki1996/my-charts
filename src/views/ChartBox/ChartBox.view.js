@@ -42,9 +42,9 @@ export default class ChartBox extends Component {
   @action.bound
   init() {
     this.lineChart = new Chart(this.context,{
-      type: 'line',
+      type: 'bar',
       data: {
-        labels: ['July', 'February', 'March', 'April', 'May', 'June', 'July','March', 'April', 'May'],
+        labels: ['July', 'February', 'March', 'April', 'May', 'June', 'July','March', 'April', 'May', 'July', 'February'],
         datasets: [
           {
             label: 'My First dataset',
@@ -65,10 +65,10 @@ export default class ChartBox extends Component {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [65, 259, 80, 81,23 ,123, 34, 323, 67, 240]
+            data: [65, 259, 80, 81,23 ,123, 34, 323, 67, 240, 89,324]
           },
           {
-            label: 'My First dataset',
+            label: 'My second dataset',
             fill: true,
             lineTension: 0.5,
             backgroundColor: 'blue',
@@ -86,7 +86,7 @@ export default class ChartBox extends Component {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [65, 359, 80, 81, 56, 255,44,43, 40,223]
+            data: [65, 359, 80, 81, 56, 255,44,43, 40,223,90, 234]
           }
         ],
         scaleFontColor: 'white',
