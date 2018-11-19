@@ -32,7 +32,35 @@ export class DataStore {
       column1: '150',
       column2: '320',
       column3: '340',
-      column4: '422'
+      column4: '421'
+    },
+    {
+      id: uniqueId('row_'),
+      column1: '123',
+      column2: '320',
+      column3: '93',
+      column4: '421'
+    },
+    {
+      id: uniqueId('row_'),
+      column1: '10',
+      column2: '54',
+      column3: '33',
+      column4: '90'
+    },
+    {
+      id: uniqueId('row_'),
+      column1: '123',
+      column2: '18',
+      column3: '93',
+      column4: '749'
+    },
+    {
+      id: uniqueId('row_'),
+      column1: '32',
+      column2: '54',
+      column3: '254',
+      column4: '64'
     }
   ];
 

@@ -44,6 +44,9 @@ td:nth-last-child(2) {
 }
 
 .remove-column-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: $metric-small;
   cursor: pointer;
   margin-left: $metric-x-small;
@@ -71,4 +74,10 @@ td:nth-last-child(2) {
   display: flex;
   justify-content: space-between;
   margin-bottom: $metric-x-small;
+}
+
+.column-cell-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }

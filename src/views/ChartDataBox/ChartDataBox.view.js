@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { map, uniqueId } from 'lodash';
 import jsPDF from 'jspdf';
-import { action, observable, runInAction } from 'mobx';
+import { action, observable } from 'mobx';
 import { PulseLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
 
@@ -22,7 +22,7 @@ import CustomModal from './../../common/components/CustomModal/CustomModal';
 
 // icons
 import ExportIcon from './../../common/icons/export.svg';
-import ImportIcon from './../../common/icons/import.svg';
+// import ImportIcon from './../../common/icons/import.svg';
 import SaveIcon from './../../common/icons/save.svg';
 
 // styles
@@ -104,7 +104,7 @@ export default class ChartDataBox extends Component {
 
   @action.bound
   showAddColumnPopup() {
-    this.newColumnName = 'Column' + (this.table.current.columns.length + 1);
+    this.newColumnName = 'Column' + uniqueId();
     this.isAddColumnPopupShown = true;
   }
 

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { observer, PropTypes as MobxPropTypes } from 'mobx-react';
-import { remove, find, indexOf, uniqueId, map, capitalize, toLower, includes } from 'lodash';
+import { remove, find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
 
@@ -93,8 +92,13 @@ export default class Table extends Component {
   }
 
   @observable isRowEditPopupShown = false;
+  @observable isEditColumnNamePopupShown = false;
   
   @observable editingRow = {};
+  @observable editingColumn = {
+    index: null,
+    text: ''
+  }
 
   @action.bound
   showEditRowPopup(row) {
@@ -105,6 +109,44 @@ export default class Table extends Component {
   @action.bound
   hideEditRowPopup() {
     this.isRowEditPopupShown = false;
+  }
+
+  @action.bound
+  showEditColumnNamePopup(column) {
+    const indexOfColumn = indexOf(this.columns,column);
+    this.editingColumn = {
+      index: indexOfColumn,
+      text: column
+    }
+    this.isEditColumnNamePopupShown = true;
+  }
+
+  @action.bound
+  hideEditColumnNamePopup() {
+    this.editingColumn = {};
+    this.isEditColumnNamePopupShown = false;
+  }
+
+  @action.bound
+  onColumnNameChange(event) {
+    this.editingColumn.text = event.target.value;
+  }
+
+  @action.bound
+  saveColumnName() {
+    this.columns[this.editingColumn.index] = toLower(this.editingColumn.text);
+    const newRows = map(this.rows, row => {
+      const keyToEdit = Object.keys(row)[this.editingColumn.index + 1] // first is id
+      const newRow = mapKeys(row, (value,key) => {
+        if(key === keyToEdit) {
+          return this.editingColumn.text
+        }
+        return key;
+      })
+      return newRow;
+    });
+    this.rows = newRows;
+    this.hideEditColumnNamePopup();
   }
 
   @action.bound
@@ -135,20 +177,25 @@ export default class Table extends Component {
   @action.bound
   addColumn(columnName="Undefined column", randomFrom=null, randomTo=null, initialRowValue) {
     const newColumn = toLower(columnName);
-    this.columns.push(newColumn);
-    if(randomFrom !== null && randomTo !== null) {
-      map(this.rows, row => {
-        extendObservable(row, { 
-            [newColumn]: this.getRandomInt(randomFrom, randomTo).toString() 
-          }
-        );
-      })
-    } else {
-      map(this.rows, row => {
-        extendObservable(row, { 
-          [newColumn]: initialRowValue.toString()
+    const indexOfColumn = includes(this.columns,newColumn);
+    if(!indexOfColumn) {
+      this.columns.push(newColumn);
+      if(randomFrom !== null && randomTo !== null) {
+        map(this.rows, row => {
+          extendObservable(row, { 
+              [newColumn]: this.getRandomInt(randomFrom, randomTo).toString() 
+            }
+          );
+        })
+      } else {
+        map(this.rows, row => {
+          extendObservable(row, { 
+            [newColumn]: initialRowValue.toString()
+          });
         });
-      });
+      }
+    } else {
+      NotificationService.error("This column name existing");
     }
   }
 
@@ -224,6 +271,40 @@ export default class Table extends Component {
       </CustomModal>
     );
 
+    const EditColumnPopup = (
+      <CustomModal
+        title="Edit column"
+        width="430" 
+        height="220" 
+        effect="fadeInDown" 
+        visible={this.isEditColumnNamePopupShown} 
+        onClose={this.hideEditColumnNamePopup}
+        isFooter={true}
+        buttonRight={
+          <Button
+            buttonStyle="button-primary"
+            textColor="light"
+            className="export-button"
+            onClick={this.saveColumnName}
+          >
+            Change
+          </Button>
+        }
+      >
+        <React.Fragment>
+          <div className="option">
+            <div className="label">Column name</div>
+          </div>
+          <Input 
+            type="text" 
+            value={this.editingColumn.text}
+            onChange={this.onColumnNameChange} 
+            inputClassName="column-input"
+          />
+        </React.Fragment>
+      </CustomModal>
+    );
+
     const editRowButton = row => (
       <Button key={uniqueId()} className="edit-button" onClick={() => this.showEditRowPopup(row)}>
         <EditIcon 
@@ -259,8 +340,10 @@ export default class Table extends Component {
           <thead>
             <tr>{map(columns,column => (
               <th key={uniqueId()}>
-                {capitalize(column)}
-                {removeColumnButton(column)}
+                <div className="column-cell-wrapper">
+                  {<div title="Edit this column" role="button" onClick={() => this.showEditColumnNamePopup(column)}>{capitalize(column)}</div>}
+                  {removeColumnButton(column)}
+                </div>
               </th>))}
             </tr>
           </thead>
@@ -281,6 +364,7 @@ export default class Table extends Component {
           </tbody>
         </table>
         {EditRowPopup}
+        {EditColumnPopup}
       </React.Fragment>
     );
   }
