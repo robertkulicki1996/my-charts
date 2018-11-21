@@ -5,7 +5,7 @@ import { observer, inject } from 'mobx-react';
 import { Bind } from 'lodash-decorators';
 import { action } from 'mobx';
 import Chart from 'chart.js';
-import {  LineChartSettingsStore } from '../../stores/lineChartSettings';
+import {  LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 
 import './ChartBox.view.scss';
 
@@ -21,6 +21,8 @@ export default class ChartBox extends Component {
     super(props);
     this.lineChartRef = React.createRef();
     this.lineChart = null;
+
+    console.log(this.props.lineChartSettingsStore);
   }
 
   componentDidMount() {
@@ -42,7 +44,7 @@ export default class ChartBox extends Component {
   @action.bound
   init() {
     this.lineChart = new Chart(this.context,{
-      type: 'bar',
+      type: 'line',
       data: {
         labels: ['July', 'February', 'March', 'April', 'May', 'June', 'July','March', 'April', 'May', 'July', 'February'],
         datasets: [
@@ -77,12 +79,12 @@ export default class ChartBox extends Component {
             borderDash: [],
             borderDashOffset: 0.0,
             borderJoinStyle: 'red',
-            pointBorderColor: '#EB1E64',
+            pointBorderColor: 'white',
             pointBackgroundColor: '#fff',
             pointBorderWidth: 1,
             pointHoverRadius: 5,
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBorderColor: 'blue',
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
@@ -152,9 +154,9 @@ export default class ChartBox extends Component {
         },
         elements: {
           point: {
-            pointStyle: 'cross',
-            backgroundColor: 'blue',
-            borderColor: 'blue'
+            pointStyle: 'star',
+            backgroundColor: 'rgba(0,230,0,0.1)',
+            borderColor: 'rgba(240,0,0,0.1)'
           }
         },
         scales: {
