@@ -48,6 +48,23 @@ class Input extends Component {
      * Determines if input should have border rendered
      */
     displayBorder: PropTypes.bool,
+    /**
+     * Textarea component
+     */
+    textarea: PropTypes.bool,
+    /**
+     * Textarea rows number
+     */
+    rows: PropTypes.number,
+    /**
+     * Textarea cols number
+     */
+    cols: PropTypes.number,
+    /**
+     * onChange callback for textarea, should be properly bound to current view.
+     * Noop by default
+     */
+    onTextareaChange: PropTypes.func,
   };
   
   static defaultProps = {
@@ -62,6 +79,10 @@ class Input extends Component {
     value: '',
     placeholder: '',
     displayBorder: true,
+    textarea: false,
+    rows: 0,
+    cols: 0,
+    onTextareaChange: noop,
   };
 
 
@@ -78,9 +99,13 @@ class Input extends Component {
       value,
       placeholder,
       displayBorder,
+      textarea,
+      rows, 
+      cols,
+      onTextareaChange,
     } = this.props;
 
-    return (
+    return textarea === false ? (
       <div className={`input-container ${className}`} >
         <input
           className={`input ${inputClassName} ${displayBorder ? 'bordered' : ''}`}
@@ -94,7 +119,14 @@ class Input extends Component {
         />
         {(error && isString(error)) ? <span>{error}</span> : null }
       </div>
-    );
+    ) : (
+      <textarea 
+        rows={rows}
+        cols={cols}
+        value={value}
+        onChange={onTextareaChange}
+      />
+    )
   }
 };
 

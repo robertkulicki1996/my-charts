@@ -1,12 +1,7 @@
 import { observable } from 'mobx';
 import ChartSettingsStore from './ChartSettings';
 
-export class LineChartSettingsStore extends ChartSettingsStore {
-  // eslint-disable-next-line no-useless-constructor
-  constructor() {
-    super();
-  }
-  
+export class LineChartSettingsStore extends ChartSettingsStore {  
   // Line configuration - line charts
   @observable line = {
     // Bézier curve tension (0 for no Bézier curves).

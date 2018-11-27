@@ -16,6 +16,8 @@ import Switch from '../../../common/components/Switch/Switch';
 import Button from '../../../common/components/Button/Button';
 import Input from '../../../common/components/Input/Input';
 
+import Chart from 'chart.js';
+
 import InfoIcon from '../../../common/icons/info.svg';
 import { ChromePicker } from 'react-color';
 
@@ -55,6 +57,19 @@ const animationOptions = [
   'easeInBounce',
   'easeOutBounce',
   'easeInOutBounce',
+];
+
+const pointStyles = [
+  'circle',
+  'cross',
+  'crossRot',
+  'dash',
+  'line',
+  'rect',
+  'rectRounded',
+  'rectRot',
+  'star',
+  'triangle'
 ];
 
 const labelsPositionOptions = ['top','right','bottom','left'];
@@ -210,6 +225,17 @@ export default class LineChartSettings extends Component {
         backgroundColor: value
       }
     }
+    lineChartObject.update();
+  }
+
+  @action.bound
+  onGlobalPointConfigurationChange(option,value) {
+    const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
+    lineChartSettingsStore.point[option] = value;
+    lineChartObject.options.elements.point[option] = value;
+    console.log(option,value);
     lineChartObject.update();
   }
 
@@ -674,7 +700,7 @@ export default class LineChartSettings extends Component {
         </Collapsible>
 
         <Collapsible 
-          open={true} 
+          open={false} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -1041,7 +1067,125 @@ export default class LineChartSettings extends Component {
             </ContextMenu>
           </div>
         </Collapsible>
-        
+        <Collapsible 
+          open={false} 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          height={300}
+          trigger={
+            <OptionSectionHeader title="Global point configuration" />
+          }
+        >
+          <div className="option-wrapper">
+            <div className="label">Radius</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.point.radius}
+              value={lineChartSettingsStore.point.radius}
+              onChange={value => this.onGlobalPointConfigurationChange('radius',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Point style</div>
+            <Dropdown 
+              options={pointStyles} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.point.pointStyle}
+              onChange={value => this.onGlobalPointConfigurationChange('pointStyle',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Rotation</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.point.rotation}
+              value={lineChartSettingsStore.point.rotation}
+              onChange={value => this.onGlobalPointConfigurationChange('rotation',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Background color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.point.backgroundColor} 
+                  onChange={color => this.onGlobalPointConfigurationChange('backgroundColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.point.backgroundColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Border width</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.point.borderWidth}
+              value={lineChartSettingsStore.point.borderWidth}
+              onChange={value => this.onGlobalPointConfigurationChange('borderWidth',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Border color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.point.borderColor} 
+                  onChange={color => this.onGlobalPointConfigurationChange('borderColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.point.borderColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Hit radius</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.point.hitRadius}
+              value={lineChartSettingsStore.point.hitRadius}
+              onChange={value => this.onGlobalPointConfigurationChange('hitRadius',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Hover radius</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.point.hoverRadius}
+              value={lineChartSettingsStore.point.hoverRadius}
+              onChange={value => this.onGlobalPointConfigurationChange('hoverRadius',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Hover border width</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.point.hoverBorderWidth}
+              value={lineChartSettingsStore.point.hoverBorderWidth}
+              onChange={value => this.onGlobalPointConfigurationChange('hoverBorderWidth',value)}
+            />
+          </div>
+        </Collapsible>
       </div>
     );
   }

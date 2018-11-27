@@ -53,3 +53,20 @@
   font-weight: $font-weight-medium;
   font-size: $metric-base /2;
 }
+
+textarea {
+  border: 0;
+  width: 100%;
+  text-decoration: none;
+  text-align: left;
+  height: $metric-xx-large * 2;
+  padding: 0;
+  background-color: inherit;
+  color: $color-lightgrey;
+  font-family: $font-default;
+  font-size: $metric-small - $metric-x-small / 4;
+
+  &:focus {
+    outline: none;
+  }
+}

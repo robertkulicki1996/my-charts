@@ -21,8 +21,6 @@ export default class ChartBox extends Component {
     super(props);
     this.lineChartRef = React.createRef();
     this.lineChart = null;
-
-    console.log(this.props.lineChartSettingsStore);
   }
 
   componentDidMount() {
@@ -52,42 +50,42 @@ export default class ChartBox extends Component {
             label: 'My First dataset',
             fill: true,
             lineTension: 0.5,
-            backgroundColor: '#EB1E64',
-            borderColor: '#fff',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'red',
-            pointBorderColor: '#EB1E64',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
+            // backgroundColor: '#EB1E64',
+            // borderColor: '#fff',
+            // borderCapStyle: 'butt',
+            // borderDash: [],
+            // borderDashOffset: 0.0,
+            // borderJoinStyle: 'red',
+            // pointBorderColor: '#EB1E64',
+            // pointBackgroundColor: '#fff',
+            // pointBorderWidth: 1,
+            // pointHoverRadius: 5,
+            // pointHoverBackgroundColor: '#fff',
+            // pointHoverBorderColor: 'rgba(220,220,220,1)',
+            // pointHoverBorderWidth: 2,
+            // pointRadius: 1,
+            // pointHitRadius: 10,
             data: [65, 259, 80, 81,23 ,123, 34, 323, 67, 240, 89,324]
           },
           {
             label: 'My second dataset',
             fill: true,
             lineTension: 0.5,
-            backgroundColor: 'blue',
-            borderColor: '#fff',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'red',
-            pointBorderColor: 'white',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'blue',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
+            // backgroundColor: 'blue',
+            // borderColor: '#fff',
+            // borderCapStyle: 'butt',
+            // borderDash: [],
+            // borderDashOffset: 0.0,
+            // borderJoinStyle: 'red',
+            // pointBorderColor: 'white',
+            // pointBackgroundColor: '#fff',
+            // pointBorderWidth: 1,
+            // pointHoverRadius: 5,
+            // pointHoverBackgroundColor: '#fff',
+            // pointHoverBorderColor: 'blue',
+            // pointHoverBorderWidth: 2,
+            // pointRadius: 1,
+            // pointHitRadius: 10,
             data: [65, 359, 80, 81, 56, 255,44,43, 40,223,90, 234]
           }
         ],
@@ -154,9 +152,8 @@ export default class ChartBox extends Component {
         },
         elements: {
           point: {
-            pointStyle: 'star',
-            backgroundColor: 'rgba(0,230,0,0.1)',
-            borderColor: 'rgba(240,0,0,0.1)'
+            pointStyle: 'circle',
+            backgroundColor: this.props.lineChartSettingsStore.point.backgroundColor,
           }
         },
         scales: {

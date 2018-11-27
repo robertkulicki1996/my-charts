@@ -43,6 +43,8 @@ export default class ChartDataBox extends Component {
 
   @observable isAddColumnPopupShown = false;
   @observable isExportChartPopupShown = false;
+  @observable isDescriptionPopupShown = false;
+
   @observable newColumnName = '';
   @observable isRandomValuesDisabled = true;
   @observable randomFrom = 0;
@@ -54,6 +56,8 @@ export default class ChartDataBox extends Component {
   @observable fileName = null;
   @observable exportFileName = `chart_${uniqueId()}`;
 
+  @observable chartDescription = 'Type description here ...';
+
   @action.bound
   handleColumnName(event) {
     this.newColumnName = event.target.value;
@@ -62,6 +66,12 @@ export default class ChartDataBox extends Component {
   @action.bound
   handleExportFileNameChange(event) {
     this.exportFileName = event.target.value;
+  }
+
+  @action.bound
+  handleChartDescriptionChange(event) {
+    this.chartDescription = event.target.value;
+    console.log(this.chartDescription);
   }
 
   @action.bound
@@ -121,6 +131,16 @@ export default class ChartDataBox extends Component {
   @action.bound
   hideExportPopup() {
     this.isExportChartPopupShown = false;
+  }
+
+  @action.bound
+  showDescriptionPopup() {
+    this.isDescriptionPopupShown = true;
+  }
+
+  @action.bound
+  hideDescriptionPopup() {
+    this.isDescriptionPopupShown = false;
   }
 
   @action.bound
@@ -335,6 +355,36 @@ export default class ChartDataBox extends Component {
       </CustomModal>
     );
 
+    const DescriptionPopup = (
+      <CustomModal
+        title="Description"
+        width="620" 
+        height="320" 
+        effect="fadeInDown" 
+        visible={this.isDescriptionPopupShown} 
+        onClose={this.hideDescriptionPopup}
+        isFooter={true}
+        buttonRight={
+          <Button
+            buttonStyle="button-primary"
+            textColor="light"
+            className="export-button"
+            onClick={this.saveChart}
+          >
+            Add
+          </Button>
+        }
+      >
+        <React.Fragment>
+          <Input
+            textarea
+            value={this.chartDescription}
+            onTextareaChange={this.handleChartDescriptionChange} 
+          />
+        </React.Fragment>
+      </CustomModal>
+    );
+
     return (
       <div className="chart-data-box">
         <div className="chart-data-options">
@@ -361,21 +411,29 @@ export default class ChartDataBox extends Component {
             />
             <Button 
               className="add-button"
-              onClick={() => {}}
+              onClick={this.showDescriptionPopup}
             >
-            <div className="button-label">
-              <div className="label">Save</div>
-              <SaveIcon width={14} height={14} />
-            </div>
+              <div className="button-label">
+                <div className="label">Add description</div>
+              </div>
+            </Button>
+            <Button 
+              className="add-button"
+              onClick={this.showSaveChartPopup}
+            >
+              <div className="button-label">
+                <div className="label">Save</div>
+                <SaveIcon width={14} height={14} />
+              </div>
             </Button>
             <Button 
               className="add-button"
               onClick={this.showExportPopup}
             >
-            <div className="button-label">
-              <div className="label">Export chart</div>
-              <ExportIcon width={14} height={14} />
-            </div>
+              <div className="button-label">
+                <div className="label">Export chart</div>
+                <ExportIcon width={14} height={14} />
+              </div>
             </Button>
           </div>
         </div>
@@ -386,6 +444,7 @@ export default class ChartDataBox extends Component {
         />
         {AddColumnPopup}
         {ExportChartPopup}
+        {DescriptionPopup}
       </div>
     );
   }
