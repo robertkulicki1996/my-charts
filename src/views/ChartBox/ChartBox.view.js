@@ -44,33 +44,12 @@ export default class ChartBox extends Component {
     this.lineChart = new Chart(this.context,{
       type: 'line',
       data: {
-        labels: ['July', 'February', 'March', 'April', 'May', 'June', 'July','March', 'April', 'May', 'July', 'February'],
+        labels: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
         datasets: [
           {
-            label: 'My First dataset',
-            fill: true,
-            lineTension: 0.5,
-            // backgroundColor: '#EB1E64',
-            // borderColor: '#fff',
-            // borderCapStyle: 'butt',
-            // borderDash: [],
-            // borderDashOffset: 0.0,
-            // borderJoinStyle: 'red',
-            // pointBorderColor: '#EB1E64',
-            // pointBackgroundColor: '#fff',
-            // pointBorderWidth: 1,
-            // pointHoverRadius: 5,
-            // pointHoverBackgroundColor: '#fff',
-            // pointHoverBorderColor: 'rgba(220,220,220,1)',
-            // pointHoverBorderWidth: 2,
-            // pointRadius: 1,
-            // pointHitRadius: 10,
-            data: [65, 259, 80, 81,23 ,123, 34, 323, 67, 240, 89,324]
-          },
-          {
-            label: 'My second dataset',
-            fill: true,
-            lineTension: 0.5,
+            label: 'My first dataset',
+            // fill: false,
+            // lineTension: 0.5,
             // backgroundColor: 'blue',
             // borderColor: '#fff',
             // borderCapStyle: 'butt',
@@ -86,7 +65,28 @@ export default class ChartBox extends Component {
             // pointHoverBorderWidth: 2,
             // pointRadius: 1,
             // pointHitRadius: 10,
-            data: [65, 359, 80, 81, 56, 255,44,43, 40,223,90, 234]
+            data: [100,200,300,400,500,600,700,800,900,1000,1100]
+          },
+          {
+            label: 'My second dataset',
+            // fill: false,
+            // lineTension: 0.5,
+            // backgroundColor: 'blue',
+            // borderColor: '#fff',
+            // borderCapStyle: 'butt',
+            // borderDash: [],
+            // borderDashOffset: 0.0,
+            // borderJoinStyle: 'red',
+            // pointBorderColor: 'white',
+            // pointBackgroundColor: '#fff',
+            // pointBorderWidth: 1,
+            // pointHoverRadius: 5,
+            // pointHoverBackgroundColor: '#fff',
+            // pointHoverBorderColor: 'blue',
+            // pointHoverBorderWidth: 2,
+            // pointRadius: 1,
+            // pointHitRadius: 10,
+            data: [100,200,300,400,500,600,700,800,900,1000,1100]
           }
         ],
         scaleFontColor: 'white',

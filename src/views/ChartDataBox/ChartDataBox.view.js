@@ -393,7 +393,7 @@ export default class ChartDataBox extends Component {
               className="add-button"
               onClick={this.addRow}
             >
-              Add Row
+              Add Dataset
             </Button>
             <Button 
               className="add-button"

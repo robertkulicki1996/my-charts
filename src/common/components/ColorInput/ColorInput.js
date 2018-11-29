@@ -15,9 +15,18 @@ export default class ColorInput extends Component {
 
   render() {
     const { color } = this.props;
+
+    let borderColor;
+
+    if(color === '#ffffff' || '#FFFFFF' || '#fff' || 'white') {
+      borderColor = '#000000';
+    } else {
+      borderColor = '#ffffff';
+    }
+
     return (
       <div className='color-input-wrapper'>
-        <div className="color-circle" style={{backgroundColor: color}} />
+        <div className="color-circle" style={{backgroundColor: color, border: `1px solid ${borderColor}` }} />
         <span className="color-text" style={{color: '#272f40'}}>{color}</span>
       </div>
     );

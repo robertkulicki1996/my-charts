@@ -16,8 +16,6 @@ import Switch from '../../../common/components/Switch/Switch';
 import Button from '../../../common/components/Button/Button';
 import Input from '../../../common/components/Input/Input';
 
-import Chart from 'chart.js';
-
 import InfoIcon from '../../../common/icons/info.svg';
 import { ChromePicker } from 'react-color';
 
@@ -239,6 +237,17 @@ export default class LineChartSettings extends Component {
     lineChartObject.update();
   }
 
+  @action.bound
+  onGlobalLineConfigurationChange(option,value) {
+    const { lineChartSettingsStore } = this.props;
+    const { lineChartObject } = lineChartSettingsStore;
+
+    lineChartSettingsStore.line[option] = value;
+    lineChartObject.options.elements.line[option] = value;
+    console.log(option,value);
+    lineChartObject.update();
+  }
+
   render() {
     const { lineChartSettingsStore } = this.props;
 
@@ -309,7 +318,7 @@ export default class LineChartSettings extends Component {
           </ContextMenu>
         </div>
         <Collapsible 
-          open={true} 
+          open={false} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -364,7 +373,7 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible 
-          open={true} 
+          open={false} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -426,7 +435,7 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible 
-          open={true} 
+          open={false} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -589,7 +598,7 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible 
-          open={true} 
+          open={false} 
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
@@ -1183,6 +1192,108 @@ export default class LineChartSettings extends Component {
               defaultValue={lineChartSettingsStore.point.hoverBorderWidth}
               value={lineChartSettingsStore.point.hoverBorderWidth}
               onChange={value => this.onGlobalPointConfigurationChange('hoverBorderWidth',value)}
+            />
+          </div>
+        </Collapsible>
+        <Collapsible 
+          open={true} 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          height={300}
+          trigger={
+            <OptionSectionHeader title="Global line configuration" />
+          }
+        >
+          <div className="option-wrapper">
+            <div className="label">Tension</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={1}
+              step={0.1}
+              defaultValue={lineChartSettingsStore.line.tension}
+              value={lineChartSettingsStore.line.tension}
+              onChange={value => this.onGlobalLineConfigurationChange('tension',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Background color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.line.backgroundColor} 
+                  onChange={color => this.onGlobalLineConfigurationChange('backgroundColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.line.backgroundColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Border width</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.line.borderWidth}
+              value={lineChartSettingsStore.line.borderWidth}
+              onChange={value => this.onGlobalLineConfigurationChange('borderWidth',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Border color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.line.borderColor} 
+                  onChange={color => this.onGlobalLineConfigurationChange('borderColor',color.hex)}  
+                />
+              }
+            >
+              <ColorInput color={lineChartSettingsStore.line.borderColor} />
+            </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Border cap style</div>
+            <Dropdown 
+              options={['butt', 'round', 'square']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.line.borderCapStyle}
+              onChange={value => this.onGlobalLineConfigurationChange('borderCapStyle',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          {/* TODO: borderDash component */}
+          {/* TODO: borderDashOffset */}
+          {/* TODO: borderJoinStyle */}
+          <div className="option-wrapper">
+            <div className="label">Keep Bézier control inside chart</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.line.capBezierPoints}
+              onChange={value => this.onGlobalLineConfigurationChange('capBezierPoints', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Fill</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.line.fill}
+              onChange={value => this.onGlobalLineConfigurationChange('fill', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Stepped</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.line.stepped}
+              onChange={value => this.onGlobalLineConfigurationChange('stepped', value)}
             />
           </div>
         </Collapsible>

@@ -1,0 +1,15 @@
+@import '../../../common/styles/variables.scss';
+
+.dataset {
+  display: flex;
+  flex-wrap: wrap;
+  width: $metric-base - 1px;
+  height: $metric-small;
+}
+
+.dataset-item {
+  width: $metric-x-small / 2;
+  height: $metric-x-small / 2;
+  margin-right: $metric-x-small / 4;
+  margin-bottom: $metric-x-small / 4;
+}

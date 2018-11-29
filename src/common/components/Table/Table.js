@@ -16,6 +16,7 @@ import EditIcon from '../../icons/edit.svg';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import CustomModal from '../CustomModal/CustomModal';
+import Dataset from '../Dataset/Dataset';
 
 // styles
 import './Table.scss';
@@ -28,62 +29,49 @@ export default class Table extends Component {
   }
 
   @observable columns = [
-    'column1',
-    'column2',
-    'column3',
-    'column4'
+    '2010',
+    '2011',
+    '2012',
+    '2013',
+    '2014',
+    '2015',
+    '2016',
+    '2017',
+    '2018',
+    '2019',
+    '2020'
   ];
 
   @observable rows = [
     {
       id: uniqueId('row_'),
-      column1: '110',
-      column2: '320',
-      column3: '320',
-      column4: '420'
+      '2010': '100',
+      '2011': '200',
+      '2012': '300',
+      '2013': '400',
+      '2014': '500',
+      '2015': '600',
+      '2016': '700',
+      '2017': '800',
+      '2018': '900',
+      '2019': '1000',
+      '2020': '1100',
+
     },
     {
       id: uniqueId('row_'),
-      column1: '150',
-      column2: '420',
-      column3: '330',
-      column4: '420'
+      '2010': '200',
+      '2011': '400',
+      '2012': '600',
+      '2013': '800',
+      '2014': '1000',
+      '2015': '1200',
+      '2016': '1400',
+      '2017': '1600',
+      '2018': '1800',
+      '2019': '2000',
+      '2020': '2200',
     },
-    {
-      id: uniqueId('row_'),
-      column1: '150',
-      column2: '320',
-      column3: '340',
-      column4: '421'
-    },
-    {
-      id: uniqueId('row_'),
-      column1: '123',
-      column2: '320',
-      column3: '93',
-      column4: '421'
-    },
-    {
-      id: uniqueId('row_'),
-      column1: '10',
-      column2: '54',
-      column3: '33',
-      column4: '90'
-    },
-    {
-      id: uniqueId('row_'),
-      column1: '123',
-      column2: '18',
-      column3: '93',
-      column4: '749'
-    },
-    {
-      id: uniqueId('row_'),
-      column1: '32',
-      column2: '54',
-      column3: '254',
-      column4: '64'
-    }
   ];
 
   componentWillReceiveProps() {
@@ -225,6 +213,22 @@ export default class Table extends Component {
     })
   }
 
+  addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
+    });
+    chart.update();
+}
+
+removeData(chart) {
+    chart.data.labels.pop();
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.pop();
+    });
+    chart.update();
+}
+
   @Bind()
   renderEditRowPopupBody(){
     return Object.keys(this.editingRow).map((key,index) => 
@@ -350,7 +354,7 @@ export default class Table extends Component {
           <tbody>
             {map(rows, row => (<tr key={uniqueId()}>{
               map(Object.values(row), (val, index) => {
-                if (!includes(val,'row_')) return <td key={index}>{val}</td>
+                if (!includes(val,'row_')) return <td key={index}>{<Dataset name="xxx" color="blue" />}{val}</td>
               })}
               <React.Fragment>
                 <td key={uniqueId()}>
