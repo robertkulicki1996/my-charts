@@ -4,7 +4,7 @@ table {
   font-family: $font-default;
   border-collapse: collapse;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 td, th {
@@ -80,4 +80,10 @@ td:nth-last-child(2) {
   display: flex;
   align-items: center;
   cursor: pointer;
+}
+
+.dataset-button {
+  position: relative;
+  right: $metric-base;
+  top: $metric-x-small / 2;
 }

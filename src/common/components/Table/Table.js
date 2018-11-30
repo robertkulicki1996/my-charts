@@ -353,8 +353,16 @@ removeData(chart) {
           </thead>
           <tbody>
             {map(rows, row => (<tr key={uniqueId()}>{
-              map(Object.values(row), (val, index) => {
-                if (!includes(val,'row_')) return <td key={index}>{<Dataset name="xxx" color="blue" />}{val}</td>
+              map(Object.values(row), (value, index) => {
+                if(index === 0) return ( 
+                  <td key={index}>
+                    <div class="dataset-button">
+                      <Dataset color="#EB1E64" />
+                    </div>
+                    {value}
+                  </td>
+                );
+                if(!includes(value,'row_')) return <td key={index}>{value}</td>
               })}
               <React.Fragment>
                 <td key={uniqueId()}>

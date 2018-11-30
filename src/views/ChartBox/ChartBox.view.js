@@ -48,6 +48,7 @@ export default class ChartBox extends Component {
         datasets: [
           {
             label: 'My first dataset',
+            showLine: false,
             // fill: false,
             // lineTension: 0.5,
             // backgroundColor: 'blue',
