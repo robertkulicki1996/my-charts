@@ -357,7 +357,7 @@ removeData(chart) {
                 if(index === 0) return ( 
                   <td key={index}>
                     <div class="dataset-button">
-                      <Dataset color="#EB1E64" />
+                      <Dataset color="blue" />
                     </div>
                     {value}
                   </td>

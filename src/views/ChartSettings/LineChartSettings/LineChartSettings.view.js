@@ -19,7 +19,7 @@ import Input from '../../../common/components/Input/Input';
 import InfoIcon from '../../../common/icons/info.svg';
 import { ChromePicker } from 'react-color';
 
-import { LineChartSettingsStore } from '../../../stores/lineChartSettings';
+import { LineChartSettingsStore } from '../../../stores/ChartSettings/LineChartSettings';
 
 import './LineChartSettings.view.scss';
 
@@ -1269,9 +1269,6 @@ export default class LineChartSettings extends Component {
               arrowClassName='custom-arrow'
             />
           </div>
-          {/* TODO: borderDash component */}
-          {/* TODO: borderDashOffset */}
-          {/* TODO: borderJoinStyle */}
           <div className="option-wrapper">
             <div className="label">Keep Bézier control inside chart</div>
             <Switch

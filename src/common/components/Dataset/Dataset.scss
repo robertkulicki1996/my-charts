@@ -14,11 +14,11 @@
 }
 
 .dataset-item {
-  width: $metric-x-small / 2;
-  height: $metric-x-small / 2;
+  width: $metric-x-small + $metric-x-small/4;
+  height: $metric-x-small + $metric-x-small/4;
   margin-right: $metric-x-small / 4;
   margin-bottom: $metric-x-small / 4;
-
+  border-radius: 50%;
   transition: all .3s ease-in-out;
 
 	&:hover {

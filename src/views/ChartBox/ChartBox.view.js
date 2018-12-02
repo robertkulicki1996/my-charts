@@ -4,16 +4,22 @@ import { withRouter } from 'react-router';
 import { observer, inject } from 'mobx-react';
 import { Bind } from 'lodash-decorators';
 import { action } from 'mobx';
-import Chart from 'chart.js';
-import {  LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 
+import Chart from 'chart.js';
+
+// stores
+import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
+import { CommonStore } from '../../stores/common';
+
+// styles
 import './ChartBox.view.scss';
 
 @withRouter
-@inject('lineChartSettingsStore')
+@inject('commonStore','lineChartSettingsStore')
 @observer
 export default class ChartBox extends Component {
   static propTypes = {
+    commonStore: PropTypes.instanceOf(CommonStore).isRequired,
     lineChartSettingsStore: PropTypes.instanceOf(LineChartSettingsStore).isRequired
   }
 
@@ -48,7 +54,6 @@ export default class ChartBox extends Component {
         datasets: [
           {
             label: 'My first dataset',
-            showLine: false,
             // fill: false,
             // lineTension: 0.5,
             // backgroundColor: 'blue',
@@ -66,7 +71,7 @@ export default class ChartBox extends Component {
             // pointHoverBorderWidth: 2,
             // pointRadius: 1,
             // pointHitRadius: 10,
-            data: [100,200,300,400,500,600,700,800,900,1000,1100]
+            data: [100,200,300,400,500,600,700,800,900,1000,1100],
           },
           {
             label: 'My second dataset',
@@ -87,10 +92,9 @@ export default class ChartBox extends Component {
             // pointHoverBorderWidth: 2,
             // pointRadius: 1,
             // pointHitRadius: 10,
-            data: [100,200,300,400,500,600,700,800,900,1000,1100]
+            data: [100,200,300,400,500,600,700,800,900,1000,1100],
           }
-        ],
-        scaleFontColor: 'white',
+        ]
       },
       options: {
         scaleFontColor: 'white',
@@ -155,6 +159,7 @@ export default class ChartBox extends Component {
           point: {
             pointStyle: 'circle',
             backgroundColor: this.props.lineChartSettingsStore.point.backgroundColor,
+            hoverBackgroundColor: '#456567'
           }
         },
         scales: {
@@ -178,9 +183,9 @@ export default class ChartBox extends Component {
       },
     });
     // set observable canvas node
-    this.props.lineChartSettingsStore.canvasRef = this.lineChartRef;
+    this.props.commonStore.canvasRef = this.lineChartRef;
     // set observable chart object
-    this.props.lineChartSettingsStore.lineChartObject = this.lineChart;
+    this.props.commonStore.lineChartObject = this.lineChart;
   }
 
   @Bind()

@@ -2,6 +2,7 @@
 import configStore from './config';
 import authStore from './auth';
 import dataStore from './data';
+import commonStore from './common';
 
 // charts settings stores
 import lineChartSettingsStore from './ChartSettings/LineChartSettings';
@@ -15,12 +16,13 @@ const exportStores = {
 	configStore,
 	authStore,
 	dataStore,
+	commonStore,
 	lineChartSettingsStore,
 	barChartSettingsStore,
 	radarChartSettingsStore,
 	doughnutAndPieChartSettingsStore,
 	polarAreaChartSettingsStore,
-	bubbleChartSettingsStore
+	bubbleChartSettingsStore,
 }
 
 // export all stores as default

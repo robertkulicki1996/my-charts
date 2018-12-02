@@ -23,15 +23,7 @@ export default class Dataset extends Component {
 
     return (
       <div className="dataset">
-        {map(Array.from(Array(4).keys()), index => 
-          <div 
-            key={index} 
-            className="dataset-item" 
-            style={
-              {backgroundColor: color}
-            } 
-          />
-        )}
+        <div className="dataset-item" style={{ backgroundColor: color }} />
       </div>
     );
   }

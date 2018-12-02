@@ -18,7 +18,7 @@ export default class ColorInput extends Component {
 
     let borderColor;
 
-    if(color === '#ffffff' || '#FFFFFF' || '#fff' || 'white') {
+    if(color === '#ffffff' || color === '#FFFFFF' || color === '#fff' || color === 'white') {
       borderColor = '#000000';
     } else {
       borderColor = '#ffffff';

@@ -16,8 +16,6 @@ export class LineChartSettingsStore extends ChartSettingsStore {
     // "square"
     // The ends of lines are squared off by adding a box with an equal width and half the height of the line's thickness.
     borderCapStyle: 'butt',
-    borderDash: [],
-    borderDashOffset: 0,
     // There are three possible values for this property: "round", "bevel", and "miter". The default is "miter".
     borderJoinStyle: 'miter',
     // True to keep Bézier control inside the chart, false for no restriction.

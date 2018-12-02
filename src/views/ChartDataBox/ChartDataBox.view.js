@@ -9,7 +9,7 @@ import { Bind } from 'lodash-decorators';
 
 // stores
 import { DataStore } from '../../stores/data';
-import { LineChartSettingsStore } from '../../stores/lineChartSettings';
+import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 
 // components
 import Table from './../../common/components/Table/Table';
@@ -19,6 +19,7 @@ import InputNumber from './../../common/components/InputNumber/InputNumber';
 import FileInput from './../../common/components/FileInput/FileInput';
 import Switch from './../../common/components/Switch/Switch';
 import CustomModal from './../../common/components/CustomModal/CustomModal';
+import AddDatasetPopup from './components/AddDatasetPopup/AddDatasetPopup.view';
 
 // icons
 import ExportIcon from './../../common/icons/export.svg';
@@ -41,6 +42,7 @@ export default class ChartDataBox extends Component {
     this.table = React.createRef();
   }
 
+  @observable isAddDatasetPopupShown = false;
   @observable isAddColumnPopupShown = false;
   @observable isExportChartPopupShown = false;
   @observable isDescriptionPopupShown = false;
@@ -71,7 +73,6 @@ export default class ChartDataBox extends Component {
   @action.bound
   handleChartDescriptionChange(event) {
     this.chartDescription = event.target.value;
-    console.log(this.chartDescription);
   }
 
   @action.bound
@@ -110,6 +111,21 @@ export default class ChartDataBox extends Component {
     }
     this.isRandomValuesDisabled = true;
     this.hideAddColumnPopup();
+  }
+
+  @action.bound
+  showAddDatasetPopup() {
+    this.isAddDatasetPopupShown = true;
+  }
+
+  @action.bound
+  hideAddDatasetPopup() {
+    this.isAddDatasetPopupShown = false;
+  }  
+
+  @action.bound
+  addDataset() {
+    console.log("add dataset button clicked");
   }
 
   @action.bound
@@ -391,7 +407,7 @@ export default class ChartDataBox extends Component {
           <div className="table-buttons">
             <Button 
               className="add-button"
-              onClick={this.addRow}
+              onClick={this.showAddDatasetPopup}
             >
               Add Dataset
             </Button>
@@ -445,6 +461,10 @@ export default class ChartDataBox extends Component {
         {AddColumnPopup}
         {ExportChartPopup}
         {DescriptionPopup}
+        <AddDatasetPopup
+          visible={this.isAddDatasetPopupShown}
+          onClose={this.hideAddDatasetPopup}
+        />
       </div>
     );
   }
