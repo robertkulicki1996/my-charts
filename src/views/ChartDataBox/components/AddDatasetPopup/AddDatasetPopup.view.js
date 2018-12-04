@@ -28,7 +28,7 @@ import './AddDatasetPopup.view.scss';
 @inject('dataStore')
 @observer
 export default class AddDatasetPopup extends Component {
-  static PropTypes = {
+  static propTypes = {
     dataStore: PropTypes.instanceOf(DataStore).isRequired,
     visible: PropTypes.bool,
     onClose: PropTypes.func
@@ -53,8 +53,9 @@ export default class AddDatasetPopup extends Component {
 
   @action.bound
   addDataset() {
-    this.props.dataStore.chartDatasets.push(this.currentDatasetObject);
+    this.props.dataStore.chartDatasetsProperties.push(this.currentDatasetObject);
     this.props.onClose();
+    console.log("a");
   }
 
   render() {

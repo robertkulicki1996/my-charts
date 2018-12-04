@@ -124,11 +124,6 @@ export default class ChartDataBox extends Component {
   }  
 
   @action.bound
-  addDataset() {
-    console.log("add dataset button clicked");
-  }
-
-  @action.bound
   showAddColumnPopup() {
     this.newColumnName = 'Column' + uniqueId();
     this.isAddColumnPopupShown = true;
@@ -453,11 +448,7 @@ export default class ChartDataBox extends Component {
             </Button>
           </div>
         </div>
-        <Table 
-          ref={this.table} 
-          rows={this.props.dataStore.rows} 
-          columns={this.props.dataStore.columns}
-        />
+        
         {AddColumnPopup}
         {ExportChartPopup}
         {DescriptionPopup}
@@ -465,6 +456,7 @@ export default class ChartDataBox extends Component {
           visible={this.isAddDatasetPopupShown}
           onClose={this.hideAddDatasetPopup}
         />
+        <Table ref={this.table} dataStore={this.props.dataStore} />
       </div>
     );
   }

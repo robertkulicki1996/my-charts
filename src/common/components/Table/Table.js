@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { observer, PropTypes as MobxPropTypes } from 'mobx-react';
+import PropTypes from 'prop-types';
+import { observer, inject } from 'mobx-react';
 import { remove, find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
 
 // services
 import NotificationService from '../../services/notifications';
+
+// stores
+import { DataStore } from '../../../stores/data';
 
 // icons
 import DeleteIcon from '../../icons/delete.svg';
@@ -24,59 +28,7 @@ import './Table.scss';
 @observer
 export default class Table extends Component {
   static propTypes = {
-    rows: MobxPropTypes.observableArray.isRequired,
-    columns: MobxPropTypes.observableArray.isRequired
-  }
-
-  @observable columns = [
-    '2010',
-    '2011',
-    '2012',
-    '2013',
-    '2014',
-    '2015',
-    '2016',
-    '2017',
-    '2018',
-    '2019',
-    '2020'
-  ];
-
-  @observable rows = [
-    {
-      id: uniqueId('row_'),
-      '2010': '100',
-      '2011': '200',
-      '2012': '300',
-      '2013': '400',
-      '2014': '500',
-      '2015': '600',
-      '2016': '700',
-      '2017': '800',
-      '2018': '900',
-      '2019': '1000',
-      '2020': '1100',
-
-    },
-    {
-      id: uniqueId('row_'),
-      '2010': '200',
-      '2011': '400',
-      '2012': '600',
-      '2013': '800',
-      '2014': '1000',
-      '2015': '1200',
-      '2016': '1400',
-      '2017': '1600',
-      '2018': '1800',
-      '2019': '2000',
-      '2020': '2200',
-    },
-  ];
-
-  componentWillReceiveProps() {
-    this.rows = this.props.rows;
-    this.columns = this.props.columns;
+    dataStore: PropTypes.instanceOf(DataStore).isRequired
   }
 
   @observable isRowEditPopupShown = false;
@@ -101,7 +53,8 @@ export default class Table extends Component {
 
   @action.bound
   showEditColumnNamePopup(column) {
-    const indexOfColumn = indexOf(this.columns,column);
+    const { dataStore } = this.props;
+    const indexOfColumn = indexOf(dataStore.columns,column);
     this.editingColumn = {
       index: indexOfColumn,
       text: column
@@ -122,8 +75,9 @@ export default class Table extends Component {
 
   @action.bound
   saveColumnName() {
-    this.columns[this.editingColumn.index] = toLower(this.editingColumn.text);
-    const newRows = map(this.rows, row => {
+    const { dataStore } = this.props;
+    dataStore.columns[this.editingColumn.index] = toLower(this.editingColumn.text);
+    const newRows = map(dataStore.rows, row => {
       const keyToEdit = Object.keys(row)[this.editingColumn.index + 1] // first is id
       const newRow = mapKeys(row, (value,key) => {
         if(key === keyToEdit) {
@@ -133,7 +87,7 @@ export default class Table extends Component {
       })
       return newRow;
     });
-    this.rows = newRows;
+    dataStore.rows = newRows;
     this.hideEditColumnNamePopup();
   }
 
@@ -144,7 +98,8 @@ export default class Table extends Component {
 
   @action.bound
   addRow(){
-    const { columns, rows } = this;
+    const { dataStore } = this.props;
+    const { columns, rows } = dataStore;
     if(columns.length > 0) {
       const newRow = {};
       newRow.id = uniqueId('row_');
@@ -164,19 +119,20 @@ export default class Table extends Component {
 
   @action.bound
   addColumn(columnName="Undefined column", randomFrom=null, randomTo=null, initialRowValue) {
+    const { dataStore } = this.props;
     const newColumn = toLower(columnName);
-    const indexOfColumn = includes(this.columns,newColumn);
+    const indexOfColumn = includes(dataStore.columns,newColumn);
     if(!indexOfColumn) {
-      this.columns.push(newColumn);
+      dataStore.columns.push(newColumn);
       if(randomFrom !== null && randomTo !== null) {
-        map(this.rows, row => {
+        map(dataStore.rows, row => {
           extendObservable(row, { 
               [newColumn]: this.getRandomInt(randomFrom, randomTo).toString() 
             }
           );
         })
       } else {
-        map(this.rows, row => {
+        map(dataStore.rows, row => {
           extendObservable(row, { 
             [newColumn]: initialRowValue.toString()
           });
@@ -189,7 +145,8 @@ export default class Table extends Component {
 
   @action.bound
   saveRow() {
-    map(this.rows, row => {
+    const { dataStore } = this.props;
+    map(dataStore.rows, row => {
       if(row.id === this.editingRow.id) {
         row = this.editingRow;
       }
@@ -198,17 +155,25 @@ export default class Table extends Component {
     this.hideEditRowPopup();
   }
 
+  consoleLog(){
+    console.log("asd");
+  }
+
   @action.bound
   removeRow(index) {
-    const objectToRemove = find(this.rows, {id: index})
-    remove(this.rows,objectToRemove);
+    const { dataStore } = this.props;
+    const objectToRemove = find(dataStore.rows, {
+      id: index
+    })
+    remove(dataStore.rows,objectToRemove);
   }
 
   @action.bound
   removeColumn(columnName) {
-    const indexOfObjectToRemove = indexOf(this.columns, columnName);
-    this.columns.splice(indexOfObjectToRemove,1);
-    map(this.rows, row => {
+    const { dataStore } = this.props;
+    const indexOfObjectToRemove = indexOf(dataStore.columns, columnName);
+    dataStore.columns.splice(indexOfObjectToRemove,1);
+    map(dataStore.rows, row => {
       delete row[columnName];
     })
   }
@@ -219,15 +184,15 @@ export default class Table extends Component {
       dataset.data.push(data);
     });
     chart.update();
-}
+  }
 
-removeData(chart) {
+  removeData(chart) {
     chart.data.labels.pop();
     chart.data.datasets.forEach((dataset) => {
       dataset.data.pop();
     });
     chart.update();
-}
+  }
 
   @Bind()
   renderEditRowPopupBody(){
@@ -249,7 +214,8 @@ removeData(chart) {
   }
 
   render() {
-    const { columns, rows } = this;
+    const { dataStore } = this.props;
+    const { columns, rows } = dataStore;
 
     const EditRowPopup = (
       <CustomModal
@@ -352,11 +318,11 @@ removeData(chart) {
             </tr>
           </thead>
           <tbody>
-            {map(rows, row => (<tr key={uniqueId()}>{
+            {map(rows, (row,index) => (<tr key={index}>{
               map(Object.values(row), (value, index) => {
                 if(index === 0) return ( 
                   <td key={index}>
-                    <div class="dataset-button">
+                    <div className="dataset-button">
                       <Dataset color="blue" />
                     </div>
                     {value}

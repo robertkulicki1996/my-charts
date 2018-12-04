@@ -92,7 +92,7 @@ export default class ChartBox extends Component {
             // pointHoverBorderWidth: 2,
             // pointRadius: 1,
             // pointHitRadius: 10,
-            data: [100,200,300,400,500,600,700,800,900,1000,1100],
+            data: [1200,1100,1000,400,500,600,700,800,900,1000,1100],
           }
         ]
       },
