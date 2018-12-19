@@ -20,6 +20,7 @@ import InfoIcon from '../../../common/icons/info.svg';
 import { ChromePicker } from 'react-color';
 
 import { LineChartSettingsStore } from '../../../stores/ChartSettings/LineChartSettings';
+import { CommonStore } from '../../../stores/common';
 
 import './LineChartSettings.view.scss';
 
@@ -72,17 +73,18 @@ const pointStyles = [
 
 const labelsPositionOptions = ['top','right','bottom','left'];
 
-@inject('lineChartSettingsStore')
+@inject('lineChartSettingsStore', 'commonStore')
 @observer
 export default class LineChartSettings extends Component {
   static propTypes = {
-    lineChartSettingsStore: PropTypes.instanceOf(LineChartSettingsStore).isRequired
+    lineChartSettingsStore: PropTypes.instanceOf(LineChartSettingsStore).isRequired,
+    commonStore: PropTypes.instanceOf(CommonStore).isRequired
   }
 
   @action.bound
   onTitleChange(event) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.title.text = event.target.value;
     lineChartObject.options.title.text = event.target.value;
@@ -91,8 +93,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onOptionChange(option, value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore[option] = value;
     lineChartObject.options[option] = value;
@@ -101,8 +103,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onPaddingChange(option,value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.padding[option] = value;
     lineChartObject.options.layout.padding[option] = value;
@@ -111,8 +113,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onRGBColorChange(color) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     const rgbColor = color.rgb;
     const hexColor = color.hex;
@@ -126,8 +128,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onAnimationChange(option, value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.animation[option] = value;
     lineChartObject.options.animation[option] = value;
@@ -136,8 +138,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onLegendOptionChange(option, value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.legend[option] = value;
     lineChartObject.options.legend[option] = value;
@@ -146,8 +148,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onLabelsOptionChange(option, value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.legend.labels[option] = value;
     lineChartObject.options.legend.labels[option] = value;
@@ -156,8 +158,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onFontColorChange(value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.legend.labels.fontColor = value.hex;
     lineChartObject.options.legend.labels.fontColor = value.hex;
@@ -166,8 +168,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onTitleOptionChange(option,value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.title[option] = value;
     lineChartObject.options.title[option] = value;
@@ -176,8 +178,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onTooltipsOptionChange(option,value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.tooltips[option] = value;
     lineChartObject.options.tooltips[option] = value;
@@ -186,8 +188,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onTooltipsCallbacksChange(option,value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.tooltips.callbacks[option] = value;
     lineChartObject.options.tooltips.callbacks[option] = () => {
@@ -198,8 +200,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onTooltipsCallbacksLabelBorderColorChange(option,value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.tooltips.callbacks.labelColor[option] = value;
     lineChartObject.options.tooltips.callbacks.labelColor = () => {
@@ -213,8 +215,8 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onTooltipsCallbacksLabelBackgroundColorChange(option,value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.tooltips.callbacks.labelColor[option] = value;
     lineChartObject.options.tooltips.callbacks.labelColor = () => {
@@ -228,23 +230,21 @@ export default class LineChartSettings extends Component {
 
   @action.bound
   onGlobalPointConfigurationChange(option,value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.point[option] = value;
     lineChartObject.options.elements.point[option] = value;
-    console.log(option,value);
     lineChartObject.update();
   }
 
   @action.bound
   onGlobalLineConfigurationChange(option,value) {
-    const { lineChartSettingsStore } = this.props;
-    const { lineChartObject } = lineChartSettingsStore;
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
 
     lineChartSettingsStore.line[option] = value;
     lineChartObject.options.elements.line[option] = value;
-    console.log(option,value);
     lineChartObject.update();
   }
 
@@ -253,23 +253,6 @@ export default class LineChartSettings extends Component {
 
     return (
       <div className="settings-wrapper">
-        {/* <div className="option-wrapper">
-          <div className="label-wrapper">
-            <div className="label-wrapper__label">Responsive</div>
-            <Button
-              className="label-info" 
-              textColor="pink"    
-              onClick={this.goToNewChart} 
-            >
-              <InfoIcon width={10} height={10}/>
-            </Button>
-          </div>
-          <Switch
-            style={{ width: 80 }}
-            checked={lineChartSettingsStore.responsive}
-            onChange={value => this.onOptionChange('responsive', value)}
-          />
-        </div> */}
         <div className="option-wrapper">
           <div className="label">Responsive animation duration</div>
           <InputNumber

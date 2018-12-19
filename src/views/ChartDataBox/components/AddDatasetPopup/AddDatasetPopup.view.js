@@ -31,12 +31,14 @@ export default class AddDatasetPopup extends Component {
   static propTypes = {
     dataStore: PropTypes.instanceOf(DataStore).isRequired,
     visible: PropTypes.bool,
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
+    addRow: PropTypes.func
   } 
 
   static defaultProps = {
     visible: false,
-    onClose: noop
+    onClose: noop,
+    addRow: noop
   }
 
   @observable currentDatasetObject = new LineDatasetProperties();
@@ -54,8 +56,8 @@ export default class AddDatasetPopup extends Component {
   @action.bound
   addDataset() {
     this.props.dataStore.chartDatasetsProperties.push(this.currentDatasetObject);
+    this.props.addRow(this.currentDatasetObject);
     this.props.onClose();
-    console.log("a");
   }
 
   render() {
@@ -112,7 +114,7 @@ export default class AddDatasetPopup extends Component {
             position="leftBottom" 
             body={
               <ChromePicker 
-                color={this.currentDatasetObject.borderdColor} 
+                color={this.currentDatasetObject.borderColor} 
                 onChange={color => this.onDatasetPropertiesChange('borderColor', color.hex)}  
               />
             }

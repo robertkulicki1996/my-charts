@@ -9,6 +9,7 @@ import { Bind } from 'lodash-decorators';
 
 // stores
 import { DataStore } from '../../stores/data';
+import { CommonStore } from '../../stores/common';
 import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 
 // components
@@ -29,11 +30,12 @@ import SaveIcon from './../../common/icons/save.svg';
 // styles
 import './ChartDataBox.view.scss';
 
-@inject('dataStore', 'lineChartSettingsStore')
+@inject('dataStore', 'lineChartSettingsStore', 'commonStore')
 @observer
 export default class ChartDataBox extends Component {
   static propTypes = {
     dataStore: PropTypes.instanceOf(DataStore).isRequired,
+    commonStore: PropTypes.instanceOf(CommonStore).isRequired,
     lineChartSettingsStore: PropTypes.instanceOf(LineChartSettingsStore).isRequired
   }
 
@@ -97,8 +99,8 @@ export default class ChartDataBox extends Component {
   }
 
   @action.bound
-  addRow() {
-    this.table.current.addRow();
+  addRow(a) {
+    this.table.current.addRow(a);
   }
 
   @action.bound
@@ -448,15 +450,15 @@ export default class ChartDataBox extends Component {
             </Button>
           </div>
         </div>
-        
+        <Table ref={this.table} dataStore={this.props.dataStore} commonStore={this.props.commonStore} />
         {AddColumnPopup}
         {ExportChartPopup}
         {DescriptionPopup}
         <AddDatasetPopup
           visible={this.isAddDatasetPopupShown}
           onClose={this.hideAddDatasetPopup}
+          addRow={this.addRow}
         />
-        <Table ref={this.table} dataStore={this.props.dataStore} />
       </div>
     );
   }

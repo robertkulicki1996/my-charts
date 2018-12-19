@@ -3,12 +3,12 @@ import { observable } from 'mobx';
 export class LineDatasetProperties {  
   @observable label = 'First dataset';
   @observable backgroundColor = 'blue';
-  @observable borderColor = 'black';
-  @observable borderWidth = 3;
+  @observable borderColor = 'white';
+  @observable borderWidth = 2;
   @observable borderCapStyle = 'butt';
   @observable borderJoinStyle = 'round';
   @observable cubicInterpolationMode = 'default';
-  @observable fill = false;
+  @observable fill = true;
   @observable lineTension = 0.4;
   @observable pointBackgroundColor = 'white';
   @observable pointBorderColor = 'white';
