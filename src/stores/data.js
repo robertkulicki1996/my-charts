@@ -1,6 +1,6 @@
 import Papa from 'papaparse';
-import { observable, action } from 'mobx';
-import { uniqueId, find } from 'lodash';
+import { observable, action, computed } from 'mobx';
+import { uniqueId, find, map } from 'lodash';
 
 export class DataStore {
 
@@ -61,7 +61,7 @@ export class DataStore {
   // errors from papaparse
   @observable errors = [];
 
-  @action
+
   getDatasetProperty(index) {
     return this.chartDatasetsProperties[index];
   }

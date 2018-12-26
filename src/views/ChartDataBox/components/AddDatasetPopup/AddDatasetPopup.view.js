@@ -41,7 +41,7 @@ export default class AddDatasetPopup extends Component {
     addRow: noop
   }
 
-  @observable currentDatasetObject = new LineDatasetProperties();
+  currentDatasetObject = new LineDatasetProperties();
 
   @action.bound
   onLabelChange(e) {

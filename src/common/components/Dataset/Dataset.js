@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { DataStore } from '../../../stores/data';
-
 import './Dataset.scss';
 
 @inject('dataStore')
@@ -11,13 +10,10 @@ import './Dataset.scss';
 export default class Dataset extends Component {
   static propTypes = {
     /**
-     * dataset index in table
+     * dataset index
      */
     datasetIndex: PropTypes.number,
-    /**
-     * data store
-     */
-    dataStore: PropTypes.instanceOf(DataStore).isRequired
+    dataStore: PropTypes.instanceOf(DataStore).isRequired,
   }
 
   @observable color = '';
@@ -33,6 +29,7 @@ export default class Dataset extends Component {
 
   render() {
     const { color, label } = this;
+
     return (
       <div className="dataset">
         <div 

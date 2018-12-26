@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { remove, find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys, slice } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
@@ -133,15 +133,6 @@ export default class Table extends Component {
     }
   }
 
-  @Bind()
-  removeData(chart) {
-    chart.data.labels.pop();
-    chart.data.datasets.forEach((dataset) => {
-      dataset.data.pop();
-    });
-    chart.update();
-  }
-
   @action.bound
   handleRowChange(event, key) {
     this.editingRow[key] = event.target.value;
@@ -199,27 +190,27 @@ export default class Table extends Component {
       id: rowId
     });
     const indexOfRemovingRow = indexOf(dataStore.rows, objectToRemove);
-    dataStore.rows.remove(objectToRemove);
-    console.log(indexOfRemovingRow);
     const dataSetToRemove = commonStore.lineChartObject.data.datasets[indexOfRemovingRow];
     const datasetPropertiesToRemove = dataStore.chartDatasetsProperties[indexOfRemovingRow];
-    console.log(dataSetToRemove);
-    commonStore.lineChartObject.data.datasets.remove(dataSetToRemove);
-    dataStore.chartDatasetsProperties.remove(datasetPropertiesToRemove);
-    console.log(dataStore.chartDatasetsProperties);
-    console.log(commonStore.lineChartObject.data.datasets);
+    commonStore.lineChartObject.data.datasets.splice(indexOfRemovingRow, 1);
     // update chart
+    dataStore.rows.remove(objectToRemove);
     commonStore.lineChartObject.chart.update();
   }
 
   @action.bound
   removeColumn(columnName) {
-    const { dataStore } = this.props;
+    const { dataStore, commonStore } = this.props;
     const indexOfObjectToRemove = indexOf(dataStore.columns, columnName);
     dataStore.columns.splice(indexOfObjectToRemove,1);
     map(dataStore.rows, row => {
       delete row[columnName];
     })
+    commonStore.lineChartObject.data.labels.pop();
+    commonStore.lineChartObject.data.datasets.forEach((dataset) => {
+      dataset.data.pop();
+    });
+    commonStore.lineChartObject.chart.update();
   }
 
   @Bind()
@@ -346,12 +337,13 @@ export default class Table extends Component {
             </tr>
           </thead>
           <tbody>
-            {map(rows, (row,indexR) => (<tr key={indexR}>{
+            {map(rows, (row,indexR) => (<tr key={row.id}>{
               map(Object.values(row), (value, indexC) => {
                 if(indexC === 0) return ( 
                   <td key={indexC}>
                     <div className="dataset-button">
-                      <Dataset datasetIndex={indexR} />
+                      {console.log("indexR",indexR)}
+                      <Dataset key={row.id} datasetIndex={indexR} />
                     </div>
                     {!includes(value,'row_') && value}
                   </td>
