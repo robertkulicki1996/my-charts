@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { observer, inject } from 'mobx-react';
-import { remove, find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys, slice } from 'lodash';
+import { observer } from 'mobx-react';
+import { find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys, slice } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
 
@@ -115,7 +115,7 @@ export default class Table extends Component {
       rows.push(newRow);
       // update chart 
       const arrayOfData = Object.values(newRow);
-      const formattedDataset = slice(Object.values(newRow), 0, arrayOfData.length - 1);
+      const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
       console.log(formattedDataset);
       console.log("->",datasetProperties);
       // update column names
@@ -132,11 +132,6 @@ export default class Table extends Component {
       NotificationService.error("There is no column!");
     }
   }
-
-  @action.bound
-  handleRowChange(event, key) {
-    this.editingRow[key] = event.target.value;
-  } 
 
   @action.bound
   addColumn(columnName="Undefined column", randomFrom=null, randomTo=null, initialRowValue) {
@@ -172,26 +167,12 @@ export default class Table extends Component {
   }
 
   @action.bound
-  saveRow() {
-    const { dataStore } = this.props;
-    map(dataStore.rows, row => {
-      if(row.id === this.editingRow.id) {
-        row = this.editingRow;
-      }
-    });
-    this.editingRow = {};
-    this.hideEditRowPopup();
-  }
-
-  @action.bound
   removeRow(rowId) {
     const { dataStore, commonStore } = this.props;
     const objectToRemove = find(dataStore.rows, {
       id: rowId
     });
     const indexOfRemovingRow = indexOf(dataStore.rows, objectToRemove);
-    const dataSetToRemove = commonStore.lineChartObject.data.datasets[indexOfRemovingRow];
-    const datasetPropertiesToRemove = dataStore.chartDatasetsProperties[indexOfRemovingRow];
     commonStore.lineChartObject.data.datasets.splice(indexOfRemovingRow, 1);
     // update chart
     dataStore.rows.remove(objectToRemove);
@@ -206,9 +187,9 @@ export default class Table extends Component {
     map(dataStore.rows, row => {
       delete row[columnName];
     })
-    commonStore.lineChartObject.data.labels.pop();
+    commonStore.lineChartObject.data.labels.splice(indexOfObjectToRemove, 1);
     commonStore.lineChartObject.data.datasets.forEach((dataset) => {
-      dataset.data.pop();
+      dataset.data.splice(indexOfObjectToRemove, 1);
     });
     commonStore.lineChartObject.chart.update();
   }
@@ -230,6 +211,28 @@ export default class Table extends Component {
           />
         </div>
     ))
+  }
+
+  @action.bound
+  handleRowChange(event, key) {
+    this.editingRow[key] = event.target.value;
+  } 
+
+  @action.bound
+  saveRow() {
+    const { dataStore, commonStore } = this.props;
+    const indexOfEditingRow = indexOf(dataStore.rows, this.editingRow);
+    map(dataStore.rows, row => {
+      if(row.id === this.editingRow.id) {
+        row = this.editingRow;
+      }
+    });
+    const arrayOfData = Object.values(this.editingRow);
+    const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
+    commonStore.lineChartObject.data.datasets[indexOfEditingRow].data = formattedDataset;
+    commonStore.lineChartObject.chart.update();
+    this.editingRow = {};
+    this.hideEditRowPopup();
   }
 
   render() {
@@ -342,7 +345,6 @@ export default class Table extends Component {
                 if(indexC === 0) return ( 
                   <td key={indexC}>
                     <div className="dataset-button">
-                      {console.log("indexR",indexR)}
                       <Dataset key={row.id} datasetIndex={indexR} />
                     </div>
                     {!includes(value,'row_') && value}

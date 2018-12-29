@@ -51,6 +51,9 @@ export default class AddDatasetPopup extends Component {
   @action.bound
   onDatasetPropertiesChange(field, value) {
     this.currentDatasetObject[field] = value;
+    if(!this.currentDatasetObject.fill) {
+      this.currentDatasetObject.backgroundColor = this.currentDatasetObject.borderColor;
+    }
   }
 
   @action.bound

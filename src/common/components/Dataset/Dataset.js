@@ -23,7 +23,11 @@ export default class Dataset extends Component {
   componentDidMount() {
     const { dataStore, datasetIndex } = this.props;
     const datasetProperty = dataStore.getDatasetProperty(datasetIndex);
-    this.color = datasetProperty.backgroundColor;
+    if(datasetProperty.fill) {
+      this.color = datasetProperty.backgroundColor;
+    } else {
+      this.color = datasetProperty.borderColor;
+    }
     this.label = datasetProperty.label;
   }
 
