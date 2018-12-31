@@ -108,16 +108,14 @@ export default class Table extends Component {
     const { columns, rows } = dataStore;
     if(columns.length > 0) {
       const newRow = {};
-      newRow.id = uniqueId('row_');
       map(columns, column => {
         newRow[column] = this.getRandomInt(100,1000).toString();
       })
+      newRow.id = uniqueId('row_');
       rows.push(newRow);
       // update chart 
       const arrayOfData = Object.values(newRow);
       const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
-      console.log(formattedDataset);
-      console.log("->",datasetProperties);
       // update column names
       commonStore.lineChartObject.data.labels = dataStore.columns.slice();
       // add new line chart with data and properties
@@ -126,7 +124,6 @@ export default class Table extends Component {
         data: formattedDataset
       }
       commonStore.lineChartObject.data.datasets.push(newChart);
-      console.log(commonStore.lineChartObject.data.datasets);
       commonStore.lineChartObject.chart.update();
     } else {
       NotificationService.error("There is no column!");
@@ -137,27 +134,30 @@ export default class Table extends Component {
   addColumn(columnName="Undefined column", randomFrom=null, randomTo=null, initialRowValue) {
     const { dataStore, commonStore } = this.props;
     const newColumn = toLower(columnName);
-    const indexOfColumn = includes(dataStore.columns,newColumn);
-    if(!indexOfColumn) {
+    const isColumn = includes(dataStore.columns,newColumn);
+    if(!isColumn) {
       dataStore.columns.push(newColumn);
+      console.log(dataStore.columns);
       commonStore.lineChartObject.data.labels.push(newColumn);
-      if(randomFrom !== null && randomTo !== null) {
-        map(dataStore.rows, (row, index) => {
-          const randomValue = this.getRandomInt(randomFrom, randomTo).toString();
-          extendObservable(row, { 
-              [newColumn]: randomValue
-            }
-          );
-          commonStore.lineChartObject.data.datasets[index].data.push(randomValue);
-        });
-      } else {
-        map(dataStore.rows, (row, index) => {
-          const initialValue = initialRowValue.toString();
-          extendObservable(row, { 
-            [newColumn]: initialValue
+      if(dataStore.rows.length > 0) {
+        if(randomFrom !== null && randomTo !== null) {
+          map(dataStore.rows, (row, index) => {
+            const randomValue = this.getRandomInt(randomFrom, randomTo).toString();
+            extendObservable(row, { 
+                [newColumn]: randomValue
+              }
+            );
+            commonStore.lineChartObject.data.datasets[index].data.push(randomValue);
           });
-          commonStore.lineChartObject.data.datasets[index].data.push(initialValue);
-        });
+        } else {
+          map(dataStore.rows, (row, index) => {
+            const initialValue = initialRowValue.toString();
+            extendObservable(row, { 
+              [newColumn]: initialValue
+            });
+            commonStore.lineChartObject.data.datasets[index].data.push(initialValue);
+          });
+        }
       }
       // update chart
       commonStore.lineChartObject.chart.update();
@@ -174,6 +174,7 @@ export default class Table extends Component {
     });
     const indexOfRemovingRow = indexOf(dataStore.rows, objectToRemove);
     commonStore.lineChartObject.data.datasets.splice(indexOfRemovingRow, 1);
+    dataStore.chartDatasetsProperties.splice(indexOfRemovingRow, 1);
     // update chart
     dataStore.rows.remove(objectToRemove);
     commonStore.lineChartObject.chart.update();
@@ -196,20 +197,19 @@ export default class Table extends Component {
 
   @Bind()
   renderEditRowPopupBody(){
-    return Object.keys(this.editingRow).map((key,index) => 
-      key !== 'id' && (
-        <div key={index-1}>
-          <div className="option">
-            <div className="label">{capitalize(key)}</div>
-          </div>
-          <Input
-            key={index-1}
-            type="number"
-            value={this.editingRow[key]}
-            onChange={event => this.handleRowChange(event,key)} 
-            inputClassName="input-n"
-          />
+    return Object.keys(this.editingRow).map((key,index) => key !== 'id' && (
+      <div key={index-1}>
+        <div className="option">
+          <div className="label">{capitalize(key)}</div>
         </div>
+        <Input
+          key={index-1}
+          type="number"
+          value={this.editingRow[key]}
+          onChange={event => this.handleRowChange(event,key)} 
+          inputClassName="input-n"
+        />
+      </div>
     ))
   }
 

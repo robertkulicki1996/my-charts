@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { action } from 'mobx';
 import { noop } from 'lodash';
 
 // models
 import { LineDatasetProperties } from '../../../../models/LineDatasetProperties';
+
+// colors
+import { getRandomColor } from './../../../../common/consts/colors';
 
 // stores
 import { DataStore } from '../../../../stores/data';
@@ -41,7 +44,11 @@ export default class AddDatasetPopup extends Component {
     addRow: noop
   }
 
-  currentDatasetObject = new LineDatasetProperties();
+  constructor(props){
+    super(props);
+    this.currentDatasetObject = new LineDatasetProperties('Example dataset', getRandomColor());
+    console.log(this.currentDatasetObject);
+  }
 
   @action.bound
   onLabelChange(e) {

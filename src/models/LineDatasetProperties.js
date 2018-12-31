@@ -1,17 +1,17 @@
 import { observable } from 'mobx';
 
 export class LineDatasetProperties {  
-  @observable label = 'First dataset';
-  @observable backgroundColor = 'blue';
-  @observable borderColor = 'white';
+  @observable label = 'Example dataset';
+  @observable backgroundColor = '#3308EB';
+  @observable borderColor = '#ffffff';
   @observable borderWidth = 2;
   @observable borderCapStyle = 'butt';
   @observable borderJoinStyle = 'round';
   @observable cubicInterpolationMode = 'default';
-  @observable fill = true;
+  @observable fill = false;
   @observable lineTension = 0.4;
-  @observable pointBackgroundColor = 'white';
-  @observable pointBorderColor = 'white';
+  @observable pointBackgroundColor = '#ffffff';
+  @observable pointBorderColor = '#ffffff';
   @observable pointBorderWidth = 1;
   @observable pointRadius = 3;
   @observable pointRotation = 0;
@@ -23,6 +23,15 @@ export class LineDatasetProperties {
   @observable showLine = true;
   @observable spanGaps = false;
   @observable steppedLine = false;
+
+  constructor(
+    label='Example dataset',
+    borderColor='#3308EB'
+  ) {
+    this.label = label;
+    this.borderColor = borderColor;
+    this.backgroundColor = borderColor;
+  }
 }
 
 export default LineDatasetProperties;

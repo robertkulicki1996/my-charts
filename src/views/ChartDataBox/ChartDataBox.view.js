@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { map, uniqueId } from 'lodash';
+import { map, uniqueId, slice } from 'lodash';
 import jsPDF from 'jspdf';
-import { action, observable } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 import { PulseLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
 
@@ -11,6 +11,12 @@ import { Bind } from 'lodash-decorators';
 import { DataStore } from '../../stores/data';
 import { CommonStore } from '../../stores/common';
 import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
+
+// models
+import { LineDatasetProperties } from '../../models/LineDatasetProperties';
+
+// colors
+import { getRandomColor } from './../../common/consts/colors';
 
 // components
 import Table from './../../common/components/Table/Table';
@@ -158,14 +164,19 @@ export default class ChartDataBox extends Component {
 
   @action.bound
   async handleFileChange(event) {
-    const { dataStore } = this.props;
-    this.isFileLoading = true;
-    this.isFileParsed = false;
+    const { dataStore, commonStore } = this.props;
+
+    runInAction(() => {
+      this.isFileLoading = true;
+      this.isFileParsed = false;
+    })
 
     // User cancelled
     if (!event.target.files[0]) {
-      this.isFileLoading = false;
-      this.isFileParsed = false;
+      runInAction(() => {
+        this.isFileLoading = false;
+        this.isFileParsed = false;
+      })
       return;
     }
 
@@ -177,35 +188,48 @@ export default class ChartDataBox extends Component {
       dataStore.errors = errors;
       dataStore.columns.clear();
       dataStore.rows.clear();
-      map(fields, field => {
-        dataStore.columns.push(field);
-      });
-      map(data, row => {
+      dataStore.chartDatasetsProperties.clear();
+      map(fields, field => dataStore.columns.push(field));
+      commonStore.lineChartObject.data.labels = dataStore.columns.slice();
+      map(data, (row, index) => {
         const rowObject = JSON.parse(JSON.stringify(row));
         if(Object.keys(rowObject).length === fields.length) {
           rowObject.id = uniqueId('row_');
+          const lineDatasetProperties = new LineDatasetProperties(`Dataset ${index + 1}`, getRandomColor());
+          dataStore.chartDatasetsProperties.push(lineDatasetProperties);
+          // update chart 
+          const arrayOfData = Object.values(rowObject);
+          const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
+          console.log(formattedDataset);
+          // add new line chart with data and properties
+          const newChart = {
+            ...lineDatasetProperties,
+            data: formattedDataset
+          }
+          commonStore.lineChartObject.data.datasets.push(newChart);
+          commonStore.lineChartObject.chart.update();
           dataStore.rows.push(rowObject);
         }
       });
       dataStore.csvFile = file;
-      this.isFileParsed = true;
-      this.isFileLoading = false;
+      runInAction(() => {
+        this.isFileLoading = false;
+        this.isFileParsed = true;
+      })
     })
   }
 
   @Bind()
   downloadPNG() {
+    const { commonStore } = this.props;
     /// create an "off-screen" anchor tag
     var lnk = document.createElement('a'), e;
-
     /// the key here is to set the download attribute of the a tag
     lnk.download = this.exportFileName;
-
     /// convert canvas content to data-uri for link. When download
     /// attribute is set the content pointed to by link will be
     /// pushed as "download" in HTML5 capable browsers
-    lnk.href = this.props.lineChartSettingsStore.canvasRef.current.toDataURL("image/png");
-
+    lnk.href = commonStore.canvasRef.current.toDataURL("image/png");
     /// create a "fake" click-event to trigger the download
     if (document.createEvent) {
       e = document.createEvent("MouseEvents");
@@ -213,7 +237,6 @@ export default class ChartDataBox extends Component {
         0, 0, 0, 0, 0, false, false, false,
         false, 0, null
       );
-
       lnk.dispatchEvent(e);
     } else if (lnk.fireEvent) {
       lnk.fireEvent("onclick");
@@ -222,8 +245,11 @@ export default class ChartDataBox extends Component {
 
   @Bind()
   downloadPDF() {
-    const imgData = this.props.lineChartSettingsStore.canvasRef.current.toDataURL("image/jpeg",1.0);
-    const pdf = new jsPDF({orientation: 'landscape',});
+    const { commonStore } = this.props;
+    const imgData = commonStore.canvasRef.current.toDataURL("image/jpeg", 1.0);
+    const pdf = new jsPDF({
+      orientation: 'landscape'
+    });
     var width = pdf.internal.pageSize.getWidth();
     var height = pdf.internal.pageSize.getHeight();
     pdf.addImage(imgData, 'JPEG', 0, 25, width, height-100);
@@ -454,11 +480,11 @@ export default class ChartDataBox extends Component {
         {AddColumnPopup}
         {ExportChartPopup}
         {DescriptionPopup}
-        <AddDatasetPopup
+        {this.isAddDatasetPopupShown && <AddDatasetPopup
           visible={this.isAddDatasetPopupShown}
           onClose={this.hideAddDatasetPopup}
           addRow={this.addRow}
-        />
+        />}
       </div>
     );
   }
