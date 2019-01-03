@@ -1,6 +1,6 @@
 import Papa from 'papaparse';
 import { observable, action } from 'mobx';
-// import { uniqueId, find, map } from 'lodash';
+import { map } from 'lodash';
 
 export class DataStore {
 
@@ -32,12 +32,12 @@ export class DataStore {
   @observable errors = [];
 
   // Add new row
-  @action
+  @action.bound
   addRow(row) {
     this.rows.push(row);
   }
 
-  @action
+  @action.bound
   addDatasetProperties(datasetProperties) {
     this.chartDatasetsProperties.push(datasetProperties);
   }
@@ -47,8 +47,24 @@ export class DataStore {
     return this.chartDatasetsProperties[index];
   }
 
+  // Return datasets data with labels
+  @action.bound
+  getPreparedRowsForReportTable() {
+    const { rows, chartDatasetsProperties } = this;
+    const preparedRows = [];
+    map(rows, (row, index) => {
+      delete row.id;
+      const rowObject = {
+        'label': chartDatasetsProperties[index].label, 
+        ...row
+      };
+      preparedRows.push(Object.values(rowObject));
+    });
+    return preparedRows;
+  }
+
   // Set initial state
-  @action
+  @action.bound
   resetDataState() {
     this.columns.clear();
     this.rows.clear();

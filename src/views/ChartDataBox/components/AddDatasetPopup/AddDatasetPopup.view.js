@@ -47,7 +47,6 @@ export default class AddDatasetPopup extends Component {
   constructor(props){
     super(props);
     this.currentDatasetObject = new LineDatasetProperties('Example dataset', getRandomColor());
-    console.log(this.currentDatasetObject);
   }
 
   @action.bound

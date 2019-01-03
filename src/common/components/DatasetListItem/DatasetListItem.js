@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { DataStore } from '../../../stores/data';
-import './Dataset.scss';
+import './DatasetListItem.scss';
 
 @inject('dataStore')
 @observer
-export default class Dataset extends Component {
+export default class DatasetListItem extends Component {
   static propTypes = {
     /**
      * dataset index
@@ -36,12 +36,13 @@ export default class Dataset extends Component {
     const { color, label } = this;
 
     return (
-      <div className="dataset">
+      <div className="dataset-list-item">
         <div 
           title={label} 
-          className='dataset-item-small'
+          className='dataset-icon'
           style={{ backgroundColor: color }} 
         />
+        <div className='dataset-label'>{label}</div>
       </div>
     );
   }

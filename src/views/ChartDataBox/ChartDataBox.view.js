@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { map, uniqueId, slice } from 'lodash';
+import { map, uniqueId, slice, includes } from 'lodash';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable/dist/jspdf.plugin.autotable.js';
 import { action, observable, runInAction } from 'mobx';
@@ -241,35 +241,52 @@ export default class ChartDataBox extends Component {
 
   @Bind()
   downloadPDF() {
-    const { commonStore } = this.props;
+    const { dataStore, commonStore } = this.props;
     const imgData = commonStore.canvasRef.current.toDataURL("image/jpeg", 1.0);
     const doc = new jsPDF({
       orientation: 'p',
       unit: 'px',
       format: 'a4'
     });
+    // Document logo
     doc.addImage(logoData, 'JPEG', 20, 20, 24, 24);
-    doc.setFont("Ubuntu");
+    // Document logo text
     doc.setFontSize(12);
     doc.text('MyCharts', 50, 32);
     doc.setFontSize(8);
     doc.text('Make your charts online', 50, 40);
+    // Chart
     const width = doc.internal.pageSize.getWidth();
-    doc.addImage(imgData, 'JPEG', 20, 60, width - 40, 150);
-    const res = doc.autoTableHtmlToJson(document.getElementById('table'));
-    doc.autoTable(res.columns, res.data, {
-      startY: 220,
+    doc.addImage(imgData, 'JPEG', 15, 60, width - 30, 145);
+    // Chart description
+    const noDescriptionPlaceholder = 'Type chart description here ...'
+    if(!includes(this.chartDescription, noDescriptionPlaceholder)){
+      doc.setFontSize(12);
+      doc.text("Chart description", 20, 215);
+      doc.setFontSize(8);
+      const splitTitle = doc.splitTextToSize(this.chartDescription, width-40);
+      doc.text(20, 226, splitTitle);
+    }
+    // Chart data title
+    doc.setFontSize(12);
+    doc.text("Chart Data", 20, !includes(this.chartDescription, noDescriptionPlaceholder) ? 300 : 220);
+    // Chart data table
+    const columns = ["Dataset name", ...dataStore.columns];
+    const rows = dataStore.getPreparedRowsForReportTable();
+    doc.autoTable(columns, rows, {
+      startY: !includes(this.chartDescription, noDescriptionPlaceholder) ? 305 : 226,
       margin: 20,
+      styles: {
+        fontSize: 8,
+        fontStyle: 'normal',
+        overflow: 'ellipsize',
+        valign: 'middle'
+      },
       headerStyles: {
         fillColor: [235, 30, 100]
-      },
-      // columnStyles: {
-    	//   id: { fillColor: 255 }
-      // },
-      drawCell: function (cell, data) {
-        return cell + "erty" + data
       }
     });
+    // Save document
     doc.save(`${this.exportFileName}`);
   }
 
