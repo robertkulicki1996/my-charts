@@ -14,7 +14,7 @@
 
 .add-button {
   height: $metric-base + $metric-x-small;
-  width: $metric-large * 2 + $metric-small;
+  width: $metric-large * 2;
   font-family: $font-default;
   font-size: $metric-m-small;
   background: $color-darkblue;
@@ -31,10 +31,11 @@
   align-items: center;
 }
 
-.label {
+.b-label {
   font-family: $font-default;
   font-size: $metric-m-small;
   margin-right: $metric-x-small;
+  margin-left: $metric-x-small
 }
 
 .add-column-button {
@@ -59,7 +60,14 @@
 
 .export-button {
   height: $metric-base;
-  width: $metric-xx-large + $metric-x-small;
+  width: $metric-large * 2 + $metric-large - 1px;
+  margin-right: $metric-small;
+  font-size: $metric-m-small;
+}
+
+.add-description-button {
+  height: $metric-base;
+  width: $metric-large * 2;
   margin-right: $metric-small;
   font-size: $metric-m-small;
 }

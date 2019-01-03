@@ -86,7 +86,7 @@ export default class AddDatasetPopup extends Component {
           <Button
             buttonStyle="button-primary"
             textColor="light"
-            className="export-button"
+            className="add-dataset-button"
             onClick={this.addDataset}
           >
             Add dataset

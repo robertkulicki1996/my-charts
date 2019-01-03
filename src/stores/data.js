@@ -4,7 +4,7 @@ import { observable, action } from 'mobx';
 
 export class DataStore {
 
-  // current chart data columns
+  // Current chart data columns
   @observable columns = [
     '2010',
     '2011',
@@ -19,20 +19,41 @@ export class DataStore {
     '2020'
   ];
 
-  // current chart data rows
+  // Current chart data rows
   @observable rows = [];
 
-  // array of datasets with properties
+  // Array of datasets with properties
   @observable chartDatasetsProperties = [];
 
-  // optional imported csv file (not parsed)
+  // Optional imported csv file (not parsed)
   @observable csvFile = null;
 
-  // errors from papaparse
+  // Errors from papaparse
   @observable errors = [];
 
+  // Add new row
+  @action
+  addRow(row) {
+    this.rows.push(row);
+  }
+
+  @action
+  addDatasetProperties(datasetProperties) {
+    this.chartDatasetsProperties.push(datasetProperties);
+  }
+
+  // Return dataset properties by index
   getDatasetProperty(index) {
     return this.chartDatasetsProperties[index];
+  }
+
+  // Set initial state
+  @action
+  resetDataState() {
+    this.columns.clear();
+    this.rows.clear();
+    this.errors.clear()
+    this.chartDatasetsProperties.clear();
   }
 
   @action.bound

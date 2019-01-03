@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { map, uniqueId, slice } from 'lodash';
 import jsPDF from 'jspdf';
+import 'jspdf-autotable/dist/jspdf.plugin.autotable.js';
 import { action, observable, runInAction } from 'mobx';
 import { PulseLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
@@ -30,8 +31,8 @@ import AddDatasetPopup from './components/AddDatasetPopup/AddDatasetPopup.view';
 
 // icons
 import ExportIcon from './../../common/icons/export.svg';
-// import ImportIcon from './../../common/icons/import.svg';
 import SaveIcon from './../../common/icons/save.svg';
+import { logoData } from '../../common/consts/logo';
 
 // styles
 import './ChartDataBox.view.scss';
@@ -57,16 +58,16 @@ export default class ChartDataBox extends Component {
 
   @observable newColumnName = '';
   @observable isRandomValuesDisabled = true;
-  @observable randomFrom = 0;
-  @observable randomTo = 100;
-  @observable initialRowValue = '0';
+  @observable randomFrom = 100;
+  @observable randomTo = 500;
+  @observable initialRowValue = 0;
 
   @observable isFileLoading = false;
   @observable isFileParsed = false;
   @observable fileName = null;
   @observable exportFileName = `chart_${uniqueId()}`;
 
-  @observable chartDescription = 'Type description here ...';
+  @observable chartDescription = 'Type chart description here ...';
 
   @action.bound
   handleColumnName(event) {
@@ -178,45 +179,40 @@ export default class ChartDataBox extends Component {
         this.isFileParsed = false;
       })
       return;
-    }
-
-    const file = event.target.files[0];
-
-    await dataStore.parseFile(file).then(result => {
-      const { data, meta, errors } = result;
-      const { fields } = meta;
-      dataStore.errors = errors;
-      dataStore.columns.clear();
-      dataStore.rows.clear();
-      dataStore.chartDatasetsProperties.clear();
-      map(fields, field => dataStore.columns.push(field));
-      commonStore.lineChartObject.data.labels = dataStore.columns.slice();
-      map(data, (row, index) => {
-        const rowObject = JSON.parse(JSON.stringify(row));
-        if(Object.keys(rowObject).length === fields.length) {
-          rowObject.id = uniqueId('row_');
-          const lineDatasetProperties = new LineDatasetProperties(`Dataset ${index + 1}`, getRandomColor());
-          dataStore.chartDatasetsProperties.push(lineDatasetProperties);
-          // update chart 
-          const arrayOfData = Object.values(rowObject);
-          const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
-          console.log(formattedDataset);
-          // add new line chart with data and properties
-          const newChart = {
-            ...lineDatasetProperties,
-            data: formattedDataset
+    } else {
+      const file = event.target.files[0];
+      commonStore.resetChartState();
+      dataStore.resetDataState();
+      await dataStore.parseFile(file).then(result => {
+        const { data, meta, errors } = result;
+        const { fields } = meta;
+        dataStore.errors = errors;
+        map(fields, field => dataStore.columns.push(field));
+        commonStore.lineChartObject.data.labels = dataStore.columns.slice();
+        map(data, (row, index) => {
+          const rowObject = JSON.parse(JSON.stringify(row));
+          if(Object.keys(rowObject).length === fields.length) {
+            rowObject.id = uniqueId('row_');
+            const lineDatasetProperties = new LineDatasetProperties(`Dataset ${index + 1}`, getRandomColor());
+            dataStore.addDatasetProperties(lineDatasetProperties);
+            const arrayOfData = Object.values(rowObject);
+            const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
+            // add new line chart with data and properties
+            const newChart = {
+              ...lineDatasetProperties,
+              data: formattedDataset
+            }
+            commonStore.addDataset(newChart);
+            dataStore.addRow(rowObject);
           }
-          commonStore.lineChartObject.data.datasets.push(newChart);
-          commonStore.lineChartObject.chart.update();
-          dataStore.rows.push(rowObject);
-        }
-      });
-      dataStore.csvFile = file;
-      runInAction(() => {
-        this.isFileLoading = false;
-        this.isFileParsed = true;
+        });
+        dataStore.csvFile = file;
+        runInAction(() => {
+          this.isFileLoading = false;
+          this.isFileParsed = true;
+        })
       })
-    })
+    }
   }
 
   @Bind()
@@ -247,13 +243,34 @@ export default class ChartDataBox extends Component {
   downloadPDF() {
     const { commonStore } = this.props;
     const imgData = commonStore.canvasRef.current.toDataURL("image/jpeg", 1.0);
-    const pdf = new jsPDF({
-      orientation: 'landscape'
+    const doc = new jsPDF({
+      orientation: 'p',
+      unit: 'px',
+      format: 'a4'
     });
-    var width = pdf.internal.pageSize.getWidth();
-    var height = pdf.internal.pageSize.getHeight();
-    pdf.addImage(imgData, 'JPEG', 0, 25, width, height-100);
-    pdf.save(`${this.exportFileName}`);
+    doc.addImage(logoData, 'JPEG', 20, 20, 24, 24);
+    doc.setFont("Ubuntu");
+    doc.setFontSize(12);
+    doc.text('MyCharts', 50, 32);
+    doc.setFontSize(8);
+    doc.text('Make your charts online', 50, 40);
+    const width = doc.internal.pageSize.getWidth();
+    doc.addImage(imgData, 'JPEG', 20, 60, width - 40, 150);
+    const res = doc.autoTableHtmlToJson(document.getElementById('table'));
+    doc.autoTable(res.columns, res.data, {
+      startY: 220,
+      margin: 20,
+      headerStyles: {
+        fillColor: [235, 30, 100]
+      },
+      // columnStyles: {
+    	//   id: { fillColor: 255 }
+      // },
+      drawCell: function (cell, data) {
+        return cell + "erty" + data
+      }
+    });
+    doc.save(`${this.exportFileName}`);
   }
 
   @action.bound
@@ -366,7 +383,7 @@ export default class ChartDataBox extends Component {
             className="export-button"
             onClick={this.downloadPDF}
           >
-            Export to PDF
+            Generate a report in PDF
           </Button> 
         }
         buttonRight={
@@ -407,7 +424,7 @@ export default class ChartDataBox extends Component {
           <Button
             buttonStyle="button-primary"
             textColor="light"
-            className="export-button"
+            className="add-description-button"
             onClick={this.saveChart}
           >
             Add
@@ -453,7 +470,7 @@ export default class ChartDataBox extends Component {
               onClick={this.showDescriptionPopup}
             >
               <div className="button-label">
-                <div className="label">Add description</div>
+                <div className="b-label">Add description</div>
               </div>
             </Button>
             <Button 
@@ -461,7 +478,7 @@ export default class ChartDataBox extends Component {
               onClick={this.showSaveChartPopup}
             >
               <div className="button-label">
-                <div className="label">Save</div>
+                <div className="b-label">Save</div>
                 <SaveIcon width={14} height={14} />
               </div>
             </Button>
@@ -470,7 +487,7 @@ export default class ChartDataBox extends Component {
               onClick={this.showExportPopup}
             >
               <div className="button-label">
-                <div className="label">Export chart</div>
+                <div className="b-label">Export</div>
                 <ExportIcon width={14} height={14} />
               </div>
             </Button>

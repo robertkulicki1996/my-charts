@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
-import { find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys, slice } from 'lodash';
+import { find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys, slice, filter } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
 
@@ -82,7 +82,7 @@ export default class Table extends Component {
     dataStore.columns[this.editingColumn.index] = toLower(this.editingColumn.text);
     const newRows = map(dataStore.rows, row => {
       const keyToEdit = Object.keys(row)[this.editingColumn.index + 1] // first is id
-      const newRow = mapKeys(row, (value,key) => {
+      const newRow = mapKeys(row, (value, key) => {
         if(key === keyToEdit) {
           return this.editingColumn.text
         }
@@ -93,7 +93,7 @@ export default class Table extends Component {
     dataStore.rows = newRows;
     commonStore.lineChartObject.data.labels[this.editingColumn.index] = this.editingColumn.text;
     // update chart
-    commonStore.lineChartObject.chart.update();
+    commonStore.updateChart();
     this.hideEditColumnNamePopup();
   }
 
@@ -105,26 +105,22 @@ export default class Table extends Component {
   @action.bound
   addRow(datasetProperties){
     const { dataStore, commonStore } = this.props;
-    const { columns, rows } = dataStore;
+    const { columns } = dataStore;
     if(columns.length > 0) {
       const newRow = {};
       map(columns, column => {
         newRow[column] = this.getRandomInt(100,1000).toString();
       })
       newRow.id = uniqueId('row_');
-      rows.push(newRow);
-      // update chart 
+      dataStore.addRow(newRow);
       const arrayOfData = Object.values(newRow);
       const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
-      // update column names
       commonStore.lineChartObject.data.labels = dataStore.columns.slice();
-      // add new line chart with data and properties
       const newChart = {
         ...datasetProperties,
         data: formattedDataset
       }
-      commonStore.lineChartObject.data.datasets.push(newChart);
-      commonStore.lineChartObject.chart.update();
+      commonStore.addDataset(newChart);
     } else {
       NotificationService.error("There is no column!");
     }
@@ -137,7 +133,6 @@ export default class Table extends Component {
     const isColumn = includes(dataStore.columns,newColumn);
     if(!isColumn) {
       dataStore.columns.push(newColumn);
-      console.log(dataStore.columns);
       commonStore.lineChartObject.data.labels.push(newColumn);
       if(dataStore.rows.length > 0) {
         if(randomFrom !== null && randomTo !== null) {
@@ -159,8 +154,7 @@ export default class Table extends Component {
           });
         }
       }
-      // update chart
-      commonStore.lineChartObject.chart.update();
+      commonStore.updateChart();
     } else {
       NotificationService.error("This column name existing");
     }
@@ -175,9 +169,8 @@ export default class Table extends Component {
     const indexOfRemovingRow = indexOf(dataStore.rows, objectToRemove);
     commonStore.lineChartObject.data.datasets.splice(indexOfRemovingRow, 1);
     dataStore.chartDatasetsProperties.splice(indexOfRemovingRow, 1);
-    // update chart
     dataStore.rows.remove(objectToRemove);
-    commonStore.lineChartObject.chart.update();
+    commonStore.updateChart();
   }
 
   @action.bound
@@ -192,7 +185,7 @@ export default class Table extends Component {
     commonStore.lineChartObject.data.datasets.forEach((dataset) => {
       dataset.data.splice(indexOfObjectToRemove, 1);
     });
-    commonStore.lineChartObject.chart.update();
+    commonStore.updateChart();
   }
 
   @Bind()
@@ -224,13 +217,12 @@ export default class Table extends Component {
     const indexOfEditingRow = indexOf(dataStore.rows, this.editingRow);
     map(dataStore.rows, row => {
       if(row.id === this.editingRow.id) {
-        row = this.editingRow;
+        return row = this.editingRow;
       }
     });
-    const arrayOfData = Object.values(this.editingRow);
-    const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
-    commonStore.lineChartObject.data.datasets[indexOfEditingRow].data = formattedDataset;
-    commonStore.lineChartObject.chart.update();
+    const arrayOfData = Object.values(this.editingRow).filter(value => !includes(value,"row_"));
+    commonStore.lineChartObject.data.datasets[indexOfEditingRow].data = arrayOfData;
+    commonStore.updateChart();
     this.editingRow = {};
     this.hideEditRowPopup();
   }
@@ -328,7 +320,7 @@ export default class Table extends Component {
 
     return (
       <React.Fragment>
-        <table>
+        <table id='table'>
           <thead>
             <tr>{map(columns,column => (
               <th key={uniqueId()}>
