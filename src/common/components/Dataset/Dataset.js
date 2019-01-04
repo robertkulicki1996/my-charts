@@ -16,31 +16,16 @@ export default class Dataset extends Component {
     dataStore: PropTypes.instanceOf(DataStore).isRequired
   }
 
-
-  @observable color = '';
-  @observable label = '';
-
-  @action
-  componentDidMount() {
+  render() {
     const { dataStore, datasetIndex } = this.props;
     const datasetProperty = dataStore.getDatasetProperty(datasetIndex);
-    if(datasetProperty.fill === true) {
-      this.color = datasetProperty.backgroundColor;
-    } else {
-      this.color = datasetProperty.borderColor;
-    }
-    this.label = datasetProperty.label;
-  }
-
-  render() {
-    const { color, label } = this;
 
     return (
       <div className="dataset">
         <div 
-          title={label} 
+          title={datasetProperty.label}
           className='dataset-item-small'
-          style={{ backgroundColor: color }} 
+          style={{ backgroundColor: datasetProperty.backgroundColor }} 
         />
       </div>
     );

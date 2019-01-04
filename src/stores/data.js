@@ -1,6 +1,8 @@
 import Papa from 'papaparse';
 import { observable, action } from 'mobx';
 import { map } from 'lodash';
+import { persist } from 'mobx-persist';
+import LineDatasetProperties from '../models/LineDatasetProperties';
 
 export class DataStore {
 
@@ -23,6 +25,7 @@ export class DataStore {
   @observable rows = [];
 
   // Array of datasets with properties
+  @persist('list', LineDatasetProperties)
   @observable chartDatasetsProperties = [];
 
   // Optional imported csv file (not parsed)
@@ -43,6 +46,7 @@ export class DataStore {
   }
 
   // Return dataset properties by index
+  @action.bound
   getDatasetProperty(index) {
     return this.chartDatasetsProperties[index];
   }
@@ -54,11 +58,10 @@ export class DataStore {
     const preparedRows = [];
     map(rows, (row, index) => {
       delete row.id;
-      const rowObject = {
-        'label': chartDatasetsProperties[index].label, 
-        ...row
-      };
-      preparedRows.push(Object.values(rowObject));
+      preparedRows.push([
+        chartDatasetsProperties[index].label,
+        ...Object.values(row)]
+      );
     });
     return preparedRows;
   }

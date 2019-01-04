@@ -238,18 +238,29 @@ export default class LineChartSettings extends Component {
   }
 
   @action.bound
-  onDatasetPropertiesChange(field, value) {
-    this.currentDatasetObject[field] = value;
-    if(!this.currentDatasetObject.fill) {
-      this.currentDatasetObject.backgroundColor = this.currentDatasetObject.borderColor;
-    }
-  }
-
-  @action.bound
   addDataset() {
     this.props.dataStore.chartDatasetsProperties.push(this.currentDatasetObject);
     this.props.addRow(this.currentDatasetObject);
     this.props.onClose();
+  }
+
+  @action.bound
+  handleLabel(e, index) {
+    const { dataStore, commonStore } = this.props;
+    const newValue = e.target.value;
+    dataStore.chartDatasetsProperties[index].label = newValue;
+    commonStore.editDataset(index, 'label', newValue);
+  }
+
+  @action.bound
+  onDatasetPropertiesChange(field, value, index) {
+    const { dataStore, commonStore } = this.props;
+    dataStore.chartDatasetsProperties[index][field] = value;
+    if(!dataStore.chartDatasetsProperties[index].fill) {
+      dataStore.chartDatasetsProperties[index].backgroundColor = dataStore.chartDatasetsProperties[index].borderColor;
+    }
+    commonStore.editDataset(index, field, value);
+    this.forceUpdate();
   }
 
   render() {
@@ -268,7 +279,7 @@ export default class LineChartSettings extends Component {
             onChange={value => this.onOptionChange('responsiveAnimationDuration',value)}
           />
         </div>
-        <div className="option-wrapper">
+        {/* <div className="option-wrapper">
           <div className="label-wrapper">
             <div className="label-wrapper__label">Maintain aspect ratio</div>
             <Tooltip
@@ -289,7 +300,7 @@ export default class LineChartSettings extends Component {
             checked={lineChartSettingsStore.maintainAspectRatio}
             onChange={value => this.onOptionChange('maintainAspectRatio', value)}
           />
-        </div>
+        </div> */}
         <div className="option-wrapper">
           <div className="label">Background color</div>
           <ContextMenu 
@@ -304,6 +315,278 @@ export default class LineChartSettings extends Component {
             <ColorInput color={lineChartSettingsStore.backgroundColor.hex} />
           </ContextMenu>
         </div>
+        <div className="option-wrapper-column">
+            {map(dataStore.chartDatasetsProperties, (properties, index) => {
+              return <Collapsible
+                key={index}
+                id={index}
+                open={false}
+                openedClassName="opened-section"
+                triggerClassName="closed-section"
+                height={300}
+                trigger={
+                  <DatasetListItem key={index} datasetIndex={index} />
+                }
+              >
+                <div key={index} className="option-wrapper-column">
+                  <div className="option-wrapper">
+                    <div className="option-wrapper__label">Label</div>
+                    <Input
+                      key={index}
+                      type="text"
+                      inputClassName="option-wrapper__custom-input"
+                      value={properties.label}
+                      onChange={(e) => this.handleLabel(e, index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Background color</div>
+                    <ContextMenu 
+                      className="option-settings"
+                      position="leftBottom" 
+                      body={
+                        <ChromePicker 
+                          color={properties.backgroundColor} 
+                          onChange={color => this.onDatasetPropertiesChange('backgroundColor', color.hex,index)}  
+                        />
+                      }
+                    >
+                      <ColorInput color={properties.backgroundColor} />
+                    </ContextMenu>
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Border color</div>
+                    <ContextMenu 
+                      className="option-settings"
+                      position="leftBottom" 
+                      body={
+                        <ChromePicker 
+                          color={properties.borderColor} 
+                          onChange={color => this.onDatasetPropertiesChange('borderColor', color.hex,index)}  
+                        />
+                      }
+                    >
+                      <ColorInput color={properties.borderColor} />
+                    </ContextMenu>
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Border width</div>
+                    <InputNumber
+                      style={{ width: 80 }}
+                      precision={0}
+                      step={1}
+                      value={properties.borderWidth}
+                      onChange={value => this.onDatasetPropertiesChange('borderWidth',value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Border cap style</div>
+                    <Dropdown 
+                      options={['butt', 'round', 'square']} 
+                      placeholder="Select" 
+                      value={properties.borderCapStyle}
+                      onChange={value => this.onDatasetPropertiesChange('borderCapStyle', value.value,index)}
+                      controlClassName='custom-dropdown'
+                      placeholderClassName='custom-placeholder'
+                      arrowClassName='custom-arrow'
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Border join style</div>
+                    <Dropdown 
+                      options={['bevel', 'round', 'miter']} 
+                      placeholder="Select" 
+                      value={properties.borderJoinStyle}
+                      onChange={value => this.onDatasetPropertiesChange('borderJoinStyle', value.value,index)}
+                      controlClassName='custom-dropdown'
+                      placeholderClassName='custom-placeholder'
+                      arrowClassName='custom-arrow'
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Cubic interpolation mode</div>
+                    <Dropdown 
+                      options={['default', 'monotone']} 
+                      placeholder="Select" 
+                      value={properties.borderJoinStyle}
+                      onChange={value => this.onDatasetPropertiesChange('cubicInterpolationMode', value.value,index)}
+                      controlClassName='custom-dropdown'
+                      placeholderClassName='custom-placeholder'
+                      arrowClassName='custom-arrow'
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Fill</div>
+                    <Switch
+                      style={{ width: 80 }}
+                      checked={properties.fill}
+                      onChange={value => this.onDatasetPropertiesChange('fill', value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Line tension</div>
+                    <InputNumber
+                      style={{ width: 80 }}
+                      precision={0}
+                      step={1}
+                      value={properties.borderWidth}
+                      onChange={value => this.onDatasetPropertiesChange('lineTension',value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point background color</div>
+                    <ContextMenu 
+                      className="option-settings"
+                      position="leftBottom" 
+                      body={
+                        <ChromePicker 
+                          color={properties.pointBackgroundColor} 
+                          onChange={color => this.onDatasetPropertiesChange('pointBackgroundColor', color.hex,index)}  
+                        />
+                      }
+                    >
+                      <ColorInput color={properties.pointBackgroundColor} />
+                    </ContextMenu>
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point border color</div>
+                    <ContextMenu 
+                      className="option-settings"
+                      position="leftBottom" 
+                      body={
+                        <ChromePicker 
+                          color={properties.pointBorderColor} 
+                          onChange={color => this.onDatasetPropertiesChange('pointBorderColor', color.hex,index)}  
+                        />
+                      }
+                    >
+                      <ColorInput color={properties.pointBorderColor} />
+                    </ContextMenu>
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point border width</div>
+                    <InputNumber
+                      style={{ width: 80 }}
+                      precision={0}
+                      step={1}
+                      defaultValue={properties.pointBorderWidth}
+                      value={properties.pointBorderWidth}
+                      onChange={value => this.onDatasetPropertiesChange('pointBorderWidth',value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point radius</div>
+                    <InputNumber
+                      style={{ width: 80 }}
+                      precision={0}
+                      step={1}
+                      defaultValue={properties.pointRadius}
+                      value={properties.pointRadius}
+                      onChange={value => this.onDatasetPropertiesChange('pointRadius',value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point rotation</div>
+                    <InputNumber
+                      style={{ width: 80 }}
+                      precision={0}
+                      step={1}
+                      defaultValue={properties.pointRotation}
+                      value={properties.pointRotation}
+                      onChange={value => this.onDatasetPropertiesChange('pointRotation',value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point hit radius</div>
+                    <InputNumber
+                      style={{ width: 80 }}
+                      precision={0}
+                      step={1}
+                      defaultValue={properties.pointHitRadius}
+                      value={properties.pointHitRadius}
+                      onChange={value => this.onDatasetPropertiesChange('pointHitRadius',value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point hover background color</div>
+                    <ContextMenu 
+                      className="option-settings"
+                      position="leftBottom" 
+                      body={
+                        <ChromePicker 
+                          color={properties.pointHoverBackgroundColor} 
+                          onChange={color => this.onDatasetPropertiesChange('pointHoverBackgroundColor', color.hex,index)}  
+                        />
+                      }
+                    >
+                      <ColorInput color={properties.pointHoverBackgroundColor} />
+                    </ContextMenu>
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point hover border color</div>
+                    <ContextMenu 
+                      className="option-settings"
+                      position="leftBottom" 
+                      body={
+                        <ChromePicker 
+                          color={properties.pointHoverBorderColor} 
+                          onChange={color => this.onDatasetPropertiesChange('pointHoverBorderColor', color.hex,index)}  
+                        />
+                      }
+                    >
+                      <ColorInput color={properties.pointHoverBorderColor} />
+                    </ContextMenu>
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point hover border width</div>
+                    <InputNumber
+                      style={{ width: 80 }}
+                      precision={0}
+                      step={1}
+                      defaultValue={properties.pointHoverBorderWidth}
+                      value={properties.pointHoverBorderWidth}
+                      onChange={value => this.onDatasetPropertiesChange('pointHoverBorderWidth',value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Point hover radius</div>
+                    <InputNumber
+                      style={{ width: 80 }}
+                      precision={0}
+                      step={1}
+                      defaultValue={properties.pointHoverRadius}
+                      value={properties.pointHoverRadius}
+                      onChange={value => this.onDatasetPropertiesChange('pointHoverRadius',value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Show line</div>
+                    <Switch
+                      style={{ width: 80 }}
+                      checked={properties.showLine}
+                      onChange={value => this.onDatasetPropertiesChange('showLine', value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Span gaps</div>
+                    <Switch
+                      style={{ width: 80 }}
+                      checked={properties.spanGaps}
+                      onChange={value => this.onDatasetPropertiesChange('spanGaps', value,index)}
+                    />
+                  </div>
+                  <div className="option-wrapper">
+                    <div className="label">Stepped line</div>
+                    <Switch
+                      style={{ width: 80 }}
+                      checked={properties.steppedLine}
+                      onChange={value => this.onDatasetPropertiesChange('steppedLine', value,index)}
+                    />
+                  </div>
+                </div>
+              </Collapsible>
+            })}
+          </div>
         <Collapsible 
           open={false} 
           overflowWhenOpen='visible' 
@@ -1064,290 +1347,15 @@ export default class LineChartSettings extends Component {
           </div>
         </Collapsible>
         <Collapsible
-          open={false}
+          open={true}
           overflowWhenOpen='visible' 
           openedClassName="opened-section"
           triggerClassName="closed-section"
           height={300}
           trigger={
-            <OptionSectionHeader title="Chart datasets" />
+            <OptionSectionHeader title="Datasets" />
           }
         >
-          <div className="option-wrapper-column">
-            {dataStore.chartDatasetsProperties.map((properties, index) => {
-              return <Collapsible
-                open={false}
-                overflowWhenOpen='visible' 
-                openedClassName="opened-section"
-                triggerClassName="closed-section"
-                height={300}
-                trigger={
-                  <DatasetListItem datasetIndex={index} />
-                }
-              >
-                <div className="option-wrapper-column">
-                  <div className="option-wrapper">
-                    <div className="option-wrapper__label">Label</div>
-                    <Input
-                      type="text"
-                      inputClassName="option-wrapper__custom-input"
-                      value={dataStore.chartDatasetsProperties[index].label}
-                      onChange={(e) => {
-                        dataStore.chartDatasetsProperties[index].label = e.target.value;
-                        this.forceUpdate();
-                      }}
-                    />
-                  </div>
-                  {/* <div className="option-wrapper">
-                    <div className="label">Background color</div>
-                    <ContextMenu 
-                      className="option-settings"
-                      position="leftBottom" 
-                      body={
-                        <ChromePicker 
-                          color={this.currentDatasetObject.backgroundColor} 
-                          onChange={color => this.onDatasetPropertiesChange('backgroundColor', color.hex)}  
-                        />
-                      }
-                    >
-                      <ColorInput color={this.currentDatasetObject.backgroundColor} />
-                    </ContextMenu>
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Border color</div>
-                    <ContextMenu 
-                      className="option-settings"
-                      position="leftBottom" 
-                      body={
-                        <ChromePicker 
-                          color={this.currentDatasetObject.borderColor} 
-                          onChange={color => this.onDatasetPropertiesChange('borderColor', color.hex)}  
-                        />
-                      }
-                    >
-                      <ColorInput color={this.currentDatasetObject.borderColor} />
-                    </ContextMenu>
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Border width</div>
-                    <InputNumber
-                      style={{ width: 80 }}
-                      precision={0}
-                      step={1}
-                      defaultValue={this.currentDatasetObject.borderWidth}
-                      value={this.currentDatasetObject.borderWidth}
-                      onChange={value => this.onDatasetPropertiesChange('borderWidth',value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Border cap style</div>
-                    <Dropdown 
-                      options={['butt', 'round', 'square']} 
-                      placeholder="Select" 
-                      value={this.currentDatasetObject.borderCapStyle}
-                      onChange={value => this.onDatasetPropertiesChange('borderCapStyle', value.value)}
-                      controlClassName='custom-dropdown'
-                      placeholderClassName='custom-placeholder'
-                      arrowClassName='custom-arrow'
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Border join style</div>
-                    <Dropdown 
-                      options={['bevel', 'round', 'miter']} 
-                      placeholder="Select" 
-                      value={this.currentDatasetObject.borderJoinStyle}
-                      onChange={value => this.onDatasetPropertiesChange('borderJoinStyle', value.value)}
-                      controlClassName='custom-dropdown'
-                      placeholderClassName='custom-placeholder'
-                      arrowClassName='custom-arrow'
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Cubic interpolation mode</div>
-                    <Dropdown 
-                      options={['default', 'monotone']} 
-                      placeholder="Select" 
-                      value={this.currentDatasetObject.borderJoinStyle}
-                      onChange={value => this.onDatasetPropertiesChange('cubicInterpolationMode', value.value)}
-                      controlClassName='custom-dropdown'
-                      placeholderClassName='custom-placeholder'
-                      arrowClassName='custom-arrow'
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Fill</div>
-                    <Switch
-                      style={{ width: 80 }}
-                      checked={this.currentDatasetObject.fill}
-                      onChange={value => this.onDatasetPropertiesChange('fill', value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Line tension</div>
-                    <InputNumber
-                      style={{ width: 80 }}
-                      precision={0}
-                      step={1}
-                      defaultValue={this.currentDatasetObject.borderWidth}
-                      value={this.currentDatasetObject.borderWidth}
-                      onChange={value => this.onDatasetPropertiesChange('lineTension',value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point background color</div>
-                    <ContextMenu 
-                      className="option-settings"
-                      position="leftBottom" 
-                      body={
-                        <ChromePicker 
-                          color={this.currentDatasetObject.pointBackgroundColor} 
-                          onChange={color => this.onDatasetPropertiesChange('pointBackgroundColor', color.hex)}  
-                        />
-                      }
-                    >
-                      <ColorInput color={this.currentDatasetObject.pointBackgroundColor} />
-                    </ContextMenu>
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point border color</div>
-                    <ContextMenu 
-                      className="option-settings"
-                      position="leftBottom" 
-                      body={
-                        <ChromePicker 
-                          color={this.currentDatasetObject.pointBorderColor} 
-                          onChange={color => this.onDatasetPropertiesChange('pointBorderColor', color.hex)}  
-                        />
-                      }
-                    >
-                      <ColorInput color={this.currentDatasetObject.pointBorderColor} />
-                    </ContextMenu>
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point border width</div>
-                    <InputNumber
-                      style={{ width: 80 }}
-                      precision={0}
-                      step={1}
-                      defaultValue={this.currentDatasetObject.pointBorderWidth}
-                      value={this.currentDatasetObject.pointBorderWidth}
-                      onChange={value => this.onDatasetPropertiesChange('pointBorderWidth',value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point radius</div>
-                    <InputNumber
-                      style={{ width: 80 }}
-                      precision={0}
-                      step={1}
-                      defaultValue={this.currentDatasetObject.pointRadius}
-                      value={this.currentDatasetObject.pointRadius}
-                      onChange={value => this.onDatasetPropertiesChange('pointRadius',value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point rotation</div>
-                    <InputNumber
-                      style={{ width: 80 }}
-                      precision={0}
-                      step={1}
-                      defaultValue={this.currentDatasetObject.pointRotation}
-                      value={this.currentDatasetObject.pointRotation}
-                      onChange={value => this.onDatasetPropertiesChange('pointRotation',value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point hit radius</div>
-                    <InputNumber
-                      style={{ width: 80 }}
-                      precision={0}
-                      step={1}
-                      defaultValue={this.currentDatasetObject.pointHitRadius}
-                      value={this.currentDatasetObject.pointHitRadius}
-                      onChange={value => this.onDatasetPropertiesChange('pointHitRadius',value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point hover background color</div>
-                    <ContextMenu 
-                      className="option-settings"
-                      position="leftBottom" 
-                      body={
-                        <ChromePicker 
-                          color={this.currentDatasetObject.pointHoverBackgroundColor} 
-                          onChange={color => this.onDatasetPropertiesChange('pointHoverBackgroundColor', color.hex)}  
-                        />
-                      }
-                    >
-                      <ColorInput color={this.currentDatasetObject.pointHoverBackgroundColor} />
-                    </ContextMenu>
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point hover border color</div>
-                    <ContextMenu 
-                      className="option-settings"
-                      position="leftBottom" 
-                      body={
-                        <ChromePicker 
-                          color={this.currentDatasetObject.pointHoverBorderColor} 
-                          onChange={color => this.onDatasetPropertiesChange('pointHoverBorderColor', color.hex)}  
-                        />
-                      }
-                    >
-                      <ColorInput color={this.currentDatasetObject.pointHoverBorderColor} />
-                    </ContextMenu>
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point hover border width</div>
-                    <InputNumber
-                      style={{ width: 80 }}
-                      precision={0}
-                      step={1}
-                      defaultValue={this.currentDatasetObject.pointHoverBorderWidth}
-                      value={this.currentDatasetObject.pointHoverBorderWidth}
-                      onChange={value => this.onDatasetPropertiesChange('pointHoverBorderWidth',value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Point hover radius</div>
-                    <InputNumber
-                      style={{ width: 80 }}
-                      precision={0}
-                      step={1}
-                      defaultValue={this.currentDatasetObject.pointHoverRadius}
-                      value={this.currentDatasetObject.pointHoverRadius}
-                      onChange={value => this.onDatasetPropertiesChange('pointHoverRadius',value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Show line</div>
-                    <Switch
-                      style={{ width: 80 }}
-                      checked={this.currentDatasetObject.showLine}
-                      onChange={value => this.onDatasetPropertiesChange('showLine', value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Span gaps</div>
-                    <Switch
-                      style={{ width: 80 }}
-                      checked={this.currentDatasetObject.spanGaps}
-                      onChange={value => this.onDatasetPropertiesChange('spanGaps', value)}
-                    />
-                  </div>
-                  <div className="option-wrapper">
-                    <div className="label">Stepped line</div>
-                    <Switch
-                      style={{ width: 80 }}
-                      checked={this.currentDatasetObject.steppedLine}
-                      onChange={value => this.onDatasetPropertiesChange('steppedLine', value)}
-                    />
-                  </div> */}
-                </div>
-              </Collapsible>
-            })}
-          </div>
         </Collapsible>
       </div>
     );

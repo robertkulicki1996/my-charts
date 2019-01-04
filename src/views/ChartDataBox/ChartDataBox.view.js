@@ -9,7 +9,7 @@ import { PulseLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
 
 // stores
-import { DataStore } from '../../stores/data';
+import dataStore, { DataStore } from '../../stores/data';
 import { CommonStore } from '../../stores/common';
 import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 

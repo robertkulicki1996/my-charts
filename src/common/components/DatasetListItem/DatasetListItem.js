@@ -16,12 +16,11 @@ export default class DatasetListItem extends Component {
     dataStore: PropTypes.instanceOf(DataStore).isRequired
   }
 
-
   @observable color = '';
   @observable label = '';
 
-  @action
-  componentDidMount() {
+  @action.bound
+  setInitialValue() {
     const { dataStore, datasetIndex } = this.props;
     const datasetProperty = dataStore.getDatasetProperty(datasetIndex);
     if(datasetProperty.fill === true) {
@@ -30,6 +29,16 @@ export default class DatasetListItem extends Component {
       this.color = datasetProperty.borderColor;
     }
     this.label = datasetProperty.label;
+  }
+
+  @action
+  componentDidMount() {
+    this.setInitialValue();
+  }
+
+  @action
+  componentWillReceiveProps() {
+    this.setInitialValue();
   }
 
   render() {

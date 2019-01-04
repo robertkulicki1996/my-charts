@@ -29,6 +29,13 @@ export class CommonStore {
     this.lineChartObject.data.datasets.push(dataset);
     this.updateChart();
   }
+
+  // Edit dataset properties
+  @action
+  editDataset(index, field, value) {
+    this.lineChartObject.data.datasets[index][field] = value;
+    this.updateChart();
+  }
 }
 
 const commonStore = new CommonStore();
