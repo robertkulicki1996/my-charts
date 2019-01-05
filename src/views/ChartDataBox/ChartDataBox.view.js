@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { map, uniqueId, slice, includes } from 'lodash';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable/dist/jspdf.plugin.autotable.js';
+
+// pdfmake
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
 import { action, observable, runInAction } from 'mobx';
 import { PulseLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
 
 // stores
-import dataStore, { DataStore } from '../../stores/data';
+import { DataStore } from '../../stores/data';
 import { CommonStore } from '../../stores/common';
 import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 
@@ -32,7 +35,7 @@ import AddDatasetPopup from './components/AddDatasetPopup/AddDatasetPopup.view';
 // icons
 import ExportIcon from './../../common/icons/export.svg';
 import SaveIcon from './../../common/icons/save.svg';
-import { logoData } from '../../common/consts/logo';
+import { logoData } from './../../common/consts/logo';
 
 // styles
 import './ChartDataBox.view.scss';
@@ -49,6 +52,7 @@ export default class ChartDataBox extends Component {
   constructor(props) {
     super(props);
     this.table = React.createRef();
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
   }
 
   @observable isAddDatasetPopupShown = false;
@@ -134,7 +138,7 @@ export default class ChartDataBox extends Component {
 
   @action.bound
   showAddColumnPopup() {
-    this.newColumnName = 'Column' + uniqueId();
+    this.newColumnName = 'Col' + uniqueId();
     this.isAddColumnPopupShown = true;
   }
 
@@ -242,52 +246,136 @@ export default class ChartDataBox extends Component {
   @Bind()
   downloadPDF() {
     const { dataStore, commonStore } = this.props;
+    console.log(dataStore.getPreparedRowsForReportTable());
     const imgData = commonStore.canvasRef.current.toDataURL("image/jpeg", 1.0);
-    const doc = new jsPDF({
-      orientation: 'p',
-      unit: 'px',
-      format: 'a4'
-    });
-    // Document logo
-    doc.addImage(logoData, 'JPEG', 20, 20, 24, 24);
-    // Document logo text
-    doc.setFontSize(12);
-    doc.text('MyCharts', 50, 32);
-    doc.setFontSize(8);
-    doc.text('Make your charts online', 50, 40);
-    // Chart
-    const width = doc.internal.pageSize.getWidth();
-    doc.addImage(imgData, 'JPEG', 15, 60, width - 30, 145);
-    // Chart description
-    const noDescriptionPlaceholder = 'Type chart description here ...'
-    if(!includes(this.chartDescription, noDescriptionPlaceholder)){
-      doc.setFontSize(12);
-      doc.text("Chart description", 20, 215);
-      doc.setFontSize(8);
-      const splitTitle = doc.splitTextToSize(this.chartDescription, width-40);
-      doc.text(20, 226, splitTitle);
-    }
-    // Chart data title
-    doc.setFontSize(12);
-    doc.text("Chart Data", 20, !includes(this.chartDescription, noDescriptionPlaceholder) ? 300 : 220);
-    // Chart data table
-    const columns = ["Dataset name", ...dataStore.columns];
-    const rows = dataStore.getPreparedRowsForReportTable();
-    doc.autoTable(columns, rows, {
-      startY: !includes(this.chartDescription, noDescriptionPlaceholder) ? 305 : 226,
-      margin: 20,
+    var doc = {
+      content: [
+        {
+          table: {
+            body: [
+              [{
+                image: logoData,
+                border: [false, false, false, false],
+                fillColor: '#ffffff',
+                width: 32,
+                height: 32,
+                margin: [0,0,0,0]
+              },
+              {
+                text: [{
+                  text: 'MyCharts \n',
+                  style: 'header'
+                },{
+                  text: 'Make your charts online',
+                  style: 'subheader'
+                }],
+                margin: [0,4,0,0],
+                border: [false, false, false, false]
+              }]
+            ]
+          }
+        }, 
+        {
+          image: imgData,
+          margin: [0, 12, 0, 0],
+          width: 520,
+          height: 180
+        },
+        {
+          text: !includes(this.chartDescription, 'Type chart description here ...') ? 'Chart description': '',
+          style: 'header',
+          margin: [0,4,0,4]
+        },
+        {
+          text: !includes(this.chartDescription, 'Type chart description here ...') ? this.chartDescription : '',
+          style: 'subheader',
+        },
+        {
+          text: 'Chart datasets',
+          style: 'header',
+          margin: [0,4,0,4]
+        },
+        {
+          table: {
+            body: [
+              ['Dataset name', ...dataStore.columns],
+              ...dataStore.getPreparedRowsForReportTable()
+            ]
+          },
+          layout: {
+            fillColor: function (rowIndex, node, columnIndex) {
+              if(rowIndex === 0) return '#EB1E64';
+              return (rowIndex !== 0 && rowIndex % 2 === 0) ? '#F5F5F5' : null;
+            },
+            hLineWidth: function (i, node) {
+              if (i === 0 || i === node.table.body.length) return 0;
+              return (i === node.table.headerRows) ? 0 : 0;
+            },
+            vLineWidth: function (i, node) {
+              if (i === 0 || i === node.table.body.length) return 0;
+              return (i === node.table.headerRows) ? 0 : 0;
+            },
+          },
+          fontSize: 8
+        }
+      ],
       styles: {
-        fontSize: 8,
-        fontStyle: 'normal',
-        overflow: 'ellipsize',
-        valign: 'middle'
-      },
-      headerStyles: {
-        fillColor: [235, 30, 100]
+        header: {
+          fontSize: 12
+        },
+        subheader: {
+          fontSize: 8,
+        }
       }
-    });
-    // Save document
-    doc.save(`${this.exportFileName}`);
+    }
+    pdfMake.createPdf(doc).download();
+    // const doc = new jsPDF({
+    //   orientation: 'p',
+    //   unit: 'px',
+    //   format: 'a4'
+    // });
+    // // Document logo
+    // doc.addImage(logoData, 'JPEG', 20, 20, 24, 24);
+    // // Document logo text
+    // doc.addFont('Abha.ttf', 'Abha', 'normal', 'Identity-H');
+    // doc.setFont('Abha');   
+    // doc.setFontSize(12);
+    // doc.text('MyCharts', 50, 32);
+    // doc.setFontSize(8);
+    // doc.text('Make your charts online', 50, 40);
+    // // Chart
+    // const width = doc.internal.pageSize.getWidth();
+    // doc.addImage(imgData, 'JPEG', 20, 60, width - 40, 145);
+    // // Chart description
+    // const noDescriptionPlaceholder = 'Type chart description here ...'
+    // if(!includes(this.chartDescription, noDescriptionPlaceholder)){
+    //   doc.setFontSize(12);
+    //   doc.text("Chart description", 20, 215);
+    //   doc.setFontSize(8);
+    //   const splitTitle = doc.splitTextToSize(this.chartDescription, width-40);
+    //   doc.text(20, 226, splitTitle);
+    // }
+    // // Chart data title
+    // doc.setFontSize(12);
+    // doc.text("Chart Data", 20, !includes(this.chartDescription, noDescriptionPlaceholder) ? 300 : 220);
+    // // Chart data table
+    // const columns = ["Dataset name", ...dataStore.columns];
+    // const rows = dataStore.getPreparedRowsForReportTable();
+    // doc.autoTable(columns, rows, {
+    //   startY: !includes(this.chartDescription, noDescriptionPlaceholder) ? 305 : 226,
+    //   margin: 20,
+    //   styles: {
+    //     fontSize: 8,
+    //     fontStyle: 'normal',
+    //     overflow: 'ellipsize',
+    //     valign: 'middle'
+    //   },
+    //   headerStyles: {
+    //     fillColor: [235, 30, 100]
+    //   }
+    // });
+    // // Save document
+    // doc.save(`${this.exportFileName}`);
   }
 
   @action.bound
@@ -442,7 +530,7 @@ export default class ChartDataBox extends Component {
             buttonStyle="button-primary"
             textColor="light"
             className="add-description-button"
-            onClick={this.saveChart}
+            onClick={this.hideDescriptionPopup}
           >
             Add
           </Button>

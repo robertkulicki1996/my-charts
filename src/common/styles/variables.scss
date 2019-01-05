@@ -27,9 +27,6 @@ $metric-large: 64px;
 $metric-x-large: 80px;
 $metric-xx-large: 96px;
 
-// Fonts
-$font-default: 'Ubuntu', sans-serif;
-
 // Font weights
 $font-weight-medium: 500;
 $font-weight-demi: 600;
@@ -39,3 +36,7 @@ $font-weight-bold: 700;
 $zindex-header: 5000;
 $zindex-context-menu: 10000;
 $zindex-popup: 100000;
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+$font-default: 'Ubuntu', sans-serif;
