@@ -51,50 +51,7 @@ export default class ChartBox extends Component {
       type: 'line',
       data: {
         labels: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
-        datasets: [
-          // {
-          //   label: 'My first dataset',
-          //   fill: true,
-          //   lineTension: 0.5,
-          //   backgroundColor: '#eb1e64',
-          //   borderColor: '#fff',
-          //   borderCapStyle: 'butt',
-          //   borderDash: [],
-          //   borderDashOffset: 0.0,
-          //   borderJoinStyle: 'red',
-          //   pointBorderColor: 'white',
-          //   pointBackgroundColor: '#fff',
-          //   pointBorderWidth: 1,
-          //   pointHoverRadius: 5,
-          //   pointHoverBackgroundColor: '#fff',
-          //   pointHoverBorderColor: 'blue',
-          //   pointHoverBorderWidth: 2,
-          //   pointRadius: 1,
-          //   pointHitRadius: 10,
-          //   data: [30,50,70,180,190,200,210,220,230,240,250],
-          // },
-          // {
-          //   label: 'My second dataset',
-          //   fill: true,
-          //   lineTension: 0.5,
-          //   backgroundColor: '#cadaed',
-          //   borderColor: '#fff',
-          //   borderCapStyle: 'butt',
-          //   borderDash: [],
-          //   borderDashOffset: 0.0,
-          //   borderJoinStyle: 'red',
-          //   pointBorderColor: 'white',
-          //   pointBackgroundColor: '#fff',
-          //   pointBorderWidth: 1,
-          //   pointHoverRadius: 5,
-          //   pointHoverBackgroundColor: '#fff',
-          //   pointHoverBorderColor: 'blue',
-          //   pointHoverBorderWidth: 2,
-          //   pointRadius: 1,
-          //   pointHitRadius: 10,
-          //   data: [880,400,300,300,40,50,200,300,200,340,340],
-          // }
-        ]
+        datasets: []
       },
       options: {
         scaleFontColor: 'white',
@@ -155,29 +112,88 @@ export default class ChartBox extends Component {
           },
           backgroundColor: 'blue'
         },
-        elements: {
-          point: {
-            pointStyle: 'circle',
-            backgroundColor: this.props.lineChartSettingsStore.point.backgroundColor,
-            hoverBackgroundColor: '#456567'
-          }
-        },
+        // scale: {
+        //  display: true,
+        // }, 
         scales: {
           xAxes: [{ 
+            display: true,
+            position: 'bottom',
+            offset: false,
+            scaleLabel: {
+              display: true,
+              labelString: "Example x label",
+              lineHeight: 1.2,
+              fontColor: '#97a5b7',
+              fontFamily: 'Ubuntu',
+              fontSize: 18,
+              fontStyle: 'normal',
+              padding: {
+                top: 4,
+                bottom: 4
+              }
+            },
             gridLines: {
-                display: true,
+              display: true,
+              color: '#38435a',
+              // for radar chart
+              circular: false,
+              borderDash: [5,5],
+              lineWidth: 1,
+              drawTicks: true,
+              tickMarkLength: 5,
+              zeroLineWidth: 1,
+              zeroLineColor: '#38435a',
+              zeroLineBorderDash: [],
+              offsetGridLines: false
             },
             ticks: {
-              fontColor: "#CCC", // this here
+              fontColor: "#97a5b7", 
+              fontFamily: "Ubuntu",
+              fontSize: 12,
+              fontStyle: 'normal',
+              reverse: false,
+              stepSize: 1
             },
           }],
           yAxes: [{
+            display: true,
+            position: 'left',
+            offset: false,
+            scaleLabel: {
+              display: true,
+              labelString: "Example y label",
+              lineHeight: 1.2,
+              fontColor: '#97a5b7',
+              fontFamily: 'Ubuntu',
+              fontSize: 18,
+              fontStyle: 'normal',
+              padding: {
+                top: 4,
+                bottom: 4
+              }
+            },
             gridLines: {
-                display: true,
+              display: true,
+              color: '#38435a',
+              // for radar chart
+              circular: false,
+              borderDash: [5,5],
+              lineWidth: 1,
+              drawTicks: true,
+              tickMarkLength: 5,
+              zeroLineWidth: 1,
+              zeroLineColor: '#38435a',
+              zeroLineBorderDash: [],
+              offsetGridLines: false
             },
             ticks: {
-              fontColor: "#CCC", // this here
-            },
+              fontColor: "#97a5b7", 
+              fontFamily: "Ubuntu",
+              fontSize: 12,
+              fontStyle: 'normal',
+              reverse: false,
+            }
           }],
         }
       },

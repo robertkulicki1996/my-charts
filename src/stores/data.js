@@ -1,8 +1,6 @@
 import Papa from 'papaparse';
 import { observable, action } from 'mobx';
 import { map } from 'lodash';
-import { persist } from 'mobx-persist';
-import LineDatasetProperties from '../models/LineDatasetProperties';
 
 export class DataStore {
 
@@ -18,14 +16,17 @@ export class DataStore {
     '2017',
     '2018',
     '2019',
-    '2020'
+    '2020',
+    '2021',
+    '2022',
+    '2023',
+    '2024'
   ];
 
   // Current chart data rows
   @observable rows = [];
 
   // Array of datasets with properties
-  @persist('list', LineDatasetProperties)
   @observable chartDatasetsProperties = [];
 
   // Optional imported csv file (not parsed)

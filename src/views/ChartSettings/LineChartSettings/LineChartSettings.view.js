@@ -18,6 +18,8 @@ import Button from '../../../common/components/Button/Button';
 import Input from '../../../common/components/Input/Input';
 import DatasetListItem from '../../../common/components/DatasetListItem/DatasetListItem';
 
+import { animationOptions } from '../../../common/consts/animation-options';
+
 import InfoIcon from '../../../common/icons/info.svg';
 import { ChromePicker } from 'react-color';
 
@@ -26,53 +28,6 @@ import { CommonStore } from '../../../stores/common';
 import { DataStore } from '../../../stores/data';
 
 import './LineChartSettings.view.scss';
-
-const animationOptions = [
-  'linear',
-  'easeInQuad',
-  'easeOutQuad',
-  'easeInOutQuad',
-  'easeInCubic',
-  'easeOutCubic',
-  'easeInOutCubic',
-  'easeInQuart',
-  'easeOutQuart',
-  'easeInOutQuart',
-  'easeInQuint',
-  'easeOutQuint',
-  'easeInOutQuint',
-  'easeInSine',
-  'easeOutSine',
-  'easeInOutSine',
-  'easeInExpo',
-  'easeOutExpo',
-  'easeInOutExpo',
-  'easeInCirc',
-  'easeOutCirc',
-  'easeInOutCirc',
-  'easeInElastic',
-  'easeOutElastic',
-  'easeInOutElastic',
-  'easeInBack',
-  'easeOutBack',
-  'easeInOutBack',
-  'easeInBounce',
-  'easeOutBounce',
-  'easeInOutBounce',
-];
-
-const pointStyles = [
-  'circle',
-  'cross',
-  'crossRot',
-  'dash',
-  'line',
-  'rect',
-  'rectRounded',
-  'rectRot',
-  'star',
-  'triangle'
-];
 
 const labelsPositionOptions = ['top','right','bottom','left'];
 
@@ -279,28 +234,6 @@ export default class LineChartSettings extends Component {
             onChange={value => this.onOptionChange('responsiveAnimationDuration',value)}
           />
         </div>
-        {/* <div className="option-wrapper">
-          <div className="label-wrapper">
-            <div className="label-wrapper__label">Maintain aspect ratio</div>
-            <Tooltip
-              title="Maintain the original canvas aspect ratio (width / height) when resizing."
-              position="top"
-              arrow={true}
-              size="regular"
-              trigger="click"
-              theme="transparent"
-            >
-              <div className="label-info" >
-                <InfoIcon width={10} height={10}/>
-              </div>
-            </Tooltip>
-          </div>
-          <Switch
-            style={{ width: 80 }}
-            checked={lineChartSettingsStore.maintainAspectRatio}
-            onChange={value => this.onOptionChange('maintainAspectRatio', value)}
-          />
-        </div> */}
         <div className="option-wrapper">
           <div className="label">Background color</div>
           <ContextMenu 
@@ -315,7 +248,248 @@ export default class LineChartSettings extends Component {
             <ColorInput color={lineChartSettingsStore.backgroundColor.hex} />
           </ContextMenu>
         </div>
-        <div className="option-wrapper-column">
+        {/* Layout configuration */}
+        <Collapsible 
+          open={false} 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          height={300}
+          trigger={
+            <OptionSectionHeader title="Layout" />
+          }
+        >
+          <div className="option-wrapper">
+            <div className="label">Padding top</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.padding.top}
+              value={lineChartSettingsStore.padding.top}
+              onChange={value => this.onPaddingChange('top',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Padding right</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.padding.right}
+              value={lineChartSettingsStore.padding.right}
+              onChange={value => this.onPaddingChange('right',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Padding bottom</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.padding.bottom}
+              value={lineChartSettingsStore.padding.bottom}
+              onChange={value => this.onPaddingChange('bottom',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Padding left</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.padding.left}
+              value={lineChartSettingsStore.padding.left}
+              onChange={value => this.onPaddingChange('left',value)}
+            />
+          </div>
+        </Collapsible>
+        {/* Animations configuration */}
+        <Collapsible 
+          open={false} 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          height={300}
+          trigger={
+            <OptionSectionHeader title="Animations" />
+          }
+        >
+          <div className="option-wrapper">
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Duration</div>
+              <Tooltip
+                title="The number of milliseconds an animation takes."
+                position="top"
+                arrow={true}
+                size="regular"
+                trigger="click"
+                theme="transparent"
+              >
+                <div className="label-info" >
+                  <InfoIcon width={10} height={10}/>
+                </div>
+              </Tooltip>
+            </div>
+              <InputNumber
+                style={{ width: 80 }}
+                precision={0}
+                step={1000}
+                defaultValue={lineChartSettingsStore.animation.duration}
+                value={lineChartSettingsStore.animation.duration}
+                onChange={value => this.onAnimationChange('duration',value)}
+              />
+          </div>
+          <div className="option-wrapper">
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Easing</div>
+              <Tooltip
+                title="Easing function to use."
+                position="top"
+                arrow={true}
+                size="regular"
+                trigger="click"
+                theme="transparent"
+              >
+                <div className="label-info" >
+                  <InfoIcon width={10} height={10}/>
+                </div>
+              </Tooltip>
+            </div>
+            <Dropdown 
+              options={animationOptions} 
+              value={lineChartSettingsStore.animation.easing}
+              onChange={value => this.onAnimationChange('easing',value.value)}
+              placeholder="Select" 
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+        </Collapsible>
+        {/* Chart title configuration */}
+        <Collapsible 
+          open={true} 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          height={300}
+          trigger={
+            <OptionSectionHeader title="Chart title" />
+          }
+        >
+          <div className="option-wrapper">
+            <div className="label">Display</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.title.display}
+              onChange={value => this.onTitleOptionChange('display', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Text</div>
+            <Input
+              type="text"
+              inputClassName="title-input"
+              value={lineChartSettingsStore.title.text}
+              onChange={value => this.onTitleChange(value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Position</div>
+            <Dropdown 
+              options={labelsPositionOptions} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.legend.position}
+              onChange={value => this.onTitleOptionChange('position',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font size</div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={0}
+              step={1}
+              defaultValue={lineChartSettingsStore.title.fontSize}
+              value={lineChartSettingsStore.title.fontSize}
+              onChange={value => this.onTitleOptionChange('fontSize',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label-wrapper">
+              <div className="label-wrapper__label">Line height</div>
+              <Button
+                className="label-info" 
+                textColor="pink"    
+                onClick={this.goToNewChart} 
+              >
+                <InfoIcon width={10} height={10}/>
+              </Button>
+            </div>
+            <InputNumber
+              style={{ width: 80 }}
+              precision={1}
+              step={0.1}
+              defaultValue={lineChartSettingsStore.title.lineHeight}
+              value={lineChartSettingsStore.title.lineHeight}
+              onChange={value => this.onTitleOptionChange('lineHeight',value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font style</div>
+            <Dropdown 
+              options={['normal','bold', 'italic']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.title.fontStyle}
+              onChange={value => this.onTitleOptionChange('fontStyle',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font color</div>
+            <ContextMenu 
+              className="option-settings"
+              position="leftBottom" 
+              body={
+                <ChromePicker 
+                  color={lineChartSettingsStore.title.fontColor} 
+                  onChange={color => this.onTitleOptionChange('fontColor',color.hex)}  
+                />
+              }
+            >
+            <ColorInput color={lineChartSettingsStore.title.fontColor} />
+          </ContextMenu>
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Font family</div>
+            <Dropdown 
+              options={['Helvetica', 'Arial','Ubuntu', 'Cambria']} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.title.fontFamily}
+              onChange={value => this.onTitleOptionChange('fontFamily',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+        </Collapsible>
+        {/* Datasets configuration */}
+        <Collapsible 
+          open={true} 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          height={300}
+          trigger={
+            <OptionSectionHeader title="Datasets" />
+          }
+        >
+          <div className="option-wrapper-column">
             {map(dataStore.chartDatasetsProperties, (properties, index) => {
               return <Collapsible
                 key={index}
@@ -587,61 +761,8 @@ export default class LineChartSettings extends Component {
               </Collapsible>
             })}
           </div>
-        <Collapsible 
-          open={false} 
-          overflowWhenOpen='visible' 
-          openedClassName="opened-section"
-          triggerClassName="closed-section"
-          height={300}
-          trigger={
-            <OptionSectionHeader title="Layout" />
-          }
-        >
-          <div className="option-wrapper">
-            <div className="label">Padding top</div>
-            <InputNumber
-              style={{ width: 80 }}
-              precision={0}
-              step={1}
-              defaultValue={lineChartSettingsStore.padding.top}
-              value={lineChartSettingsStore.padding.top}
-              onChange={value => this.onPaddingChange('top',value)}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Padding right</div>
-            <InputNumber
-              style={{ width: 80 }}
-              precision={0}
-              step={1}
-              defaultValue={lineChartSettingsStore.padding.right}
-              value={lineChartSettingsStore.padding.right}
-              onChange={value => this.onPaddingChange('right',value)}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Padding bottom</div>
-            <InputNumber
-              style={{ width: 80 }}
-              precision={0}
-              step={1}
-              defaultValue={lineChartSettingsStore.padding.bottom}
-              value={lineChartSettingsStore.padding.bottom}
-              onChange={value => this.onPaddingChange('bottom',value)}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Padding left</div>
-            <InputNumber
-              style={{ width: 80 }}
-              precision={0}
-              step={1}
-              defaultValue={lineChartSettingsStore.padding.left}
-              value={lineChartSettingsStore.padding.left}
-              onChange={value => this.onPaddingChange('left',value)}
-            />
-          </div>
         </Collapsible>
+        {/* Legend configuration */}
         <Collapsible 
           open={false} 
           overflowWhenOpen='visible' 
@@ -649,69 +770,7 @@ export default class LineChartSettings extends Component {
           triggerClassName="closed-section"
           height={300}
           trigger={
-            <OptionSectionHeader title="Animations" />
-          }
-        >
-          <div className="option-wrapper">
-            <div className="label-wrapper">
-              <div className="label-wrapper__label">Duration</div>
-              <Tooltip
-                title="The number of milliseconds an animation takes."
-                position="top"
-                arrow={true}
-                size="regular"
-                trigger="click"
-                theme="transparent"
-              >
-                <div className="label-info" >
-                  <InfoIcon width={10} height={10}/>
-                </div>
-              </Tooltip>
-            </div>
-              <InputNumber
-                style={{ width: 80 }}
-                precision={0}
-                step={1000}
-                defaultValue={lineChartSettingsStore.animation.duration}
-                value={lineChartSettingsStore.animation.duration}
-                onChange={value => this.onAnimationChange('duration',value)}
-              />
-          </div>
-          <div className="option-wrapper">
-            <div className="label-wrapper">
-              <div className="label-wrapper__label">Easing</div>
-              <Tooltip
-                title="Easing function to use."
-                position="top"
-                arrow={true}
-                size="regular"
-                trigger="click"
-                theme="transparent"
-              >
-                <div className="label-info" >
-                  <InfoIcon width={10} height={10}/>
-                </div>
-              </Tooltip>
-            </div>
-            <Dropdown 
-              options={animationOptions} 
-              value={lineChartSettingsStore.animation.easing}
-              onChange={value => this.onAnimationChange('easing',value.value)}
-              placeholder="Select" 
-              controlClassName='custom-dropdown'
-              placeholderClassName='custom-placeholder'
-              arrowClassName='custom-arrow'
-            />
-          </div>
-        </Collapsible>
-        <Collapsible 
-          open={false} 
-          overflowWhenOpen='visible' 
-          openedClassName="opened-section"
-          triggerClassName="closed-section"
-          height={300}
-          trigger={
-            <OptionSectionHeader title="Legend configuration" />
+            <OptionSectionHeader title="Legend" />
           }
         >
           <div className="option-wrapper">
@@ -874,118 +933,7 @@ export default class LineChartSettings extends Component {
           triggerClassName="closed-section"
           height={300}
           trigger={
-            <OptionSectionHeader title="Chart title" />
-          }
-        >
-          <div className="option-wrapper">
-            <div className="label">Display</div>
-            <Switch
-              style={{ width: 80 }}
-              checked={lineChartSettingsStore.title.display}
-              onChange={value => this.onTitleOptionChange('display', value)}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Text</div>
-            <Input
-              type="text"
-              inputClassName="title-input"
-              value={lineChartSettingsStore.title.text}
-              onChange={value => this.onTitleChange(value)}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Position</div>
-            <Dropdown 
-              options={labelsPositionOptions} 
-              placeholder="Select position" 
-              value={lineChartSettingsStore.legend.position}
-              onChange={value => this.onTitleOptionChange('position',value.value)}
-              controlClassName='custom-dropdown'
-              placeholderClassName='custom-placeholder'
-              arrowClassName='custom-arrow'
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Font size</div>
-            <InputNumber
-              style={{ width: 80 }}
-              precision={0}
-              step={1}
-              defaultValue={lineChartSettingsStore.title.fontSize}
-              value={lineChartSettingsStore.title.fontSize}
-              onChange={value => this.onTitleOptionChange('fontSize',value)}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label-wrapper">
-              <div className="label-wrapper__label">Line height</div>
-              <Button
-                className="label-info" 
-                textColor="pink"    
-                onClick={this.goToNewChart} 
-              >
-                <InfoIcon width={10} height={10}/>
-              </Button>
-            </div>
-            <InputNumber
-              style={{ width: 80 }}
-              precision={1}
-              step={0.1}
-              defaultValue={lineChartSettingsStore.title.lineHeight}
-              value={lineChartSettingsStore.title.lineHeight}
-              onChange={value => this.onTitleOptionChange('lineHeight',value)}
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Font style</div>
-            <Dropdown 
-              options={['normal','bold', 'italic']} 
-              placeholder="Select position" 
-              value={lineChartSettingsStore.title.fontStyle}
-              onChange={value => this.onTitleOptionChange('fontStyle',value.value)}
-              controlClassName='custom-dropdown'
-              placeholderClassName='custom-placeholder'
-              arrowClassName='custom-arrow'
-            />
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Font color</div>
-            <ContextMenu 
-              className="option-settings"
-              position="leftBottom" 
-              body={
-                <ChromePicker 
-                  color={lineChartSettingsStore.title.fontColor} 
-                  onChange={color => this.onTitleOptionChange('fontColor',color.hex)}  
-                />
-              }
-            >
-            <ColorInput color={lineChartSettingsStore.title.fontColor} />
-          </ContextMenu>
-          </div>
-          <div className="option-wrapper">
-            <div className="label">Font family</div>
-            <Dropdown 
-              options={['Helvetica', 'Arial','Ubuntu', 'Cambria']} 
-              placeholder="Select position" 
-              value={lineChartSettingsStore.title.fontFamily}
-              onChange={value => this.onTitleOptionChange('fontFamily',value.value)}
-              controlClassName='custom-dropdown'
-              placeholderClassName='custom-placeholder'
-              arrowClassName='custom-arrow'
-            />
-          </div>
-        </Collapsible>
-
-        <Collapsible 
-          open={false} 
-          overflowWhenOpen='visible' 
-          openedClassName="opened-section"
-          triggerClassName="closed-section"
-          height={300}
-          trigger={
-            <OptionSectionHeader title="Tooltip configuration for web use" />
+            <OptionSectionHeader title="Tooltips" />
           }
         >
           <div className="option-wrapper">
@@ -1345,17 +1293,6 @@ export default class LineChartSettings extends Component {
               <ColorInput color={lineChartSettingsStore.tooltips.borderColor} />
             </ContextMenu>
           </div>
-        </Collapsible>
-        <Collapsible
-          open={true}
-          overflowWhenOpen='visible' 
-          openedClassName="opened-section"
-          triggerClassName="closed-section"
-          height={300}
-          trigger={
-            <OptionSectionHeader title="Datasets" />
-          }
-        >
         </Collapsible>
       </div>
     );

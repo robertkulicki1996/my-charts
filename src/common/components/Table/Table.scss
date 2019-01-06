@@ -1,5 +1,10 @@
 @import '../../../common/styles/variables.scss';
 
+.table-wrapper {
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
 table {
   font-family: $font-default;
   border-collapse: collapse;

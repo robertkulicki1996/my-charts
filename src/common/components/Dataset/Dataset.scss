@@ -5,6 +5,12 @@
   flex-wrap: wrap;
   width: $metric-small;
   height: 0px;
+  transition: all .3s ease-in-out;
+
+	&:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+	}
 }
 
 .dataset-item-small {

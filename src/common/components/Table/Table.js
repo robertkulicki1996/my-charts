@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
-import { find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys, slice, filter } from 'lodash';
+import { find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys, slice } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
 
@@ -319,7 +319,7 @@ export default class Table extends Component {
     );
 
     return (
-      <React.Fragment>
+      <div className="table-wrapper">
         <table id='table'>
           <thead>
             <tr>{map(columns,column => (
@@ -357,7 +357,7 @@ export default class Table extends Component {
         </table>
         {EditRowPopup}
         {EditColumnPopup}
-      </React.Fragment>
+      </div>
     );
   }
 }
