@@ -122,7 +122,7 @@ export default class ChartBox extends Component {
             offset: false,
             scaleLabel: {
               display: true,
-              labelString: "Example x label",
+              labelString: "Example axis label",
               lineHeight: 1.2,
               fontColor: '#97a5b7',
               fontFamily: 'Ubuntu',
@@ -152,8 +152,7 @@ export default class ChartBox extends Component {
               fontFamily: "Ubuntu",
               fontSize: 12,
               fontStyle: 'normal',
-              reverse: false,
-              stepSize: 1
+              reverse: false
             },
           }],
           yAxes: [{
@@ -162,7 +161,7 @@ export default class ChartBox extends Component {
             offset: false,
             scaleLabel: {
               display: true,
-              labelString: "Example y label",
+              labelString: "Example axis label",
               lineHeight: 1.2,
               fontColor: '#97a5b7',
               fontFamily: 'Ubuntu',

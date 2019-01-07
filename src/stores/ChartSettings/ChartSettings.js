@@ -1,4 +1,5 @@
 import { observable } from 'mobx';
+import Axis from '../../models/Axis';
 
 export default class ChartSettingsStore {
 
@@ -149,4 +150,10 @@ export default class ChartSettingsStore {
     // Size of the border
     borderWidth: 0
   }
+
+  // X axis
+  @observable xAxes = new Axis('bottom');
+
+  // Y axis
+  @observable yAxes = new Axis('left');
 }

@@ -31,6 +31,10 @@ import './LineChartSettings.view.scss';
 
 const labelsPositionOptions = ['top','right','bottom','left'];
 
+const xAxesPositions = ['bottom', 'top'];
+
+const yAxesPositions = ['left', 'right'];
+
 @inject('lineChartSettingsStore', 'commonStore', 'dataStore')
 @observer
 export default class LineChartSettings extends Component {
@@ -216,6 +220,47 @@ export default class LineChartSettings extends Component {
     }
     commonStore.editDataset(index, field, value);
     this.forceUpdate();
+  }
+
+  
+  @action.bound
+  onXAxesChange(option,value) {
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
+
+    lineChartSettingsStore.xAxes[option] = value;
+    lineChartObject.options.scales.xAxes[0][option] = value;
+    lineChartObject.update();
+  }
+
+  @action.bound
+  onXAxesScaleLabelChange(option,value) {
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
+
+    lineChartSettingsStore.xAxes.scaleLabel[option] = value;
+    lineChartObject.options.scales.xAxes[0].scaleLabel[option] = value;
+    lineChartObject.update();
+  }
+
+  @action.bound
+  onXAxesScaleLabelPaddingChange(option,value) {
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
+
+    lineChartSettingsStore.xAxes.scaleLabel.padding[option] = value;
+    lineChartObject.options.scales.xAxes[0].scaleLabel.padding[option] = value;
+    lineChartObject.update();
+  }
+
+  @action.bound
+  onXAxesGridLinesChange(option,value) {
+    const { lineChartSettingsStore, commonStore } = this.props;
+    const { lineChartObject } = commonStore;
+
+    lineChartSettingsStore.xAxes.gridLines[option] = value;
+    lineChartObject.options.scales.xAxes[0].gridLines[option] = value;
+    lineChartObject.update();
   }
 
   render() {
@@ -421,13 +466,6 @@ export default class LineChartSettings extends Component {
           <div className="option-wrapper">
             <div className="label-wrapper">
               <div className="label-wrapper__label">Line height</div>
-              <Button
-                className="label-info" 
-                textColor="pink"    
-                onClick={this.goToNewChart} 
-              >
-                <InfoIcon width={10} height={10}/>
-              </Button>
             </div>
             <InputNumber
               style={{ width: 80 }}
@@ -1293,6 +1331,274 @@ export default class LineChartSettings extends Component {
               <ColorInput color={lineChartSettingsStore.tooltips.borderColor} />
             </ContextMenu>
           </div>
+        </Collapsible>
+        {/* X Axes */}
+        <Collapsible 
+          open={false} 
+          overflowWhenOpen='visible' 
+          openedClassName="opened-section"
+          triggerClassName="closed-section"
+          height={300}
+          trigger={
+            <OptionSectionHeader title="X axes" />
+          }
+        >
+          <div className="option-wrapper">
+            <div className="label">Display</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.xAxes.display}
+              onChange={value => this.onXAxesChange('display', value)}
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Position</div>
+            <Dropdown 
+              options={xAxesPositions} 
+              placeholder="Select position" 
+              value={lineChartSettingsStore.xAxes.position}
+              onChange={value => this.onXAxesChange('position',value.value)}
+              controlClassName='custom-dropdown'
+              placeholderClassName='custom-placeholder'
+              arrowClassName='custom-arrow'
+            />
+          </div>
+          <div className="option-wrapper">
+            <div className="label">Offset</div>
+            <Switch
+              style={{ width: 80 }}
+              checked={lineChartSettingsStore.xAxes.offset}
+              onChange={value => this.onXAxesChange('offset', value)}
+            />
+          </div>
+          <Collapsible 
+            open={false} 
+            overflowWhenOpen='visible' 
+            openedClassName="opened-section"
+            triggerClassName="closed-section"
+            height={300}
+            trigger={
+              <OptionSectionHeader title="Scale label" />
+            }
+          >
+            <div className="option-wrapper">
+              <div className="label">Display</div>
+              <Switch
+                style={{ width: 80 }}
+                checked={lineChartSettingsStore.xAxes.scaleLabel.display}
+                onChange={value => this.onXAxesScaleLabelChange('display', value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Label</div>
+              <Input
+                type="text"
+                inputClassName="title-input"
+                value={lineChartSettingsStore.xAxes.scaleLabel.labelString}
+                onChange={event => this.onXAxesScaleLabelChange('labelString',event.target.value)}
+              />
+            </div>
+            <div className="option-wrapper">
+            <div className="label">Font size</div>
+              <InputNumber
+                style={{ width: 80 }}
+                precision={0}
+                step={1}
+                value={lineChartSettingsStore.xAxes.scaleLabel.fontSize}
+                onChange={value => this.onXAxesScaleLabelChange('fontSize',value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">
+                <div className="label">Line height</div>
+              </div>
+              <InputNumber
+                style={{ width: 80 }}
+                precision={1}
+                step={0.1}
+                value={lineChartSettingsStore.xAxes.scaleLabel.lineHeight}
+                onChange={value => this.onXAxesScaleLabelChange('lineHeight',value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Font style</div>
+              <Dropdown 
+                options={['normal','bold', 'italic']} 
+                placeholder="Select position" 
+                value={lineChartSettingsStore.xAxes.scaleLabel.fontStyle}
+                onChange={value => this.onXAxesScaleLabelChange('fontStyle',value.value)}
+                controlClassName='custom-dropdown'
+                placeholderClassName='custom-placeholder'
+                arrowClassName='custom-arrow'
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Font color</div>
+              <ContextMenu 
+                className="option-settings"
+                position="leftBottom" 
+                body={
+                  <ChromePicker 
+                    color={lineChartSettingsStore.xAxes.scaleLabel.fontColor} 
+                    onChange={color => this.onXAxesScaleLabelChange('fontColor',color.hex)}  
+                  />
+                }
+              >
+                <ColorInput color={lineChartSettingsStore.xAxes.scaleLabel.fontColor} />
+              </ContextMenu>
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Font family</div>
+              <Dropdown 
+                options={['Helvetica', 'Arial','Ubuntu', 'Cambria']} 
+                placeholder="Select position" 
+                value={lineChartSettingsStore.xAxes.scaleLabel.fontFamily}
+                onChange={value => this.onXAxesScaleLabelChange('fontFamily',value.value)}
+                controlClassName='custom-dropdown'
+                placeholderClassName='custom-placeholder'
+                arrowClassName='custom-arrow'
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Padding top</div>
+              <InputNumber
+                style={{ width: 80 }}
+                precision={0}
+                step={1}
+                value={lineChartSettingsStore.xAxes.scaleLabel.padding.top}
+                onChange={value => this.onXAxesScaleLabelPaddingChange('top',value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Padding bottom</div>
+              <InputNumber
+                style={{ width: 80 }}
+                precision={0}
+                step={1}
+                value={lineChartSettingsStore.xAxes.scaleLabel.padding.bottom}
+                onChange={value => this.onXAxesScaleLabelPaddingChange('bottom',value)}
+              />
+            </div>
+          </Collapsible>
+          <Collapsible 
+            open={false} 
+            overflowWhenOpen='visible' 
+            openedClassName="opened-section"
+            triggerClassName="closed-section"
+            height={300}
+            trigger={
+              <OptionSectionHeader title="Grid lines" />
+            }
+          >
+            <div className="option-wrapper">
+              <div className="label">Display</div>
+              <Switch
+                style={{ width: 80 }}
+                checked={lineChartSettingsStore.xAxes.gridLines.display}
+                onChange={value => this.onXAxesGridLinesChange('display', value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Color</div>
+              <ContextMenu 
+                className="option-settings"
+                position="leftBottom" 
+                body={
+                  <ChromePicker 
+                    color={lineChartSettingsStore.xAxes.gridLines.color} 
+                    onChange={color => this.onXAxesGridLinesChange('color',color.hex)}  
+                  />
+                }
+              >
+                <ColorInput color={lineChartSettingsStore.xAxes.gridLines.color} />
+              </ContextMenu>
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Circular</div>
+              <Switch
+                style={{ width: 80 }}
+                checked={lineChartSettingsStore.xAxes.gridLines.circular}
+                onChange={value => this.onXAxesGridLinesChange('circular', value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Border dash</div>
+              <Switch
+                style={{ width: 80 }}
+                checked={true}
+                onChange={value => this.onXAxesGridLinesChange('borderDash', value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Line width</div>
+              <InputNumber
+                style={{ width: 80 }}
+                precision={0}
+                step={1}
+                value={lineChartSettingsStore.xAxes.gridLines.lineWidth}
+                onChange={value => this.onXAxesGridLinesChange('lineWidth',value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Draw ticks</div>
+              <Switch
+                style={{ width: 80 }}
+                checked={lineChartSettingsStore.xAxes.gridLines.drawTicks}
+                onChange={value => this.onXAxesGridLinesChange('drawTicks', value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Tick mark length</div>
+              <InputNumber
+                style={{ width: 80 }}
+                precision={0}
+                step={1}
+                value={lineChartSettingsStore.xAxes.gridLines.tickMarkLength}
+                onChange={value => this.onXAxesGridLinesChange('tickMarkLength',value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Zero line width</div>
+              <InputNumber
+                style={{ width: 80 }}
+                precision={0}
+                step={1}
+                value={lineChartSettingsStore.xAxes.gridLines.zeroLineWidth}
+                onChange={value => this.onXAxesGridLinesChange('zeroLineWidth',value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Zero line color</div>
+              <ContextMenu 
+                className="option-settings"
+                position="leftBottom" 
+                body={
+                  <ChromePicker 
+                    color={lineChartSettingsStore.xAxes.gridLines.zeroLineColor} 
+                    onChange={color => this.onXAxesGridLinesChange('zeroLineColor',color.hex)}  
+                  />
+                }
+              >
+                <ColorInput color={lineChartSettingsStore.xAxes.gridLines.zeroLineColor} />
+              </ContextMenu>
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Zero line border dash</div>
+              <Switch
+                style={{ width: 80 }}
+                checked={true}
+                onChange={value => this.onXAxesGridLinesChange('zeroLineBorderDash', value)}
+              />
+            </div>
+            <div className="option-wrapper">
+              <div className="label">Offset grid lines</div>
+              <Switch
+                style={{ width: 80 }}
+                checked={lineChartSettingsStore.xAxes.gridLines.offsetGridLines}
+                onChange={value => this.onXAxesGridLinesChange('offsetGridLines', value)}
+              />
+            </div>
+          </Collapsible>
         </Collapsible>
       </div>
     );
