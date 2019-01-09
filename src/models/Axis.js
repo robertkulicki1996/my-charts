@@ -22,13 +22,13 @@ export default class Axis {
     color: '#38435a',
     // for radar chart
     circular: false,
-    borderDash: [5,5],
+    borderDash: true,
     lineWidth: 1,
     drawTicks: true,
     tickMarkLength: 5,
     zeroLineWidth: 1,
     zeroLineColor: '#38435a',
-    zeroLineBorderDash: [],
+    zeroLineBorderDash: false,
     offsetGridLines: false
   };
   @observable ticks = {

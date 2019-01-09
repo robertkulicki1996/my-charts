@@ -2,6 +2,9 @@ import { observable } from 'mobx';
 import Axis from '../../models/Axis';
 
 export default class ChartSettingsStore {
+  
+  // Chart type
+  @observable type = 'line';
 
   // Resizes the chart canvas when its container does
   @observable responsive = true;
@@ -20,10 +23,10 @@ export default class ChartSettingsStore {
 
   // The padding to add inside the chart.
   @observable padding = {
-    left: 30,
+    left: 20,
     right: 60,
     top: 30,
-    bottom: 30
+    bottom: 20
   }
 
   // Animation on chart update

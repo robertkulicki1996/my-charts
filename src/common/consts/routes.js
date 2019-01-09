@@ -19,13 +19,6 @@ export const RECOVER_PASSWORD = '/recover-password';
 export const SIGN_UP = '/sign-up';
 export const HOME = '/home';
 export const DASHBOARD = '/dashboard';
-export const LINE_CHART = '/line-chart';
-export const BAR_CHART = '/bar-chart';
-export const RADAR_CHART = '/radar-chart';
-export const PIE_CHART = '/pie';
-export const POLAR_AREA_CHART = '/polar-area-chart';
-export const BUBBLE_CHART = '/bubble-chart';
-export const SCATTER_CHART = '/scatter-chart';
 export const CHOOSE_CHART_TYPE = '/choose-chart-type'
 
 // Application routes

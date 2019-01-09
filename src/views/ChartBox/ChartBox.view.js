@@ -47,8 +47,9 @@ export default class ChartBox extends Component {
 
   @action.bound
   init() {
+    const { lineChartSettingsStore } = this.props;
     this.lineChart = new Chart(this.context,{
-      type: 'line',
+      type: lineChartSettingsStore.type,
       data: {
         labels: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
         datasets: []
@@ -62,12 +63,17 @@ export default class ChartBox extends Component {
           easing: 'easeOutQuart'
         },
         layout: {
-          padding: {
-            top: this.props.lineChartSettingsStore.padding.top,
-            left: this.props.lineChartSettingsStore.padding.left,
-            right: this.props.lineChartSettingsStore.padding.right,
-            bottom: this.props.lineChartSettingsStore.padding.bottom,
-          }
+          padding: lineChartSettingsStore.padding
+        },
+        elements: {
+          arc: {
+            // Arc fill color.
+            backgroundColor: '#ffffff',
+            // Arc stroke color.
+            borderColor: '#ffffff',
+            // Arc stroke width.
+            borderWidth: 2
+          },
         },
         legend: {
           display: true,
@@ -105,8 +111,8 @@ export default class ChartBox extends Component {
             },
             labelColor: () => {
               return {
-                borderColor: this.props.lineChartSettingsStore.tooltips.callbacks.borderColor,
-                backgroundColor: this.props.lineChartSettingsStore.tooltips.callbacks.backgroundColor
+                borderColor: lineChartSettingsStore.tooltips.callbacks.borderColor,
+                backgroundColor: lineChartSettingsStore.tooltips.callbacks.backgroundColor
               }
             }
           },
@@ -124,7 +130,7 @@ export default class ChartBox extends Component {
               display: true,
               labelString: "Example axis label",
               lineHeight: 1.2,
-              fontColor: '#97a5b7',
+              fontColor: 'white',
               fontFamily: 'Ubuntu',
               fontSize: 18,
               fontStyle: 'normal',
@@ -148,11 +154,13 @@ export default class ChartBox extends Component {
               offsetGridLines: false
             },
             ticks: {
-              fontColor: "#97a5b7", 
-              fontFamily: "Ubuntu",
-              fontSize: 12,
-              fontStyle: 'normal',
-              reverse: false
+              minor: {
+                fontColor: "white", 
+                fontFamily: "Ubuntu",
+                fontSize: 12,
+                fontStyle: 'normal',
+                reverse: false
+              }
             },
           }],
           yAxes: [{
@@ -163,7 +171,7 @@ export default class ChartBox extends Component {
               display: true,
               labelString: "Example axis label",
               lineHeight: 1.2,
-              fontColor: '#97a5b7',
+              fontColor: 'white',
               fontFamily: 'Ubuntu',
               fontSize: 18,
               fontStyle: 'normal',
@@ -187,11 +195,13 @@ export default class ChartBox extends Component {
               offsetGridLines: false
             },
             ticks: {
-              fontColor: "#97a5b7", 
-              fontFamily: "Ubuntu",
-              fontSize: 12,
-              fontStyle: 'normal',
-              reverse: false,
+              minor: {
+                fontColor: "white", 
+                fontFamily: "Ubuntu",
+                fontSize: 12,
+                fontStyle: 'normal',
+                reverse: false,
+              }
             }
           }],
         }
@@ -201,6 +211,7 @@ export default class ChartBox extends Component {
     this.props.commonStore.canvasRef = this.lineChartRef;
     // set observable chart object
     this.props.commonStore.lineChartObject = this.lineChart;
+    console.log(this.lineChart);
   }
 
   @Bind()
