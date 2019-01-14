@@ -4,7 +4,6 @@
   display: flex;
   flex-wrap: wrap;
   width: $metric-small;
-  height: 0px;
   transition: all .3s ease-in-out;
 
 	&:hover {
@@ -14,9 +13,8 @@
 }
 
 .dataset-item-small {
-  width: $metric-x-small + $metric-x-small/4;
-  height: $metric-x-small + $metric-x-small/4;
+  width: 11px;
+  height: 11px;
   margin-right: $metric-x-small / 4;
-  margin-bottom: $metric-x-small / 4;
   border-radius: 50%;
 }

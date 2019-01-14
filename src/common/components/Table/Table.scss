@@ -5,6 +5,40 @@
   overflow-y: visible;
 }
 
+.ReactVirtualized__Table__row {
+  font-family: $font-default;
+  text-align: left;
+  font-size: $metric-m-small;
+  color: $color-lightgrey;
+  animation: row-animation 0.5s ease;
+
+  &:nth-child(odd){
+    background-color: #38435a;
+  }
+
+  &:hover {
+    background-color: #202634;
+    cursor: pointer;
+  }
+}
+
+.table-header {
+  font-family: $font-default;
+  font-size: $metric-m-small;
+  color: $color-lightgrey;
+  text-transform: lowercase;
+}
+
+.header-cell {
+  display: flex;
+  align-items: center;
+}
+
+.edit-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
 table {
   font-family: $font-default;
   border-collapse: collapse;
@@ -58,6 +92,7 @@ td:nth-last-child(2) {
 
 .edit-button {
   height: $metric-small;
+  margin-right: $metric-small;
   cursor: pointer;
 }
 

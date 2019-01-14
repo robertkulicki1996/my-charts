@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { observer } from 'mobx-react';
+import PropTypes, { object } from 'prop-types';
+import { observer, Observer } from 'mobx-react';
 import { find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys, slice } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
+
+// virtualized table
+import { AutoSizer, Column, Table } from 'react-virtualized';
+import 'react-virtualized/styles.css';
 
 // services
 import NotificationService from '../../services/notifications';
@@ -27,8 +31,9 @@ import Dataset from '../Dataset/Dataset';
 import './Table.scss';
 
 @observer
-export default class Table extends Component {
+export default class TableC extends Component {
   static propTypes = {
+    parentHeight: PropTypes.number,
     dataStore: PropTypes.instanceOf(DataStore).isRequired,
     commonStore: PropTypes.instanceOf(CommonStore).isRequired
   }
@@ -103,7 +108,7 @@ export default class Table extends Component {
   }
 
   @action.bound
-  addRow(datasetProperties){
+  addColumn(datasetProperties){
     const { dataStore, commonStore } = this.props;
     const { columns } = dataStore;
     if(columns.length > 0) {
@@ -127,54 +132,59 @@ export default class Table extends Component {
   }
 
   @action.bound
-  addColumn(columnName="Undefined column", randomFrom=null, randomTo=null, initialRowValue) {
+  addRow(categoryName="Undefined column", randomFrom=null, randomTo=null, initialRowValue) {
     const { dataStore, commonStore } = this.props;
-    const newColumn = toLower(columnName);
-    const isColumn = includes(dataStore.columns,newColumn);
+    const newRowCategory = toLower(categoryName);
+    const isColumn = includes(dataStore.categories,categoryName);
     if(!isColumn) {
-      dataStore.columns.push(newColumn);
-      commonStore.lineChartObject.data.labels.push(newColumn);
-      if(dataStore.rows.length > 0) {
+      dataStore.categories.push(newRowCategory);
+      commonStore.lineChartObject.data.labels.push(newRowCategory);
+      let row = {
+        'category': newRowCategory
+      };
+      if(dataStore.datasets.length > 0) {
         if(randomFrom !== null && randomTo !== null) {
-          map(dataStore.rows, (row, index) => {
+          map(dataStore.datasets, (dataset, index) => {
             const randomValue = this.getRandomInt(randomFrom, randomTo).toString();
             extendObservable(row, { 
-                [newColumn]: randomValue
-              }
-            );
-            commonStore.lineChartObject.data.datasets[index].data.push(randomValue);
+                [dataset.dataKey]: randomValue
+            });
+            // commonStore.lineChartObject.data.datasets[index].data.push(randomValue);
           });
         } else {
-          map(dataStore.rows, (row, index) => {
+          map(dataStore.datasets, (dataset, index) => {
             const initialValue = initialRowValue.toString();
             extendObservable(row, { 
-              [newColumn]: initialValue
+              [dataset.dataKey]: initialValue
             });
-            commonStore.lineChartObject.data.datasets[index].data.push(initialValue);
+            // commonStore.lineChartObject.data.datasets[index].data.push(initialValue);
           });
         }
       }
+      dataStore.rows.push(row);
+      this.forceUpdate();
       commonStore.updateChart();
     } else {
-      NotificationService.error("This column name existing");
+      NotificationService.error("This category exists");
     }
   }
 
   @action.bound
-  removeRow(rowId) {
+  removeRow(row, index) {
     const { dataStore, commonStore } = this.props;
-    const objectToRemove = find(dataStore.rows, {
-      id: rowId
-    });
-    const indexOfRemovingRow = indexOf(dataStore.rows, objectToRemove);
-    commonStore.lineChartObject.data.datasets.splice(indexOfRemovingRow, 1);
-    dataStore.chartDatasetsProperties.splice(indexOfRemovingRow, 1);
+    const objectToRemove = find(dataStore.rows, 
+      row.rowData
+    );
+    console.log(objectToRemove);
+    // commonStore.lineChartObject.data.datasets.splice(indexOfRemovingRow, 1);
+    // dataStore.chartDatasetsProperties.splice(indexOfRemovingRow, 1);
     dataStore.rows.remove(objectToRemove);
+    this.forceUpdate();
     commonStore.updateChart();
   }
 
   @action.bound
-  removeColumn(columnName) {
+  removeDataset(columnName) {
     const { dataStore, commonStore } = this.props;
     const indexOfObjectToRemove = indexOf(dataStore.columns, columnName);
     dataStore.columns.splice(indexOfObjectToRemove,1);
@@ -229,7 +239,7 @@ export default class Table extends Component {
 
   render() {
     const { dataStore } = this.props;
-    const { columns, rows } = dataStore;
+    const { categories, rows, datasets } = dataStore;
 
     const EditRowPopup = (
       <CustomModal
@@ -299,6 +309,42 @@ export default class Table extends Component {
       </Button>
     );
 
+    const renderEditRowCell = (row) => {
+      console.log(row);
+      return (
+        <div className="edit-row">
+          <Button className="edit-button" onClick={() => this.showEditRowPopup(row)}>
+            <EditIcon 
+              width={14} 
+              height={14} 
+            />
+          </Button>
+          <Button className="remove-button" onClick={() => this.removeRow(row)}>
+            <DeleteIcon 
+              width={14} 
+              height={14} 
+            />
+          </Button>
+        </div>
+      );
+    }
+
+    const renderDatasetColumnCell = (dataset) => {
+      console.log(dataset);
+      return (
+        <div className="header-cell">
+          <Dataset datasetIndex={0} />
+          {dataset.label}
+          <Button className="remove-column-button" onClick={() => this.removeColumn(dataset)}>
+            <Delete2Icon 
+              width={11} 
+              height={11} 
+            />
+          </Button>
+        </div>
+      );
+    }
+
     const removeRowButton = index => (
       <Button key={index} className="remove-button" onClick={() => this.removeRow(index)}>
         <DeleteIcon 
@@ -318,46 +364,97 @@ export default class Table extends Component {
       </Button>
     );
 
+    const renderTable = ({height, width}) => {
+      return (
+        <Table
+          width={width}
+          height={height}
+          headerHeight={24}
+          headerClassName='table-header'
+          rowHeight={30}
+          rowCount={rows.length}
+          rowGetter={({ index }) => rows[index]}
+        >
+          <Column
+            label='Category'
+            dataKey='category'
+            width={200}
+            flexGrow={2}
+          />
+          {map(datasets, dataset => (
+            <Column
+              label={dataset.label}
+              dataKey={dataset.dataKey}
+              width={200}
+              flexGrow={2}
+              headerRenderer={() => renderDatasetColumnCell(dataset)}
+            />
+          ))}
+          <Column
+            label=''
+            dataKey=''
+            cellRenderer={row => renderEditRowCell(row)}
+            width={100}
+            flexGrow={1}
+          />
+        </Table>
+      );
+    };
+
+
     return (
-      <div className="table-wrapper">
-        <table id='table'>
-          <thead>
-            <tr>{map(columns,column => (
-              <th key={uniqueId()}>
-                <div className="column-cell-wrapper">
-                  {<div title="Edit this column" role="button" onClick={() => this.showEditColumnNamePopup(column)}>{capitalize(column)}</div>}
-                  {removeColumnButton(column)}
-                </div>
-              </th>))}
-            </tr>
-          </thead>
-          <tbody>
-            {map(rows, (row,indexR) => (<tr key={row.id}>{
-              map(Object.values(row), (value, indexC) => {
-                if(indexC === 0) return ( 
-                  <td key={indexC}>
-                    <div className="dataset-button">
-                      <Dataset key={row.id} datasetIndex={indexR} />
-                    </div>
-                    {!includes(value,'row_') && value}
-                  </td>
-                );
-                if(!includes(value,'row_')) return <td key={indexC}>{value}</td>
-              })}
-              <React.Fragment>
-                <td key={uniqueId()}>
-                  {editRowButton(row)}
-                </td>
-                <td key={uniqueId()}>
-                  {removeRowButton(row.id)}
-                </td>
-              </React.Fragment>
-            </tr>))}
-          </tbody>
-        </table>
-        {EditRowPopup}
-        {EditColumnPopup}
+      <div
+        className="AutoSizerContainer" 
+        style={{
+          height: this.props.parentHeight - 104
+        }} 
+      >
+        <AutoSizer>
+          {renderTable}
+        </AutoSizer>
       </div>
     );
+
+    // return (
+    //   <div className="table-wrapper">
+    //     <table id='table'>
+    //       <thead>
+    //         <tr>{map(columns,column => (
+    //           <th key={uniqueId()}>
+    //             <div className="column-cell-wrapper">
+    //               {<div title="Edit this column" role="button" onClick={() => this.showEditColumnNamePopup(column)}>{capitalize(column)}</div>}
+    //               {removeColumnButton(column)}
+    //             </div>
+    //           </th>))}
+    //         </tr>
+    //       </thead>
+    //       <tbody>
+    //         {map(rows, (row,indexR) => (<tr key={row.id}>{
+    //           map(Object.values(row), (value, indexC) => {
+    //             if(indexC === 0) return ( 
+    //               <td key={indexC}>
+    //                 <div className="dataset-button">
+    //                   <Dataset key={row.id} datasetIndex={indexR} />
+    //                 </div>
+    //                 {!includes(value,'row_') && value}
+    //               </td>
+    //             );
+    //             if(!includes(value,'row_')) return <td key={indexC}>{value}</td>
+    //           })}
+    //           <React.Fragment>
+    //             <td key={uniqueId()}>
+    //               {editRowButton(row)}
+    //             </td>
+    //             <td key={uniqueId()}>
+    //               {removeRowButton(row.id)}
+    //             </td>
+    //           </React.Fragment>
+    //         </tr>))}
+    //       </tbody>
+    //     </table>
+    //     {EditRowPopup}
+    //     {EditColumnPopup}
+    //   </div>
+    // );
   }
 }

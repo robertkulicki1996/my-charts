@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from "react-dom";
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { map, uniqueId, slice, includes } from 'lodash';
@@ -12,7 +13,7 @@ import { PulseLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
 
 // stores
-import { DataStore } from '../../stores/data';
+import dataStore, { DataStore } from '../../stores/data';
 import { CommonStore } from '../../stores/common';
 import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 
@@ -23,7 +24,7 @@ import { LineDatasetProperties } from '../../models/LineDatasetProperties';
 import { getRandomColor } from './../../common/consts/colors';
 
 // components
-import Table from './../../common/components/Table/Table';
+import TableC from './../../common/components/Table/Table';
 import Button from './../../common/components/Button/Button';
 import Input from './../../common/components/Input/Input';
 import InputNumber from './../../common/components/InputNumber/InputNumber';
@@ -44,6 +45,7 @@ import './ChartDataBox.view.scss';
 @observer
 export default class ChartDataBox extends Component {
   static propTypes = {
+    height: PropTypes.number,
     dataStore: PropTypes.instanceOf(DataStore).isRequired,
     commonStore: PropTypes.instanceOf(CommonStore).isRequired,
     lineChartSettingsStore: PropTypes.instanceOf(LineChartSettingsStore).isRequired
@@ -56,11 +58,11 @@ export default class ChartDataBox extends Component {
   }
 
   @observable isAddDatasetPopupShown = false;
-  @observable isAddColumnPopupShown = false;
+  @observable isAddRowPopupShown = false;
   @observable isExportChartPopupShown = false;
   @observable isDescriptionPopupShown = false;
 
-  @observable newColumnName = '';
+  @observable newRowCategory = '';
   @observable isRandomValuesDisabled = true;
   @observable randomFrom = 100;
   @observable randomTo = 500;
@@ -71,11 +73,11 @@ export default class ChartDataBox extends Component {
   @observable fileName = null;
   @observable exportFileName = `chart_${uniqueId()}`;
 
-  @observable chartDescription = 'Type chart description here ...';
+  @observable chartDescription = 'Populacja Polski w 2019 zmaleje o 58 000 i osiągnie 37 734 000 ludzi w 2020 roku. Migracja ludności zmniejszyła populację o 10 000 ludzi rocznie uwzględniając emigrację i imigrację. Średnia liczba urodzeń w Polsce wynosi 333 698 rocznie, liczba zgonów to 403 311 w roku. Od 1980 gęstość zaludnienia Polski uległa zmianie z 116,1 na 124,6 w 2017 roku.';
 
   @action.bound
-  handleColumnName(event) {
-    this.newColumnName = event.target.value;
+  handleRowCategory(event) {
+    this.newRowCategory = event.target.value;
   }
 
   @action.bound
@@ -110,20 +112,20 @@ export default class ChartDataBox extends Component {
   }
 
   @action.bound
-  addRow(a) {
-    this.table.current.addRow(a);
+  addColumn(a) {
+    this.table.current.addColumn(a);
   }
 
   @action.bound
-  addColumn() {
-    const { newColumnName, randomFrom, randomTo, initialRowValue } = this; 
+  addRow() {
+    const { newRowCategory, randomFrom, randomTo, initialRowValue } = this; 
     if(this.isRandomValuesDisabled) {
-      this.table.current.addColumn(newColumnName, null, null, initialRowValue);
+      this.table.current.addRow(newRowCategory, null, null, initialRowValue);
     } else {
-      this.table.current.addColumn(newColumnName, randomFrom, randomTo);
+      this.table.current.addRow(newRowCategory, randomFrom, randomTo);
     }
     this.isRandomValuesDisabled = true;
-    this.hideAddColumnPopup();
+    this.hideAddRowPopup();
   }
 
   @action.bound
@@ -137,14 +139,14 @@ export default class ChartDataBox extends Component {
   }  
 
   @action.bound
-  showAddColumnPopup() {
-    this.newColumnName = 'Col' + uniqueId();
-    this.isAddColumnPopupShown = true;
+  showAddRowPopup() {
+    this.newRowCategory = 'category-' + uniqueId();
+    this.isAddRowPopupShown = true;
   }
 
   @action.bound
-  hideAddColumnPopup() {
-    this.isAddColumnPopupShown = false;
+  hideAddRowPopup() {
+    this.isAddRowPopupShown = false;
   }
 
   @action.bound
@@ -246,7 +248,6 @@ export default class ChartDataBox extends Component {
   @Bind()
   downloadPDF() {
     const { dataStore, commonStore } = this.props;
-    console.log(dataStore.getPreparedRowsForReportTable());
     const imgData = commonStore.canvasRef.current.toDataURL("image/jpeg", 1.0);
     var doc = {
       content: [
@@ -398,21 +399,21 @@ export default class ChartDataBox extends Component {
   }
 
   render() {
-    const AddColumnPopup = (
+    const AddRowPopup = (
       <CustomModal
-        title="Create data column"
+        title="Create row data"
         width="300" 
         height="368" 
         effect="fadeInDown" 
-        visible={this.isAddColumnPopupShown} 
-        onClose={this.hideAddColumnPopup}
+        visible={this.isAddRowPopupShown} 
+        onClose={this.hideAddRowPopup}
         isFooter={true}
         buttonRight={
           <Button
             buttonStyle="button-primary"
             textColor="light"
             className="add-column-button"
-            onClick={this.addColumn}
+            onClick={this.addRow}
           >
             Add 
           </Button>
@@ -420,12 +421,12 @@ export default class ChartDataBox extends Component {
       >
         <React.Fragment>
           <div className="option">
-            <div className="label">Column name</div>
+            <div className="label">Category name</div>
           </div>
           <Input 
             type="text" 
-            value={this.newColumnName}
-            onChange={this.handleColumnName} 
+            value={this.newRowCategory}
+            onChange={this.handleRowCategory} 
             inputClassName="column-input"
           />
           <div className="option">
@@ -547,20 +548,20 @@ export default class ChartDataBox extends Component {
     );
 
     return (
-      <div className="chart-data-box">
+      <div className="chart-data-box" ref={this.chartDataBox}>
         <div className="chart-data-options">
           <div className="table-buttons">
+            <Button 
+              className="add-button"
+              onClick={this.showAddRowPopup}
+            >
+              Add Row
+            </Button>
             <Button 
               className="add-button"
               onClick={this.showAddDatasetPopup}
             >
               Add Dataset
-            </Button>
-            <Button 
-              className="add-button"
-              onClick={this.showAddColumnPopup}
-            >
-              Add Column
             </Button>
           </div>
           <div className="table-buttons">
@@ -580,7 +581,7 @@ export default class ChartDataBox extends Component {
             </Button>
             <Button 
               className="add-button"
-              onClick={this.showSaveChartPopup}
+              onClick={() => this.props.dataStore.saveChart()}
             >
               <div className="button-label">
                 <div className="b-label">Save</div>
@@ -598,8 +599,13 @@ export default class ChartDataBox extends Component {
             </Button>
           </div>
         </div>
-        <Table ref={this.table} dataStore={this.props.dataStore} commonStore={this.props.commonStore} />
-        {AddColumnPopup}
+        <TableC
+          parentHeight={this.props.height}
+          ref={this.table} 
+          dataStore={this.props.dataStore} 
+          commonStore={this.props.commonStore} 
+        />
+        {AddRowPopup}
         {ExportChartPopup}
         {DescriptionPopup}
         {this.isAddDatasetPopupShown && <AddDatasetPopup

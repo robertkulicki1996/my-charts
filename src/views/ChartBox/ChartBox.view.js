@@ -10,16 +10,18 @@ import Chart from 'chart.js';
 // stores
 import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 import { CommonStore } from '../../stores/common';
+import { DataStore } from '../../stores/data';
 
 // styles
 import './ChartBox.view.scss';
 
 @withRouter
-@inject('commonStore','lineChartSettingsStore')
+@inject('commonStore','lineChartSettingsStore', 'dataStore')
 @observer
 export default class ChartBox extends Component {
   static propTypes = {
     commonStore: PropTypes.instanceOf(CommonStore).isRequired,
+    dataStore: PropTypes.instanceOf(DataStore).isRequired,
     lineChartSettingsStore: PropTypes.instanceOf(LineChartSettingsStore).isRequired
   }
 
@@ -47,13 +49,9 @@ export default class ChartBox extends Component {
 
   @action.bound
   init() {
-    const { lineChartSettingsStore } = this.props;
+    const { lineChartSettingsStore, dataStore } = this.props;
     this.lineChart = new Chart(this.context,{
       type: lineChartSettingsStore.type,
-      data: {
-        labels: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
-        datasets: []
-      },
       options: {
         scaleFontColor: 'white',
         responsive: true,
@@ -98,7 +96,7 @@ export default class ChartBox extends Component {
           fontStyle: 'normal',
           fontColor: '#ffffff',
           lineHeight: 1.2,
-          text: 'Example title'
+          text: 'Liczba ludności Polski (1960 - 2019)'
         },
         tooltips: {
           enabled: true,
@@ -128,7 +126,7 @@ export default class ChartBox extends Component {
             offset: false,
             scaleLabel: {
               display: true,
-              labelString: "Example axis label",
+              labelString: "Rok",
               lineHeight: 1.2,
               fontColor: 'white',
               fontFamily: 'Ubuntu',
@@ -169,7 +167,7 @@ export default class ChartBox extends Component {
             offset: false,
             scaleLabel: {
               display: true,
-              labelString: "Example axis label",
+              labelString: "Populacja",
               lineHeight: 1.2,
               fontColor: 'white',
               fontFamily: 'Ubuntu',
