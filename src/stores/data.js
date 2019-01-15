@@ -14,97 +14,103 @@ export class DataStore {
     '2012',
     '2013',
     '2014',
-    '2015'
+    '2015',
+    '2016',
+    '2017',
+    '2018',
+    '2019',
+    '2020',
+    '2021'
   ];
 
 
   @observable datasets = [
     {
       label: 'Datset-1',
-      dataKey: 'dataset-1'
+      dataKey: 'dataset_1'
     },
     {
       label: 'Datset-2',
-      dataKey: 'dataset-2'
+      dataKey: 'dataset_2'
     },
     {
       label: 'Datset-3',
-      dataKey: 'dataset-3'
+      dataKey: 'dataset_3'
     }
   ];
 
   @observable rows = [
     {
       'category': '2010',
-      'dataset-1': '100',
-      'dataset-2': '200',
-      'dataset-3': '300'
+      'dataset_1': '100',
+      'dataset_2': '200',
+      'dataset_3': '300'
     },
     {
       'category': '2011',
-      'dataset-1': '1200',
-      'dataset-2': '2200',
-      'dataset-3': '3200'
+      'dataset_1': '1200',
+      'dataset_2': '2200',
+      'dataset_3': '3200'
     },
     {
       'category': '2012',
-      'dataset-1': '1300',
-      'dataset-2': '2300',
-      'dataset-3': '3300'
+      'dataset_1': '1300',
+      'dataset_2': '2300',
+      'dataset_3': '3300'
     },
     {
       'category': '2013',
-      'dataset-1': '1400',
-      'dataset-2': '2400',
-      'dataset-3': '3400'
+      'dataset_1': '1400',
+      'dataset_2': '2400',
+      'dataset_3': '3400'
     },
     {
       'category': '2014',
-      'dataset-1': '100',
-      'dataset-2': '200',
-      'dataset-3': '300'
+      'dataset_1': '100',
+      'dataset_2': '200',
+      'dataset_3': '300'
     },
     {
       'category': '2015',
-      'dataset-1': '1200',
-      'dataset-2': '2200',
-      'dataset-3': '3200'
+      'dataset_1': '1200',
+      'dataset_2': '2200',
+      'dataset_3': '3200'
     },
     {
       'category': '2016',
-      'dataset-1': '1400',
-      'dataset-2': '2400',
-      'dataset-3': '3400'
+      'dataset_1': '1400',
+      'dataset_2': '2400',
+      'dataset_3': '3400'
     },
     {
       'category': '2017',
-      'dataset-1': '100',
-      'dataset-2': '200',
-      'dataset-3': '300'
+      'dataset_1': '100',
+      'dataset_2': '200',
+      'dataset_3': '300'
     },
     {
       'category': '2018',
-      'dataset-1': '1200',
-      'dataset-2': '2200',
-      'dataset-3': '3200'
+      'dataset_1': '1200',
+      'dataset_2': '2200',
+      'dataset_3': '3200'
     },
     {
       'category': '2019',
-      'dataset-1': '1400',
-      'dataset-2': '2400',
-      'dataset-3': '3400'
+      'dataset_1': '1400',
+      'dataset_2': '2400',
+      'dataset_3': '3400'
     },
     {
       'category': '2020',
-      'dataset-1': '100',
-      'dataset-2': '200',
-      'dataset-3': '300'
+      'dataset_1': '100',
+      'dataset_2': '200',
+      'dataset_3': '300'
     },
     {
       'category': '2021',
-      'dataset-1': '1200',
-      'dataset-2': '2200',
-      'dataset-3': '3200'
+      'dataset_1': '1200',
+      'dataset_2': '2200',
+      'dataset_3': '3200'
     }
   ]
 

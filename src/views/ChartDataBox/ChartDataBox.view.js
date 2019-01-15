@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from "react-dom";
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { map, uniqueId, slice, includes } from 'lodash';
@@ -13,7 +12,7 @@ import { PulseLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
 
 // stores
-import dataStore, { DataStore } from '../../stores/data';
+import { DataStore } from '../../stores/data';
 import { CommonStore } from '../../stores/common';
 import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 
@@ -112,8 +111,8 @@ export default class ChartDataBox extends Component {
   }
 
   @action.bound
-  addColumn(a) {
-    this.table.current.addColumn(a);
+  addDataset(datasetProperties) {
+    this.table.current.addDataset(datasetProperties);
   }
 
   @action.bound
@@ -611,7 +610,7 @@ export default class ChartDataBox extends Component {
         {this.isAddDatasetPopupShown && <AddDatasetPopup
           visible={this.isAddDatasetPopupShown}
           onClose={this.hideAddDatasetPopup}
-          addRow={this.addRow}
+          addDataset={this.addDataset}
         />}
       </div>
     );

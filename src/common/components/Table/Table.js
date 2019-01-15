@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes, { object } from 'prop-types';
-import { observer, Observer } from 'mobx-react';
-import { find, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys, slice } from 'lodash';
+import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
+import { snakeCase, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { observable, action, extendObservable } from 'mobx';
 
@@ -97,7 +97,6 @@ export default class TableC extends Component {
     });
     dataStore.rows = newRows;
     commonStore.lineChartObject.data.labels[this.editingColumn.index] = this.editingColumn.text;
-    // update chart
     commonStore.updateChart();
     this.hideEditColumnNamePopup();
   }
@@ -108,29 +107,35 @@ export default class TableC extends Component {
   }
 
   @action.bound
-  addColumn(datasetProperties){
+  addDataset(datasetProperties){
     const { dataStore, commonStore } = this.props;
-    const { columns } = dataStore;
-    if(columns.length > 0) {
-      const newRow = {};
-      map(columns, column => {
-        newRow[column] = this.getRandomInt(100,1000).toString();
+    if(dataStore.rows.length > 0) {
+      const newDataset = {
+        label: datasetProperties.label,
+        dataKey: snakeCase(datasetProperties.label)
+      }
+      dataStore.datasets.push(newDataset);
+      dataStore.chartDatasetsProperties.push(datasetProperties);
+      const formattedDataset = [];
+      map(dataStore.rows, row => {
+        const categoryValue = this.getRandomInt(100,1000).toString();
+        row[newDataset.dataKey] = categoryValue;
+        formattedDataset.push(categoryValue);
       })
-      newRow.id = uniqueId('row_');
-      dataStore.addRow(newRow);
-      const arrayOfData = Object.values(newRow);
-      const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
-      commonStore.lineChartObject.data.labels = dataStore.columns.slice();
+      commonStore.lineChartObject.data.labels = dataStore.categories.slice();
+      map(dataStore)
       const newChart = {
         ...datasetProperties,
         data: formattedDataset
       }
       commonStore.addDataset(newChart);
+      this.forceUpdate();
     } else {
-      NotificationService.error("There is no column!");
+      NotificationService.error("There is no categories");
     }
   }
 
+  // completed
   @action.bound
   addRow(categoryName="Undefined column", randomFrom=null, randomTo=null, initialRowValue) {
     const { dataStore, commonStore } = this.props;
@@ -169,32 +174,28 @@ export default class TableC extends Component {
     }
   }
 
+  // completed
   @action.bound
-  removeRow(row, index) {
+  removeRow(row) {
     const { dataStore, commonStore } = this.props;
-    const objectToRemove = find(dataStore.rows, 
-      row.rowData
-    );
-    console.log(objectToRemove);
-    // commonStore.lineChartObject.data.datasets.splice(indexOfRemovingRow, 1);
-    // dataStore.chartDatasetsProperties.splice(indexOfRemovingRow, 1);
-    dataStore.rows.remove(objectToRemove);
+    dataStore.categories.remove(row.rowData.category);
+    dataStore.rows.remove(row.rowData);
     this.forceUpdate();
     commonStore.updateChart();
   }
 
+  // completed
   @action.bound
-  removeDataset(columnName) {
+  removeDataset(index,dataset) {
     const { dataStore, commonStore } = this.props;
-    const indexOfObjectToRemove = indexOf(dataStore.columns, columnName);
-    dataStore.columns.splice(indexOfObjectToRemove,1);
+    dataStore.datasets.remove(dataset);
     map(dataStore.rows, row => {
-      delete row[columnName];
+      delete row[dataset.dataKey]
     })
-    commonStore.lineChartObject.data.labels.splice(indexOfObjectToRemove, 1);
-    commonStore.lineChartObject.data.datasets.forEach((dataset) => {
-      dataset.data.splice(indexOfObjectToRemove, 1);
-    });
+    dataStore.datasets.remove(dataset);
+    commonStore.lineChartObject.data.datasets.splice(index, 1);
+    dataStore.chartDatasetsProperties.splice(index, 1);
+    this.forceUpdate();
     commonStore.updateChart();
   }
 
@@ -239,7 +240,7 @@ export default class TableC extends Component {
 
   render() {
     const { dataStore } = this.props;
-    const { categories, rows, datasets } = dataStore;
+    const { rows, datasets } = dataStore;
 
     const EditRowPopup = (
       <CustomModal
@@ -329,13 +330,13 @@ export default class TableC extends Component {
       );
     }
 
-    const renderDatasetColumnCell = (dataset) => {
-      console.log(dataset);
+    const renderDatasetColumnCell = (index,dataset) => {
+      console.log(index,dataset);
       return (
         <div className="header-cell">
           <Dataset datasetIndex={0} />
           {dataset.label}
-          <Button className="remove-column-button" onClick={() => this.removeColumn(dataset)}>
+          <Button className="remove-column-button" onClick={() => this.removeDataset(index,dataset)}>
             <Delete2Icon 
               width={11} 
               height={11} 
@@ -369,7 +370,7 @@ export default class TableC extends Component {
         <Table
           width={width}
           height={height}
-          headerHeight={24}
+          headerHeight={32}
           headerClassName='table-header'
           rowHeight={30}
           rowCount={rows.length}
@@ -381,13 +382,13 @@ export default class TableC extends Component {
             width={200}
             flexGrow={2}
           />
-          {map(datasets, dataset => (
+          {map(datasets, (dataset, index) => (
             <Column
               label={dataset.label}
               dataKey={dataset.dataKey}
               width={200}
               flexGrow={2}
-              headerRenderer={() => renderDatasetColumnCell(dataset)}
+              headerRenderer={() => renderDatasetColumnCell(index,dataset)}
             />
           ))}
           <Column

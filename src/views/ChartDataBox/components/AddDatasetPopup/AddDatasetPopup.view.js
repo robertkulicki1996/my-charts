@@ -35,13 +35,13 @@ export default class AddDatasetPopup extends Component {
     dataStore: PropTypes.instanceOf(DataStore).isRequired,
     visible: PropTypes.bool,
     onClose: PropTypes.func,
-    addRow: PropTypes.func
+    addDataset: PropTypes.func
   } 
 
   static defaultProps = {
     visible: false,
     onClose: noop,
-    addRow: noop
+    addDataset: noop
   }
 
   constructor(props){
@@ -64,8 +64,7 @@ export default class AddDatasetPopup extends Component {
 
   @action.bound
   addDataset() {
-    this.props.dataStore.chartDatasetsProperties.push(this.currentDatasetObject);
-    this.props.addRow(this.currentDatasetObject);
+    this.props.addDataset(this.currentDatasetObject);
     this.props.onClose();
   }
 
