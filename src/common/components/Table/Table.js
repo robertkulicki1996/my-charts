@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
-import { snakeCase, indexOf, uniqueId, map, capitalize, toLower, includes, mapKeys } from 'lodash';
+import { snakeCase, indexOf, uniqueId, map, capitalize, toLower, includes, find } from 'lodash';
 import { Bind } from 'lodash-decorators';
-import { observable, action, extendObservable } from 'mobx';
+import { Tooltip } from 'react-tippy';
+import { observable, action } from 'mobx';
 
 // virtualized table
 import { AutoSizer, Column, Table } from 'react-virtualized';
@@ -59,12 +60,10 @@ export default class TableC extends Component {
   }
 
   @action.bound
-  showEditColumnNamePopup(column) {
-    const { dataStore } = this.props;
-    const indexOfColumn = indexOf(dataStore.columns,column);
+  showEditColumnNamePopup(index, dataset) {
     this.editingColumn = {
-      index: indexOfColumn,
-      text: column
+      index,
+      text: dataset.label
     }
     this.isEditColumnNamePopupShown = true;
   }
@@ -77,27 +76,31 @@ export default class TableC extends Component {
 
   @action.bound
   onColumnNameChange(event) {
-    const newColumnName = event.target.value;
-    this.editingColumn.text = newColumnName;
+    this.editingColumn.text = event.target.value;
   }
 
+  // completeds
   @action.bound
   saveColumnName() {
+    const { editingColumn } = this;
     const { dataStore, commonStore } = this.props;
-    dataStore.columns[this.editingColumn.index] = toLower(this.editingColumn.text);
-    const newRows = map(dataStore.rows, row => {
-      const keyToEdit = Object.keys(row)[this.editingColumn.index + 1] // first is id
-      const newRow = mapKeys(row, (value, key) => {
-        if(key === keyToEdit) {
-          return this.editingColumn.text
-        }
-        return key;
-      })
-      return newRow;
-    });
-    dataStore.rows = newRows;
-    commonStore.lineChartObject.data.labels[this.editingColumn.index] = this.editingColumn.text;
-    commonStore.updateChart();
+    const oldKey = dataStore.datasets[editingColumn.index].dataKey;
+    const newKey = snakeCase(editingColumn.text);
+    if(!find(dataStore.datasets,['dataKey', newKey])) {
+      dataStore.datasets[editingColumn.index].label = editingColumn.text;
+      dataStore.datasets[editingColumn.index].dataKey = newKey;
+      map(dataStore.rows, row => {
+        const oldValue = row[oldKey];
+        delete row[oldKey];
+        row[newKey] = oldValue;
+      });
+      dataStore.chartDatasetsProperties[editingColumn.index].label = editingColumn.text;
+      commonStore.editDataset(editingColumn.index, 'label', editingColumn.text)
+      commonStore.updateChart();
+      this.forceUpdate();
+    } else {
+      NotificationService.error("This dataset name exists!");
+    }
     this.hideEditColumnNamePopup();
   }
 
@@ -109,11 +112,11 @@ export default class TableC extends Component {
   @action.bound
   addDataset(datasetProperties){
     const { dataStore, commonStore } = this.props;
-    if(dataStore.rows.length > 0) {
-      const newDataset = {
-        label: datasetProperties.label,
-        dataKey: snakeCase(datasetProperties.label)
-      }
+    const newDataset = {
+      label: datasetProperties.label,
+      dataKey: snakeCase(datasetProperties.label)
+    }
+    if(dataStore.rows.length > 0 && !find(dataStore.datasets, newDataset)) {
       dataStore.datasets.push(newDataset);
       dataStore.chartDatasetsProperties.push(datasetProperties);
       const formattedDataset = [];
@@ -123,7 +126,6 @@ export default class TableC extends Component {
         formattedDataset.push(categoryValue);
       })
       commonStore.lineChartObject.data.labels = dataStore.categories.slice();
-      map(dataStore)
       const newChart = {
         ...datasetProperties,
         data: formattedDataset
@@ -131,7 +133,7 @@ export default class TableC extends Component {
       commonStore.addDataset(newChart);
       this.forceUpdate();
     } else {
-      NotificationService.error("There is no categories");
+      NotificationService.error("There is no categories or this dataset exists!");
     }
   }
 
@@ -151,24 +153,20 @@ export default class TableC extends Component {
         if(randomFrom !== null && randomTo !== null) {
           map(dataStore.datasets, (dataset, index) => {
             const randomValue = this.getRandomInt(randomFrom, randomTo).toString();
-            extendObservable(row, { 
-                [dataset.dataKey]: randomValue
-            });
-            // commonStore.lineChartObject.data.datasets[index].data.push(randomValue);
+            row[dataset.dataKey] = randomValue;
+            commonStore.lineChartObject.data.datasets[index].data.push(randomValue);
           });
         } else {
           map(dataStore.datasets, (dataset, index) => {
             const initialValue = initialRowValue.toString();
-            extendObservable(row, { 
-              [dataset.dataKey]: initialValue
-            });
-            // commonStore.lineChartObject.data.datasets[index].data.push(initialValue);
+            row[dataset.dataKey] = initialValue;
+            commonStore.lineChartObject.data.datasets[index].data.push(initialValue);
           });
         }
       }
       dataStore.rows.push(row);
-      this.forceUpdate();
       commonStore.updateChart();
+      this.forceUpdate();
     } else {
       NotificationService.error("This category exists");
     }
@@ -180,8 +178,12 @@ export default class TableC extends Component {
     const { dataStore, commonStore } = this.props;
     dataStore.categories.remove(row.rowData.category);
     dataStore.rows.remove(row.rowData);
-    this.forceUpdate();
+    commonStore.lineChartObject.data.labels.splice(row.rowIndex, 1);
+    commonStore.lineChartObject.data.datasets.forEach((dataset) => {
+      dataset.data.splice(row.rowIndex, 1);
+    });
     commonStore.updateChart();
+    this.forceUpdate();
   }
 
   // completed
@@ -195,8 +197,8 @@ export default class TableC extends Component {
     dataStore.datasets.remove(dataset);
     commonStore.lineChartObject.data.datasets.splice(index, 1);
     dataStore.chartDatasetsProperties.splice(index, 1);
-    this.forceUpdate();
     commonStore.updateChart();
+    this.forceUpdate();
   }
 
   @Bind()
@@ -239,7 +241,7 @@ export default class TableC extends Component {
   }
 
   render() {
-    const { dataStore } = this.props;
+    const { dataStore, parentHeight } = this.props;
     const { rows, datasets } = dataStore;
 
     const EditRowPopup = (
@@ -311,7 +313,6 @@ export default class TableC extends Component {
     );
 
     const renderEditRowCell = (row) => {
-      console.log(row);
       return (
         <div className="edit-row">
           <Button className="edit-button" onClick={() => this.showEditRowPopup(row)}>
@@ -331,11 +332,19 @@ export default class TableC extends Component {
     }
 
     const renderDatasetColumnCell = (index,dataset) => {
-      console.log(index,dataset);
       return (
         <div className="header-cell">
           <Dataset datasetIndex={0} />
-          {dataset.label}
+          <Tooltip
+            title="Click to rename column"
+            position="top"
+            arrow={true}
+            size="small"
+            trigger="mouseenter"
+            theme="transparent"
+          >
+            <div role="button" onClick={() => this.showEditColumnNamePopup(index, dataset)}>{dataset.label}</div>
+          </Tooltip>
           <Button className="remove-column-button" onClick={() => this.removeDataset(index,dataset)}>
             <Delete2Icon 
               width={11} 
@@ -404,58 +413,19 @@ export default class TableC extends Component {
 
 
     return (
-      <div
-        className="AutoSizerContainer" 
-        style={{
-          height: this.props.parentHeight - 104
-        }} 
-      >
-        <AutoSizer>
-          {renderTable}
-        </AutoSizer>
-      </div>
+      <React.Fragment>
+        <div
+          className="AutoSizerContainer" 
+          style={{
+            height: parentHeight - 104
+          }} 
+        >
+          <AutoSizer>
+            {renderTable}
+          </AutoSizer>
+        </div>
+        {EditColumnPopup}
+      </React.Fragment>
     );
-
-    // return (
-    //   <div className="table-wrapper">
-    //     <table id='table'>
-    //       <thead>
-    //         <tr>{map(columns,column => (
-    //           <th key={uniqueId()}>
-    //             <div className="column-cell-wrapper">
-    //               {<div title="Edit this column" role="button" onClick={() => this.showEditColumnNamePopup(column)}>{capitalize(column)}</div>}
-    //               {removeColumnButton(column)}
-    //             </div>
-    //           </th>))}
-    //         </tr>
-    //       </thead>
-    //       <tbody>
-    //         {map(rows, (row,indexR) => (<tr key={row.id}>{
-    //           map(Object.values(row), (value, indexC) => {
-    //             if(indexC === 0) return ( 
-    //               <td key={indexC}>
-    //                 <div className="dataset-button">
-    //                   <Dataset key={row.id} datasetIndex={indexR} />
-    //                 </div>
-    //                 {!includes(value,'row_') && value}
-    //               </td>
-    //             );
-    //             if(!includes(value,'row_')) return <td key={indexC}>{value}</td>
-    //           })}
-    //           <React.Fragment>
-    //             <td key={uniqueId()}>
-    //               {editRowButton(row)}
-    //             </td>
-    //             <td key={uniqueId()}>
-    //               {removeRowButton(row.id)}
-    //             </td>
-    //           </React.Fragment>
-    //         </tr>))}
-    //       </tbody>
-    //     </table>
-    //     {EditRowPopup}
-    //     {EditColumnPopup}
-    //   </div>
-    // );
   }
 }

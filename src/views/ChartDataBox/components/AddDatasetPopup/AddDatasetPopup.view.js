@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
-import { noop } from 'lodash';
+import { noop, uniqueId } from 'lodash';
 
 // models
 import { LineDatasetProperties } from '../../../../models/LineDatasetProperties';
@@ -46,7 +46,7 @@ export default class AddDatasetPopup extends Component {
 
   constructor(props){
     super(props);
-    this.currentDatasetObject = new LineDatasetProperties('Example dataset', getRandomColor());
+    this.currentDatasetObject = new LineDatasetProperties(`Dataset ${uniqueId()}`, getRandomColor());
   }
 
   @action.bound

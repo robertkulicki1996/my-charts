@@ -26,15 +26,15 @@ export class DataStore {
 
   @observable datasets = [
     {
-      label: 'Datset-1',
+      label: 'Datset 1',
       dataKey: 'dataset_1'
     },
     {
-      label: 'Datset-2',
+      label: 'Datset 2',
       dataKey: 'dataset_2'
     },
     {
-      label: 'Datset-3',
+      label: 'Datset 3',
       dataKey: 'dataset_3'
     }
   ];

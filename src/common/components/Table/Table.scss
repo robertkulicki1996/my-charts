@@ -1,8 +1,7 @@
 @import '../../../common/styles/variables.scss';
 
-.table-wrapper {
-  overflow-x: visible;
-  overflow-y: visible;
+.ReactVirtualized__Grid {
+  outline: none;
 }
 
 .ReactVirtualized__Table__row {
@@ -26,17 +25,22 @@
   font-family: $font-default;
   font-size: $metric-m-small;
   color: $color-lightgrey;
-  text-transform: lowercase;
+  text-transform: uppercase;
 }
 
 .header-cell {
   display: flex;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .edit-row {
   display: flex;
   justify-content: flex-end;
+  margin-right: $metric-x-small;
 }
 
 table {

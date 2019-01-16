@@ -432,7 +432,7 @@ export default class ChartDataBox extends Component {
             <div className="label">Initial row value</div>
           </div>
           <Input 
-            type="text" 
+            type="number" 
             disabled={!this.isRandomValuesDisabled}
             value={this.initialRowValue}
             onChange={this.handleInitialRowValue} 
