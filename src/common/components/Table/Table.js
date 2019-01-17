@@ -1,10 +1,11 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
-import { snakeCase, indexOf, uniqueId, map, capitalize, toLower, includes, find } from 'lodash';
+import { snakeCase, map, toLower, includes, find } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { Tooltip } from 'react-tippy';
-import { observable, action } from 'mobx';
+import { observable, action, toJS } from 'mobx';
 
 // virtualized table
 import { AutoSizer, Column, Table } from 'react-virtualized';
@@ -42,7 +43,7 @@ export default class TableC extends Component {
   @observable isRowEditPopupShown = false;
   @observable isEditColumnNamePopupShown = false;
   
-  @observable editingRow = {};
+  editingRow = {};
   @observable editingColumn = {
     index: null,
     text: ''
@@ -51,6 +52,7 @@ export default class TableC extends Component {
   @action.bound
   showEditRowPopup(row) {
     this.editingRow = row;
+    this.editingRow.oldCategory = row.rowData.category;
     this.isRowEditPopupShown = true;
   }
 
@@ -137,7 +139,6 @@ export default class TableC extends Component {
     }
   }
 
-  // completed
   @action.bound
   addRow(categoryName="Undefined column", randomFrom=null, randomTo=null, initialRowValue) {
     const { dataStore, commonStore } = this.props;
@@ -172,7 +173,6 @@ export default class TableC extends Component {
     }
   }
 
-  // completed
   @action.bound
   removeRow(row) {
     const { dataStore, commonStore } = this.props;
@@ -186,7 +186,6 @@ export default class TableC extends Component {
     this.forceUpdate();
   }
 
-  // completed
   @action.bound
   removeDataset(index,dataset) {
     const { dataStore, commonStore } = this.props;
@@ -201,52 +200,33 @@ export default class TableC extends Component {
     this.forceUpdate();
   }
 
-  @Bind()
-  renderEditRowPopupBody(){
-    return Object.keys(this.editingRow).map((key,index) => key !== 'id' && (
-      <div key={index-1}>
-        <div className="option">
-          <div className="label">{capitalize(key)}</div>
-        </div>
-        <Input
-          key={index-1}
-          type="number"
-          value={this.editingRow[key]}
-          onChange={event => this.handleRowChange(event,key)} 
-          inputClassName="input-n"
-        />
-      </div>
-    ))
-  }
-
   @action.bound
   handleRowChange(event, key) {
-    this.editingRow[key] = event.target.value;
+    this.editingRow.rowData[key] = event.target.value;
+    this.forceUpdate();
   } 
 
   @action.bound
   saveRow() {
     const { dataStore, commonStore } = this.props;
-    const indexOfEditingRow = indexOf(dataStore.rows, this.editingRow);
-    map(dataStore.rows, row => {
-      if(row.id === this.editingRow.id) {
-        return row = this.editingRow;
-      }
+    dataStore.categories[this.editingRow.rowIndex] = this.editingRow.rowData.category;
+    dataStore.rows[this.editingRow.rowIndex] = this.editingRow.rowData;
+    commonStore.lineChartObject.data.labels = dataStore.categories;
+    commonStore.lineChartObject.data.datasets.forEach((dataset) => {
+      dataset.data[this.editingRow.rowIndex] = this.editingRow.rowData[snakeCase(dataset.label)];
     });
-    const arrayOfData = Object.values(this.editingRow).filter(value => !includes(value,"row_"));
-    commonStore.lineChartObject.data.datasets[indexOfEditingRow].data = arrayOfData;
     commonStore.updateChart();
     this.editingRow = {};
     this.hideEditRowPopup();
+    this.forceUpdate();
   }
 
-  render() {
-    const { dataStore, parentHeight } = this.props;
-    const { rows, datasets } = dataStore;
-
-    const EditRowPopup = (
+  @Bind()
+  editRowPopup() {
+    const { dataStore } = this.props;
+    return(
       <CustomModal
-        title="Edit row"
+        title={`Edit category - ${this.editingRow.oldCategory}` || 'Edit category values'}
         width="360" 
         height="444" 
         effect="fadeInDown" 
@@ -264,11 +244,37 @@ export default class TableC extends Component {
           </Button>
         }
       >
-        {this.renderEditRowPopupBody()}
+        <div>
+          <div className="option">
+            <div className="label">Category</div>
+          </div>
+          <Input
+            type="text"
+            value={this.editingRow.rowData.category}
+            onChange={event => this.handleRowChange(event,'category')} 
+            inputClassName="input-n"
+          />
+        </div>
+        {Object.keys(this.editingRow.rowData).map(key => key !== 'category' && (
+          <div key={key}>
+            <div className="option">
+              <div className="label">{dataStore.getDatasetLabel(key)}</div>
+            </div>
+            <Input
+              type="number"
+              value={this.editingRow.rowData[key]}
+              onChange={event => this.handleRowChange(event,key)} 
+              inputClassName="input-n"
+            />
+          </div>
+        ))}
       </CustomModal>
     );
+  };
 
-    const EditColumnPopup = (
+  @Bind()
+  editColumnPopup() {
+    return(
       <CustomModal
         title="Edit column"
         width="430" 
@@ -301,16 +307,12 @@ export default class TableC extends Component {
         </React.Fragment>
       </CustomModal>
     );
+  };
 
-    const editRowButton = row => (
-      <Button key={uniqueId()} className="edit-button" onClick={() => this.showEditRowPopup(row)}>
-        <EditIcon 
-          className="edit-button"  
-          width={14} 
-          height={14} 
-        />
-      </Button>
-    );
+
+  render() {
+    const { dataStore, parentHeight } = this.props;
+    const { rows, datasets } = dataStore;
 
     const renderEditRowCell = (row) => {
       return (
@@ -354,25 +356,6 @@ export default class TableC extends Component {
         </div>
       );
     }
-
-    const removeRowButton = index => (
-      <Button key={index} className="remove-button" onClick={() => this.removeRow(index)}>
-        <DeleteIcon 
-          className="remove-button"  
-          width={14} 
-          height={14} 
-        />
-      </Button>
-    );
-
-    const removeColumnButton = column => (
-      <Button key={uniqueId()} className="remove-column-button" onClick={() => this.removeColumn(column)}>
-        <Delete2Icon 
-          width={11} 
-          height={11} 
-        />
-      </Button>
-    );
 
     const renderTable = ({height, width}) => {
       return (
@@ -424,7 +407,8 @@ export default class TableC extends Component {
             {renderTable}
           </AutoSizer>
         </div>
-        {EditColumnPopup}
+        {this.isEditColumnNamePopupShown && this.editColumnPopup()}
+        {this.isRowEditPopupShown &&  this.editRowPopup()}
       </React.Fragment>
     );
   }

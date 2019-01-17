@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
-import { observable, action } from 'mobx';
 import { DataStore } from '../../../stores/data';
 import './Dataset.scss';
 

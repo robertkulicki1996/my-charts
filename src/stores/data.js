@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import Papa from 'papaparse';
 import { observable, action } from 'mobx';
-import { map, forEach } from 'lodash';
+import { map, forEach, find } from 'lodash';
 
 import authStore from './auth';
 import lineChartSettingsStore from './ChartSettings/LineChartSettings';
@@ -139,6 +139,12 @@ export class DataStore {
     this.chartDatasetsProperties.push(datasetProperties);
   }
 
+  @action.bound
+  getDatasetLabel(key) {
+    const dataset = find(this.datasets, {dataKey: key});
+    return dataset.label;
+  }
+
   // Return dataset properties by index
   @action.bound
   getDatasetProperty(index) {
@@ -176,17 +182,19 @@ export class DataStore {
   // Set initial state
   @action.bound
   resetDataState() {
-    this.columns.clear();
+    this.categories.clear();
+    this.datasets.clear();
     this.rows.clear();
     this.errors.clear()
     this.chartDatasetsProperties.clear();
+    this.csvFile = null;
   }
 
   @action.bound
   async parseFile(file) {
     return new Promise((complete, error) => {
       Papa.parse(file, {
-        header: true,
+        header: false,
         complete, 
         error
       });

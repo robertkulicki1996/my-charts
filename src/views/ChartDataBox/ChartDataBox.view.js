@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { map, uniqueId, slice, includes } from 'lodash';
+import { map, uniqueId, snakeCase, includes } from 'lodash';
 
 // pdfmake
 import pdfMake from "pdfmake/build/pdfmake";
@@ -10,6 +10,9 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { action, observable, runInAction } from 'mobx';
 import { PulseLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
+
+// services
+import NotificationService from '../../common/services/notifications';
 
 // stores
 import { DataStore } from '../../stores/data';
@@ -190,32 +193,47 @@ export default class ChartDataBox extends Component {
       dataStore.resetDataState();
       await dataStore.parseFile(file).then(result => {
         const { data, meta, errors } = result;
-        const { fields } = meta;
-        dataStore.errors = errors;
-        map(fields, field => dataStore.columns.push(field));
-        commonStore.lineChartObject.data.labels = dataStore.columns.slice();
-        map(data, (row, index) => {
-          const rowObject = JSON.parse(JSON.stringify(row));
-          if(Object.keys(rowObject).length === fields.length) {
-            rowObject.id = uniqueId('row_');
-            const lineDatasetProperties = new LineDatasetProperties(`Dataset ${index + 1}`, getRandomColor());
-            dataStore.addDatasetProperties(lineDatasetProperties);
-            const arrayOfData = Object.values(rowObject);
-            const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
-            // add new line chart with data and properties
-            const newChart = {
-              ...lineDatasetProperties,
-              data: formattedDataset
-            }
-            commonStore.addDataset(newChart);
-            dataStore.addRow(rowObject);
-          }
-        });
-        dataStore.csvFile = file;
-        runInAction(() => {
-          this.isFileLoading = false;
-          this.isFileParsed = true;
-        })
+        if(errors.length > 0) {
+          dataStore.errors = errors;
+          runInAction(() => {
+            this.isFileLoading = false;
+            this.isFileParsed = true;
+          })
+          NotificationService.error("Upload file failed");
+        } else {
+          const categories = data[0];
+          dataStore.categories = categories.slice(1, categories.length);
+          map(categories, (category, index) => index !== 0 && (
+            dataStore.datasets.push({
+              label: category,
+              dataKey: snakeCase(category)
+            })
+          ));
+        }
+        console.log(dataStore.categories, dataStore.datasets);
+        // commonStore.lineChartObject.data.labels = dataStore.columns.slice();
+        // map(data, (row, index) => {
+        //   const rowObject = JSON.parse(JSON.stringify(row));
+        //   if(Object.keys(rowObject).length === fields.length) {
+        //     rowObject.id = uniqueId('row_');
+        //     const lineDatasetProperties = new LineDatasetProperties(`Dataset ${index + 1}`, getRandomColor());
+        //     dataStore.addDatasetProperties(lineDatasetProperties);
+        //     const arrayOfData = Object.values(rowObject);
+        //     const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
+        //     // add new line chart with data and properties
+        //     const newChart = {
+        //       ...lineDatasetProperties,
+        //       data: formattedDataset
+        //     }
+        //     commonStore.addDataset(newChart);
+        //     dataStore.addRow(rowObject);
+        //   }
+        // });
+        // dataStore.csvFile = file;
+        // runInAction(() => {
+        //   this.isFileLoading = false;
+        //   this.isFileParsed = true;
+        // })
       })
     }
   }
