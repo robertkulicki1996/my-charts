@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
+import { observable, action } from 'mobx';
 import { DataStore } from '../../../stores/data';
 import './Dataset.scss';
 
@@ -15,16 +16,26 @@ export default class Dataset extends Component {
     dataStore: PropTypes.instanceOf(DataStore).isRequired
   }
 
-  render() {
-    const { dataStore, datasetIndex } = this.props;
-    const datasetProperty = dataStore.getDatasetProperty(datasetIndex);
+  @observable datasetProperty = {};
 
+  @action
+  componentDidMount(){
+    const { dataStore, datasetIndex } = this.props;
+    this.datasetProperty = dataStore.getDatasetProperty(datasetIndex);
+  }
+
+  @action
+  componentWillReceiveProps() {
+    const { dataStore, datasetIndex } = this.props;
+    this.datasetProperty = dataStore.getDatasetProperty(datasetIndex);
+  }
+
+  render() {
     return (
       <div className="dataset">
         <div 
-          title={datasetProperty.label}
           className='dataset-item-small'
-          style={{ backgroundColor: datasetProperty.backgroundColor }} 
+          style={{ backgroundColor: this.datasetProperty.backgroundColor }} 
         />
       </div>
     );

@@ -14,7 +14,7 @@ export default defineMessages({
   firstSectionSubtitle: {
     id: 'views.choose_chart_type.first_section.subtitle',
     description: 'Choose chart type view first section subtitle',
-    defaultMessage: 'TRANSLATE_ME This application comes with built-in chart types like line, bar, radar, doughnut and pie, polar area, bubble, scatter.',
+    defaultMessage: 'TRANSLATE_ME This application comes with built-in chart types like line, bar, doughnut and pie, bubble.',
   },
   mySavedCharts: {
     id: 'views.choose_chart_type.my_saved_charts',

@@ -30,6 +30,11 @@ class Home extends Component {
     this.currentChartDataBoxHeight = height;
   }
 
+  componentDidMount(){
+    const { id } = this.props.match.params
+    console.log(id);
+  }
+
   render() {
     return (
       <div className="home-wrapper">

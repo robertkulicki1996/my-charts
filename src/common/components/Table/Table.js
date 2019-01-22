@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import { snakeCase, map, toLower, includes, find } from 'lodash';
 import { Bind } from 'lodash-decorators';
 import { Tooltip } from 'react-tippy';
-import { observable, action, toJS } from 'mobx';
+import { observable, action } from 'mobx';
 
 // virtualized table
 import { AutoSizer, Column, Table } from 'react-virtualized';
@@ -81,6 +81,11 @@ export default class TableC extends Component {
     this.editingColumn.text = event.target.value;
   }
 
+  @action.bound
+  updateTable(){
+    this.forceUpdate();
+  }
+
   // completeds
   @action.bound
   saveColumnName() {
@@ -120,7 +125,7 @@ export default class TableC extends Component {
     }
     if(dataStore.rows.length > 0 && !find(dataStore.datasets, newDataset)) {
       dataStore.datasets.push(newDataset);
-      dataStore.chartDatasetsProperties.push(datasetProperties);
+      dataStore.addDatasetProperties(datasetProperties);
       const formattedDataset = [];
       map(dataStore.rows, row => {
         const categoryValue = this.getRandomInt(100,1000).toString();
@@ -133,6 +138,7 @@ export default class TableC extends Component {
         data: formattedDataset
       }
       commonStore.addDataset(newChart);
+      commonStore.updateChart();
       this.forceUpdate();
     } else {
       NotificationService.error("There is no categories or this dataset exists!");
@@ -189,13 +195,13 @@ export default class TableC extends Component {
   @action.bound
   removeDataset(index,dataset) {
     const { dataStore, commonStore } = this.props;
-    dataStore.datasets.remove(dataset);
     map(dataStore.rows, row => {
       delete row[dataset.dataKey]
     })
     dataStore.datasets.remove(dataset);
     commonStore.lineChartObject.data.datasets.splice(index, 1);
     dataStore.chartDatasetsProperties.splice(index, 1);
+    console.log(dataStore.chartDatasetsProperties);
     commonStore.updateChart();
     this.forceUpdate();
   }
@@ -336,7 +342,7 @@ export default class TableC extends Component {
     const renderDatasetColumnCell = (index,dataset) => {
       return (
         <div className="header-cell">
-          <Dataset datasetIndex={0} />
+          <Dataset datasetIndex={index} />
           <Tooltip
             title="Click to rename column"
             position="top"
@@ -376,6 +382,7 @@ export default class TableC extends Component {
           />
           {map(datasets, (dataset, index) => (
             <Column
+              key={dataset.dataKey}
               label={dataset.label}
               dataKey={dataset.dataKey}
               width={200}

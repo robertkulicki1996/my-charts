@@ -23,19 +23,15 @@ export class AuthStore {
 	 * Method set current user auth state
 	 */
 	@action.bound
-  setUserAuthState() {
-		return new Promise((resolve, reject) => {
-			firebase.auth().onAuthStateChanged(user => {
-				if (user) {
-					this.authUser = user;
-					this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, user.uid);
-					resolve(user);
-				} else {
-					this.authUser = user;
-					this.removeKeyFromStorage(STORAGE_KEY_FOR_USER_UID);
-					reject('error');
-				}
-			});
+  async setUserAuthState() {
+		return await firebase.auth().onAuthStateChanged(user => {
+			if (user) {
+				this.authUser = user;
+				this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, user.uid);
+			} else {
+				this.authUser = null;
+				this.removeKeyFromStorage(STORAGE_KEY_FOR_USER_UID);
+			}
 		});
 	}
 

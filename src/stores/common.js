@@ -27,7 +27,6 @@ export class CommonStore {
   @action
   addDataset(dataset){
     this.lineChartObject.data.datasets.push(dataset);
-    this.updateChart();
   }
 
   // Edit dataset properties

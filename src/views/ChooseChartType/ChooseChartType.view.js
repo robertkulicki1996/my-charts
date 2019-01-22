@@ -21,11 +21,8 @@ import NavBar from '../NavBar/NavBar.view';
 import FloppyDisc from '../../common/icons/floppy-disk.svg';
 import LineChart from '../../common/icons/line-chart.svg';
 import BarChart from '../../common/icons/stats.svg';
-import RadarChart from '../../common/icons/radar-chart.svg';
 import PieChart from '../../common/icons/pie-chart-1.svg';
-import PolarAreaChart from '../../common/icons/area-chart.svg';
 import BubbleChart from '../../common/icons/bubble-chart.svg';
-import ScatterChart from '../../common/icons/scatter-chart.svg';
 
 import translations from './ChooseChartType.view.intl';
 import './ChooseChartType.view.scss';
@@ -41,11 +38,17 @@ class ChooseChartType extends Component {
   }
 
   @action.bound
-  handleButtonClick(location, chartType) {
-    const { history, lineChartSettingsStore } = this.props;
+  async handleButtonClick(chartType) {
+    const { history, lineChartSettingsStore, dataStore } = this.props;
+    let chartId = null;
     switch(chartType) {
       case 'line': 
         lineChartSettingsStore.type = 'line';
+        try {
+          chartId  = await dataStore.createChart();
+        } catch(e) {
+          window.console.error(e);
+        }
         break;
       case 'bar':
         lineChartSettingsStore.type = 'bar';
@@ -53,7 +56,8 @@ class ChooseChartType extends Component {
       default:
         lineChartSettingsStore.type = 'line';
     }
-    history.push(location);
+    console.log(chartId);
+    history.push(`/home/${chartId}`);
   }
 
   render() {
@@ -68,33 +72,21 @@ class ChooseChartType extends Component {
             <div className="content__title">{intl.formatMessage(translations.firstSectionTitle)}</div>
             <div className="content__subtitle">{intl.formatMessage(translations.firstSectionSubtitle)}</div>
             <div className="chart-types">
-              <div role="button" className="chart-box" onClick={() => this.handleButtonClick(HOME,'line')}>
+              <div role="button" className="chart-box" onClick={() => this.handleButtonClick('line')}>
                 <LineChart width={48} height={48} />
                 <div className="chart-label">{intl.formatMessage(translations.lineChart)}</div>
               </div>
-              <div role="button" className="chart-box" onClick={() => this.handleButtonClick(HOME, 'bar')}>
+              <div role="button" className="chart-box" onClick={() => this.handleButtonClick('bar')}>
                 <BarChart width={48} height={48} />
                 <div className="chart-label">{intl.formatMessage(translations.barChart)}</div>        
               </div>
-              <div role="button" className="chart-box" onClick={() => this.handleButtonClick(HOME)}>
-                <RadarChart width={48} height={48} />
-                <div className="chart-label">Radar chart</div>              
-              </div>
-              <div role="button" className="chart-box" onClick={() => this.handleButtonClick(HOME)}>
+              <div role="button" className="chart-box" onClick={() => this.handleButtonClick()}>
                 <PieChart width={48} height={48} />
                 <div className="chart-label">Doughnut and pie chart</div> 
               </div>
-              <div role="button" className="chart-box" onClick={() => this.handleButtonClick(HOME)}>
-                <PolarAreaChart width={64} height={64} />
-                <div className="chart-label">Polar area chart</div> 
-              </div>
-              <div role="button" className="chart-box" onClick={() => this.handleButtonClick(HOME)}>
+              <div role="button" className="chart-box" onClick={() => this.handleButtonClick()}>
                 <BubbleChart width={48} height={48} />
                 <div className="chart-label">Bubble chart</div>  
-              </div>
-              <div role="button" className="chart-box" onClick={() =>this.handleButtonClick(HOME)}> 
-                <ScatterChart width={48} height={48} />
-                <div className="chart-label">Scatter chart</div>        
               </div>
             </div>
             <div className="content__title--saved">Your saved charts</div>

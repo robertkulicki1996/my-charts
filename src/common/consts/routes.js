@@ -17,7 +17,7 @@ import Dashboard from '../../views/Dashboard/Dashboard.view';
 export const SIGN_IN = '/';
 export const RECOVER_PASSWORD = '/recover-password';
 export const SIGN_UP = '/sign-up';
-export const HOME = '/home';
+export const HOME = '/home/:id';
 export const DASHBOARD = '/dashboard';
 export const CHOOSE_CHART_TYPE = '/choose-chart-type'
 

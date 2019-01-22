@@ -192,48 +192,63 @@ export default class ChartDataBox extends Component {
       commonStore.resetChartState();
       dataStore.resetDataState();
       await dataStore.parseFile(file).then(result => {
-        const { data, meta, errors } = result;
+        const { data, errors } = result;
         if(errors.length > 0) {
           dataStore.errors = errors;
           runInAction(() => {
             this.isFileLoading = false;
             this.isFileParsed = true;
-          })
+          });
           NotificationService.error("Upload file failed");
         } else {
-          const categories = data[0];
-          dataStore.categories = categories.slice(1, categories.length);
-          map(categories, (category, index) => index !== 0 && (
+          const datasets = data[0];
+          map(datasets, (category, index) => index !== 0 && (
             dataStore.datasets.push({
               label: category,
               dataKey: snakeCase(category)
             })
           ));
+          let rowKeys = map(dataStore.datasets, dataset => {
+            return dataset.dataKey;
+          })
+          const countOfDatasets = rowKeys.length;
+          // eslint-disable-next-line no-array-constructor
+          let formattedData = Array.from(Array(countOfDatasets+1), () => new Array());
+          rowKeys = ['category',...rowKeys];
+          const rowLength = data[0].length;
+          map(data, (row, rowIndex) => {
+            if(row.length === rowLength) {
+              const rowObject = {};
+              map(rowKeys, (key, index) => {
+                rowObject[key] = row[index];
+                if(rowIndex !== 0) {
+                  formattedData[index].push(row[index]);
+                }
+              })
+              dataStore.rows.push(rowObject);
+            }
+          });
+          dataStore.rows.shift();
+          dataStore.categories = formattedData[0];
+          commonStore.lineChartObject.data.labels = dataStore.categories.slice();
+          map(dataStore.datasets, (dataset, index) => {
+            const lineDatasetProperties = new LineDatasetProperties(`Dataset ${index}`, getRandomColor());
+            dataStore.addDatasetProperties(lineDatasetProperties);
+            const newChart = {
+              ...lineDatasetProperties,
+              data: formattedData[index+1]
+            }
+            commonStore.addDataset(newChart);
+          });
+          commonStore.updateChart();
+          dataStore.csvFile = file;
+          runInAction(() => {
+            this.isFileLoading = false;
+            this.isFileParsed = true;
+          });
+          this.forceUpdate();
+          this.table.current.updateTable();
         }
-        console.log(dataStore.categories, dataStore.datasets);
-        // commonStore.lineChartObject.data.labels = dataStore.columns.slice();
-        // map(data, (row, index) => {
-        //   const rowObject = JSON.parse(JSON.stringify(row));
-        //   if(Object.keys(rowObject).length === fields.length) {
-        //     rowObject.id = uniqueId('row_');
-        //     const lineDatasetProperties = new LineDatasetProperties(`Dataset ${index + 1}`, getRandomColor());
-        //     dataStore.addDatasetProperties(lineDatasetProperties);
-        //     const arrayOfData = Object.values(rowObject);
-        //     const formattedDataset = slice(arrayOfData, 0, arrayOfData.length - 1);
-        //     // add new line chart with data and properties
-        //     const newChart = {
-        //       ...lineDatasetProperties,
-        //       data: formattedDataset
-        //     }
-        //     commonStore.addDataset(newChart);
-        //     dataStore.addRow(rowObject);
-        //   }
-        // });
-        // dataStore.csvFile = file;
-        // runInAction(() => {
-        //   this.isFileLoading = false;
-        //   this.isFileParsed = true;
-        // })
       })
     }
   }

@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import Papa from 'papaparse';
 import { observable, action } from 'mobx';
 import { map, forEach, find } from 'lodash';
+import uniqueString from 'unique-string';
 
 import authStore from './auth';
 import lineChartSettingsStore from './ChartSettings/LineChartSettings';
@@ -24,102 +25,26 @@ export class DataStore {
   ];
 
 
-  @observable datasets = [
-    {
+  @observable datasets = [{
       label: 'Datset 1',
       dataKey: 'dataset_1'
-    },
-    {
-      label: 'Datset 2',
-      dataKey: 'dataset_2'
-    },
-    {
-      label: 'Datset 3',
-      dataKey: 'dataset_3'
     }
   ];
 
   @observable rows = [
     {
-      'category': '2010',
-      'dataset_1': '100',
-      'dataset_2': '200',
-      'dataset_3': '300'
-    },
-    {
-      'category': '2011',
-      'dataset_1': '1200',
-      'dataset_2': '2200',
-      'dataset_3': '3200'
-    },
-    {
-      'category': '2012',
-      'dataset_1': '1300',
-      'dataset_2': '2300',
-      'dataset_3': '3300'
-    },
-    {
-      'category': '2013',
-      'dataset_1': '1400',
-      'dataset_2': '2400',
-      'dataset_3': '3400'
-    },
-    {
-      'category': '2014',
-      'dataset_1': '100',
-      'dataset_2': '200',
-      'dataset_3': '300'
-    },
-    {
-      'category': '2015',
-      'dataset_1': '1200',
-      'dataset_2': '2200',
-      'dataset_3': '3200'
-    },
-    {
-      'category': '2016',
-      'dataset_1': '1400',
-      'dataset_2': '2400',
-      'dataset_3': '3400'
-    },
-    {
-      'category': '2017',
-      'dataset_1': '100',
-      'dataset_2': '200',
-      'dataset_3': '300'
-    },
-    {
-      'category': '2018',
-      'dataset_1': '1200',
-      'dataset_2': '2200',
-      'dataset_3': '3200'
-    },
-    {
-      'category': '2019',
-      'dataset_1': '1400',
-      'dataset_2': '2400',
-      'dataset_3': '3400'
-    },
-    {
-      'category': '2020',
-      'dataset_1': '100',
-      'dataset_2': '200',
-      'dataset_3': '300'
-    },
-    {
-      'category': '2021',
-      'dataset_1': '1200',
-      'dataset_2': '2200',
-      'dataset_3': '3200'
+      category: '2010',
+      dataset_1: '100',
+      dataset_2: '200',
+      dataset_3: '300'
     }
   ]
 
 
   // Array of datasets with properties
   @observable chartDatasetsProperties = [{
-    backgroundColor:'#eb1e64',
-    label: 'My dataset',
-    borderColor: '#eb1e64'
+    label: 'Dataset 1',
+    borderColor: 'red'
   }];
 
   // Optional imported csv file (not parsed)
@@ -201,25 +126,51 @@ export class DataStore {
     });
   }
 
-  @action
-  async saveChart() {
-    const userData = firebase.database().ref('charts');
+  @action.bound
+  async createChart(){
+    const chartId = uniqueString()
     const userId = authStore.authUser.uid;
-
-
-    await firebase.database().ref(`charts`).set({
-      userId,
-      chartData: {
+    await firebase.database().ref(`users/+${userId}/charts/${chartId}`).set({
+      created_at: Date.now(),
+      last_modification: Date.now(),
+      type: lineChartSettingsStore.type,
+      user_id: userId,
+      chart_data: {
+        description: 'description',
+        categories: this.categories.slice(),
         rows: this.rows.slice(),
-        columns: this.columns.slice(),
+        datasets: this.datasets.slice(),
         datasetsProperties: this.chartDatasetsProperties.slice(),
         options: lineChartSettingsStore
       }
     });
-    await userData.on("value", data => {
-        console.log(data.val());
-    }, error => {
-        console.log("Error: " + error.code);
+    return chartId;
+  }
+
+  @action.bound
+  async updateChart(chartId){
+    const userId = authStore.authUser.uid;
+    await firebase.database().ref(`users/+${userId}/charts/${chartId}`).update({
+      [chartId]: {
+        last_modification: Date.now(),
+        type: lineChartSettingsStore.type,
+        chart_data: {
+          description: 'description',
+          categories: this.categories.slice(),
+          rows: this.rows.slice(),
+          datasets: this.datasets.slice(),
+          datasetsProperties: this.chartDatasetsProperties.slice(),
+          options: lineChartSettingsStore
+        }
+      }
+    });
+  }
+
+  @action.bound
+  async deleteChart(chartId){
+    const userId = authStore.authUser.uid;
+    await firebase.database().ref(`users/+${userId}/charts/${chartId}`).update({
+      [chartId]: null
     });
   }
 
