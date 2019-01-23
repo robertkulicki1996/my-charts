@@ -8,44 +8,14 @@ import authStore from './auth';
 import lineChartSettingsStore from './ChartSettings/LineChartSettings';
 
 export class DataStore {
+  @observable categories = [];
 
-  @observable categories = [
-    '2010',
-    '2011',
-    '2012',
-    '2013',
-    '2014',
-    '2015',
-    '2016',
-    '2017',
-    '2018',
-    '2019',
-    '2020',
-    '2021'
-  ];
+  @observable datasets = [];
 
-
-  @observable datasets = [{
-      label: 'Datset 1',
-      dataKey: 'dataset_1'
-    }
-  ];
-
-  @observable rows = [
-    {
-      category: '2010',
-      dataset_1: '100',
-      dataset_2: '200',
-      dataset_3: '300'
-    }
-  ]
-
+  @observable rows = [];
 
   // Array of datasets with properties
-  @observable chartDatasetsProperties = [{
-    label: 'Dataset 1',
-    borderColor: 'red'
-  }];
+  @observable chartDatasetsProperties = [];
 
   // Optional imported csv file (not parsed)
   @observable csvFile = null;
@@ -127,12 +97,25 @@ export class DataStore {
   }
 
   @action.bound
+  async getUserCharts(){
+    const userId = authStore.authUser.uid;
+    try {
+      const resp = await firebase.database().ref(`users/+${userId}/charts`).once('value')
+      return resp.val();
+    } catch(e){
+      window.console.error(e);
+    }
+  }
+
+  @action.bound
   async createChart(){
     const chartId = uniqueString()
     const userId = authStore.authUser.uid;
+    const createdDate = Date();
     await firebase.database().ref(`users/+${userId}/charts/${chartId}`).set({
-      created_at: Date.now(),
-      last_modification: Date.now(),
+      id: chartId,
+      created_at: createdDate,
+      last_modification: createdDate,
       type: lineChartSettingsStore.type,
       user_id: userId,
       chart_data: {
@@ -152,7 +135,7 @@ export class DataStore {
     const userId = authStore.authUser.uid;
     await firebase.database().ref(`users/+${userId}/charts/${chartId}`).update({
       [chartId]: {
-        last_modification: Date.now(),
+        last_modification: Date(),
         type: lineChartSettingsStore.type,
         chart_data: {
           description: 'description',

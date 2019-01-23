@@ -8,6 +8,14 @@
 	background-color: $color-thebrightestblue;
 }
 
+.loader-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	margin-top: $metric-med;
+}
+
 .user-charts {
 	display: flex;
 	flex-direction: column;
@@ -38,6 +46,7 @@
 		padding: $metric-base;
 		margin-top: $metric-base;
 		flex-wrap: wrap;
+		color: $color-lightgrey;
 	}
 }
 
@@ -69,6 +78,7 @@
 	margin-top: $metric-base;
 	margin-right: $metric-base;
 	margin-left: $metric-base;
+	margin-bottom: $metric-x-small;
 	color: $color-lightgrey;
 	text-align: center;
 	font-size: $metric-small - 2px;
@@ -79,6 +89,6 @@
 	margin-right: $metric-base;
 	margin-left: $metric-base;
 	color: $color-lightgrey;
-	font-size: $metric-small - 2px;
+	font-size: 11px;
 	text-align: center;
 }

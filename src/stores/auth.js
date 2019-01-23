@@ -23,8 +23,8 @@ export class AuthStore {
 	 * Method set current user auth state
 	 */
 	@action.bound
-  async setUserAuthState() {
-		return await firebase.auth().onAuthStateChanged(user => {
+  setUserAuthState() {
+		firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				this.authUser = user;
 				this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, user.uid);
@@ -39,7 +39,7 @@ export class AuthStore {
 	 * Get current signed in user info
 	 */
 	@action.bound
-	async getCurrentUserInfo() {
+	getCurrentUserInfo() {
 		return firebase.auth().currentUser;
 	}
 
@@ -103,7 +103,7 @@ export class AuthStore {
 				// This gives you a GitHub Access Token. You can use it to access the GitHub API.
 				this.gitHubToken = token;
 			})
-			this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, token);
+			this.setKeyToStorage(STORAGE_KEY_FOR_USER_UID, result.user.uid);
 		}).catch(error => {
 			window.console.log(error);
 		});
