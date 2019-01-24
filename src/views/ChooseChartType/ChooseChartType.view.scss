@@ -71,19 +71,18 @@
   margin-right: $metric-small;
   margin-bottom: $metric-small;
   background-color: $color-thebrightestblue;
+  border: 1px solid $color-thebrightestblue;
 
   transition: background-color 1s linear;
 
   &:hover {
     font-size: $metric-base;
     cursor: pointer;
-    background-color: $color-darkpink;
-    opacity: 0.8;
+    border: 1px solid $color-darkpink;
   }
 
   &--saved {
     border: 1px dashed $color-darkpink;
-    color: $color-darkpink;
   }
 }
 
@@ -112,13 +111,10 @@
   margin-right: $metric-small;
   margin-bottom: $metric-small;
   background-color: $color-thebrightestblue;
-  color: $color-darkpink;
-  border: 1px solid;
-  transition: background-color 1s linear;
+  border: 1px solid $color-thebrightestblue;
 
   &:hover {
     cursor: pointer;
-    background-color: $color-darkblue;
-    opacity: 0.8;
+    border: 1px solid $color-darkpink;
   }
 }

@@ -7,6 +7,7 @@ import { Bind } from 'lodash-decorators';
 import Avatar from 'react-avatar';
 import { SIGN_IN, DASHBOARD, CHOOSE_CHART_TYPE } from '../../common/consts/routes';
 
+import { observable, action } from 'mobx';
 import { AuthStore } from '../../stores/auth';
 
 import AppLogoIcon from '../../common/icons/logo.svg';
@@ -31,14 +32,31 @@ export default class NavBar extends Component {
     isNewChartButton: true
   }
 
+  @observable displayName = 'N';
+  @observable photoURL = '';
+
+  @action
+  componentDidMount() {
+    const { authStore } = this.props;
+    const { authUser } = authStore;
+    if(authUser) {
+      this.displayName = authUser.displayName !== null ? authUser.displayName : authUser.email;
+      this.photoURL = authUser.photoURL !== null ? authUser.photoURL : '';
+    }
+  }
+
+  componentWillReceiveProps() {
+    const { authStore } = this.props;
+    const { authUser } = authStore;
+    if(authUser) {
+      this.displayName = authUser.displayName !== null ? authUser.displayName : authUser.email;
+      this.photoURL = authUser.photoURL !== null ? authUser.photoURL : '';
+    }
+  }
+
   @Bind()
   onTrySignOut() {
-    const { authStore, history } = this.props;
-    authStore.signOut().then(()=> {
-      history.push(SIGN_IN);
-    }).catch(e => {
-      window.console.error(e);
-    });
+    this.props.authStore.signOut();
   }
 
   @Bind()
@@ -89,7 +107,13 @@ export default class NavBar extends Component {
             </Button>
           )}
           <ContextMenu position="rightTop" body={userContextMenu}>
-            <Avatar name="Robert Kulicki" size="48" round="20%" color="#293142" />
+            <Avatar 
+              name={this.displayName } 
+              src={this.photoURL} 
+              size="48" 
+              round="20%" 
+              color="#293142" 
+            />
           </ContextMenu>
         </div>
       </div>

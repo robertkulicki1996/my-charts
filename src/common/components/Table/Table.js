@@ -201,7 +201,6 @@ export default class TableC extends Component {
     dataStore.datasets.remove(dataset);
     commonStore.lineChartObject.data.datasets.splice(index, 1);
     dataStore.chartDatasetsProperties.splice(index, 1);
-    console.log(dataStore.chartDatasetsProperties);
     commonStore.updateChart();
     this.forceUpdate();
   }

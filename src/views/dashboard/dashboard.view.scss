@@ -5,7 +5,7 @@
 	height: 100vh;
 	width: 100vw;
 	overflow: hidden;
-	background-color: $color-thebrightestblue;
+	background-color: $color-brighterblue;
 }
 
 .loader-wrapper {
@@ -19,7 +19,7 @@
 .user-charts {
 	display: flex;
 	flex-direction: column;
-	background-color: $color-thebrightestblue;
+	background-color: $color-brighterblue;
 	padding: $metric-base;
 	margin-bottom: $metric-base;
 	margin-left: $metric-base;
@@ -47,6 +47,8 @@
 		margin-top: $metric-base;
 		flex-wrap: wrap;
 		color: $color-lightgrey;
+		height: $metric-xx-large * 4 + $metric-med;
+		overflow-y: scroll;
 	}
 }
 
@@ -60,12 +62,12 @@
   border-radius: $metric-x-small;
   margin-right: $metric-small;
   margin-bottom: $metric-small;
-	background-color: $color-darkblue;
+	background-color: $color-thebrightestblue;
+	border: 1px solid $color-thebrightestblue;
+	position: relative;
 
   &:hover {
-    cursor: pointer;
-    background-color: $color-darkblue;
-    opacity: 0.8;
+    border: 1px solid $color-darkpink;
   }
 
   &--saved {
@@ -91,4 +93,26 @@
 	color: $color-lightgrey;
 	font-size: 11px;
 	text-align: center;
+}
+
+.remove-chart {
+	position: absolute;
+	top: $metric-x-small / 2;
+	left: $metric-small;
+	transition: all .3s ease-in-out;
+	&:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+	}
+}
+
+.edit-chart {
+	position: absolute;
+	top: $metric-x-small / 2;
+	left: $metric-small * 2.5;
+	transition: all .3s ease-in-out;
+	&:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+	}
 }

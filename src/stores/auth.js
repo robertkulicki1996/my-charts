@@ -116,7 +116,7 @@ export class AuthStore {
 	signOut() {
 		return firebase.auth().signOut().then((user) => {
 			runInAction(() => {
-				authStore.authUser = user;
+				this.authUser = user;
 			});
 			this.removeKeyFromStorage(STORAGE_KEY_FOR_USER_UID);
 		});

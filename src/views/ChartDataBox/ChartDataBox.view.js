@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { map, uniqueId, snakeCase, includes } from 'lodash';
@@ -43,6 +44,7 @@ import { logoData } from './../../common/consts/logo';
 // styles
 import './ChartDataBox.view.scss';
 
+@withRouter
 @inject('dataStore', 'lineChartSettingsStore', 'commonStore')
 @observer
 export default class ChartDataBox extends Component {
@@ -76,6 +78,8 @@ export default class ChartDataBox extends Component {
   @observable exportFileName = `chart_${uniqueId()}`;
 
   @observable chartDescription = 'Populacja Polski w 2019 zmaleje o 58 000 i osiągnie 37 734 000 ludzi w 2020 roku. Migracja ludności zmniejszyła populację o 10 000 ludzi rocznie uwzględniając emigrację i imigrację. Średnia liczba urodzeń w Polsce wynosi 333 698 rocznie, liczba zgonów to 403 311 w roku. Od 1980 gęstość zaludnienia Polski uległa zmianie z 116,1 na 124,6 w 2017 roku.';
+
+  @observable isFileSaving = false;
 
   @action.bound
   handleRowCategory(event) {
@@ -430,6 +434,23 @@ export default class ChartDataBox extends Component {
     } 
   }
 
+  @action.bound
+  async saveChart(chartId) {
+    const { dataStore } = this.props;
+    runInAction(() => {
+      this.isFileSaving = true;
+    })
+    try {
+      await dataStore.updateChart(chartId);
+      NotificationService.success("Chart was saved.")
+    } catch(e) {
+      window.console.error(e);
+    }
+    runInAction(() => {
+      this.isFileSaving = false;
+    })
+  }
+
   render() {
     const AddRowPopup = (
       <CustomModal
@@ -613,11 +634,21 @@ export default class ChartDataBox extends Component {
             </Button>
             <Button 
               className="add-button"
-              onClick={() => this.props.dataStore.saveChart()}
+              onClick={() => this.saveChart(this.props.match.params.id)}
             >
               <div className="button-label">
-                <div className="b-label">Save</div>
-                <SaveIcon width={14} height={14} />
+                {this.isFileSaving ? (
+                  <PulseLoader
+                    size={8}
+                    color={'#eb1e64'}
+                    loading={this.isFileSaving}
+                  />
+                ) : (
+                  <React.Fragment>
+                    <div className="b-label">Save</div>
+                    <SaveIcon width={14} height={14} />
+                  </React.Fragment>
+                )}
               </div>
             </Button>
             <Button 

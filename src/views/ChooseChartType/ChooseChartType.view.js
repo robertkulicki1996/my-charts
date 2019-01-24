@@ -18,7 +18,7 @@ import {
 import NavBar from '../NavBar/NavBar.view';
 
 // icons
-import FloppyDisc from '../../common/icons/floppy-disk.svg';
+import AnalysisIcon from '../../common/icons/analysis.svg';
 import LineChart from '../../common/icons/line-chart.svg';
 import BarChart from '../../common/icons/stats.svg';
 import PieChart from '../../common/icons/pie-chart-1.svg';
@@ -56,12 +56,11 @@ class ChooseChartType extends Component {
       default:
         lineChartSettingsStore.type = 'line';
     }
-    console.log(chartId);
     history.push(`/home/${chartId}`);
   }
 
   render() {
-    const { intl } = this.props;
+    const { intl, history } = this.props;
 
     return (
       <div className="choose-chart-type-wrapper">
@@ -90,8 +89,8 @@ class ChooseChartType extends Component {
               </div>
             </div>
             <div className="content__title--saved">Your saved charts</div>
-            <div role="button" className="chart-box-saved" onClick={() => this.handleButtonClick(DASHBOARD)}>
-              <FloppyDisc width={48} height={48} />
+            <div role="button" className="chart-box-saved" onClick={() => history.push('/dashboard')}>
+              <AnalysisIcon width={48} height={48} />
               <div className="chart-label">My charts</div>
             </div>
           </div>

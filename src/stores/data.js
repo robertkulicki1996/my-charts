@@ -100,7 +100,7 @@ export class DataStore {
   async getUserCharts(){
     const userId = authStore.authUser.uid;
     try {
-      const resp = await firebase.database().ref(`users/+${userId}/charts`).once('value')
+      const resp = await firebase.database().ref(`users/${userId}/charts`).once('value')
       return resp.val();
     } catch(e){
       window.console.error(e);
@@ -112,7 +112,7 @@ export class DataStore {
     const chartId = uniqueString()
     const userId = authStore.authUser.uid;
     const createdDate = Date();
-    await firebase.database().ref(`users/+${userId}/charts/${chartId}`).set({
+    await firebase.database().ref(`users/${userId}/charts/${chartId}`).set({
       id: chartId,
       created_at: createdDate,
       last_modification: createdDate,
@@ -133,7 +133,7 @@ export class DataStore {
   @action.bound
   async updateChart(chartId){
     const userId = authStore.authUser.uid;
-    await firebase.database().ref(`users/+${userId}/charts/${chartId}`).update({
+    await firebase.database().ref(`users/${userId}/charts/${chartId}`).set({
       [chartId]: {
         last_modification: Date(),
         type: lineChartSettingsStore.type,
@@ -152,7 +152,7 @@ export class DataStore {
   @action.bound
   async deleteChart(chartId){
     const userId = authStore.authUser.uid;
-    await firebase.database().ref(`users/+${userId}/charts/${chartId}`).update({
+    await firebase.database().ref(`users/${userId}/charts/${chartId}`).set({
       [chartId]: null
     });
   }

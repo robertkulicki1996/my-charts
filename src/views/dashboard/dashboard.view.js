@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { observable, action } from 'mobx';
+import { observable, action, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { ClipLoader } from 'react-spinners';
 import { map } from 'lodash';
-import { moment } from 'moment';
+import { Bind } from 'lodash-decorators';
 
 import { AuthStore } from '../../stores/auth';
 import { DataStore } from '../../stores/data';
@@ -15,8 +15,14 @@ import NavBar from '../NavBar/NavBar.view';
 
 // components
 import AvatarWithName from '../../common/components/AvatarWithName/AvatarWithName';
+import Button from '../../common/components/Button/Button';
+
+// consts
+import { LINE, BAR, BUBBLE, PIE, DOUGHNUT } from '../../common/consts/chart-types';
 
 // icons
+import EditIcon from '../../common/icons/edit-chart.svg';
+import DeleteIcon from '../../common/icons/delete.svg';
 import LineChart from '../../common/icons/line-chart.svg';
 import BarChart from '../../common/icons/stats.svg';
 import PieChart from '../../common/icons/pie-chart-1.svg';
@@ -62,6 +68,44 @@ class Dashboard extends Component {
     },1500);
   }
 
+  @Bind()
+  renderChartIcon(type) {
+    switch(type) {
+      case LINE: 
+        return <LineChart width={48} height={48} />;
+      case BAR: 
+        return <BarChart width={48} height={48} />;
+      case PIE:
+        return <PieChart width={48} height={48} />;
+      case BUBBLE: 
+        return <BubbleChart width={48} height={48} />
+      default:
+        return '';
+    }
+  }
+
+  @action.bound
+  async deleteChart(chartId) {
+    const { dataStore} = this.props;
+    runInAction(() => {
+      this.isLoading = true;
+    })
+    try {
+      await dataStore.deleteChart(chartId);
+      this.charts = await dataStore.getUserCharts();
+      runInAction(() => {
+        this.isLoading = false;
+      }) 
+    } catch(e) {
+      window.console.error(e);
+    }
+  }
+
+  @action.bound
+  goToEditChart(chart) {
+    console.log(chart);
+  }
+
   render() {
     const { intl } = this.props;
     const { isLoading, charts } = this;
@@ -85,34 +129,30 @@ class Dashboard extends Component {
               <div className="user-charts__subtitle">{intl.formatMessage(translations.subtitle)}</div>
               <div className="user-charts__list">
                 {charts !== null ? (map(Object.values(charts), chart => (
-                  <div key={chart.id} className="saved-chart-box">
-                    {console.log('chart -> ',chart)}
-                    <LineChart width={48} height={48} />
+                  <div 
+                    key={chart.id} 
+                    className="saved-chart-box"
+                  >
+                    {this.renderChartIcon(chart.type)}
                     <div className="saved-chart-info">{chart.chart_data.options.title.text}</div>
                     <div className="date-time">Created at :</div>
                     <div className="date-time">{new Date(chart.created_at).toLocaleString()}</div>
+                    <Button className="remove-chart" onClick={() => this.deleteChart(chart.id)}>
+                      <DeleteIcon 
+                        width={14} 
+                        height={14} 
+                      />
+                    </Button>
+                    <Button className="edit-chart" onClick={() => this.goToEditChart(chart)}>
+                      <EditIcon 
+                        width={16} 
+                        height={16} 
+                      />
+                    </Button>
                   </div>
                 ))) : (
                   <div>There is no saved charts.</div>
                 )} 
-                {/* <div className="saved-chart-box">
-                  <LineChart width={48} height={48} />
-                  <div className="saved-chart-info">Last saved</div>
-                  <div className="date-time">18 November 2018</div>
-                  <div className="date-time">18:35:23 PM</div>
-                </div>
-                <div className="saved-chart-box">
-                  <BarChart width={48} height={48} />
-                  <div className="saved-chart-info">Last saved</div>
-                  <div className="date-time">17 November 2018</div>
-                  <div className="date-time">13:45:33 PM</div>
-                </div>
-                <div className="saved-chart-box">
-                  <PieChart width={48} height={48} />
-                  <div className="saved-chart-info">Last saved</div>
-                  <div className="date-time">13 November 2018</div>
-                  <div className="date-time">16:55:13 PM</div>
-                </div> */}
               </div>
             </React.Fragment>
           )}

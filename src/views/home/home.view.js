@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
@@ -16,6 +17,7 @@ import ChartDataBox from '../ChartDataBox/ChartDataBox.view';
 import './Home.view.scss';
 
 @injectIntl
+@withRouter
 @inject('authStore')
 @observer
 class Home extends Component {
@@ -28,11 +30,6 @@ class Home extends Component {
   @action.bound
   handleHeightChange(height) {
     this.currentChartDataBoxHeight = height;
-  }
-
-  componentDidMount(){
-    const { id } = this.props.match.params
-    console.log(id);
   }
 
   render() {
