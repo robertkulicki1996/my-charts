@@ -1,3 +1,4 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -9,20 +10,26 @@ import { AuthStore } from '../../stores/auth';
 import { DataStore } from '../../stores/data';
 import { LineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 
-// routes
-import { 
-  HOME, 
-  DASHBOARD
-} from '../../common/consts/routes';
+// services
+import NotificationService from '../../common/services/notifications';
+
+// consts
+import {
+  LINE,
+  BAR,
+  BUBBLE,
+  PIE,
+  DOUGHNUT
+} from '../../common/consts/chart-types';
 
 import NavBar from '../NavBar/NavBar.view';
 
 // icons
-import AnalysisIcon from '../../common/icons/analysis.svg';
-import LineChart from '../../common/icons/line-chart.svg';
-import BarChart from '../../common/icons/stats.svg';
-import PieChart from '../../common/icons/pie-chart-1.svg';
-import BubbleChart from '../../common/icons/bubble-chart.svg';
+import AnalysisIcon from 'svg-react-loader?name=AnalysisIcon!../../common/icons/analysis.svg';
+import LineChart from 'svg-react-loader?name=LineChart!../../common/icons/line-chart.svg';
+import BarChart from 'svg-react-loader?name=BarChart!../../common/icons/stats.svg';
+import PieChart from 'svg-react-loader?name=PieChart!../../common/icons/pie-chart-1.svg';
+import BubbleChart from 'svg-react-loader?name=BubbleChart!../../common/icons/bubble-chart.svg';
 
 import translations from './ChooseChartType.view.intl';
 import './ChooseChartType.view.scss';
@@ -42,21 +49,59 @@ class ChooseChartType extends Component {
     const { history, lineChartSettingsStore, dataStore } = this.props;
     let chartId = null;
     switch(chartType) {
-      case 'line': 
-        lineChartSettingsStore.type = 'line';
+      case LINE: 
+        lineChartSettingsStore.type = LINE;
         try {
           chartId  = await dataStore.createChart();
+          history.push(`/home/${chartId}`);
         } catch(e) {
           window.console.error(e);
+          NotificationService.error(e);
         }
         break;
-      case 'bar':
-        lineChartSettingsStore.type = 'bar';
+      case BAR:
+        lineChartSettingsStore.type = BAR;
+        try {
+          chartId  = await dataStore.createChart();
+          history.push(`/home/${chartId}`);
+        } catch(e) {
+          window.console.error(e);
+          NotificationService.error(e);
+        }
+        break;
+      case PIE:
+        lineChartSettingsStore.type = PIE;
+        try {
+          chartId  = await dataStore.createChart();
+          history.push(`/home/${chartId}`);
+        } catch(e) {
+          window.console.error(e);
+          NotificationService.error(e);
+        }
+        break;
+      case BUBBLE:
+        lineChartSettingsStore.type = BUBBLE;
+        try {
+          chartId  = await dataStore.createChart();
+          history.push(`/home/${chartId}`);
+        } catch(e) {
+          window.console.error(e);
+          NotificationService.error(e);
+        }
+        break;
+      case DOUGHNUT:
+        lineChartSettingsStore.type = DOUGHNUT;
+        try {
+          chartId  = await dataStore.createChart();
+          history.push(`/home/${chartId}`);
+        } catch(e) {
+          window.console.error(e);
+          NotificationService.error(e);
+        }
         break;
       default:
         lineChartSettingsStore.type = 'line';
     }
-    history.push(`/home/${chartId}`);
   }
 
   render() {

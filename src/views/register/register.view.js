@@ -1,15 +1,15 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { PropagateLoader } from 'react-spinners';
 import { Bind } from 'lodash-decorators';
 
-import AppLogoIcon from '../../common/icons/logo.svg';
+import AppLogoIcon from 'svg-react-loader?name=AppLogoIcon!../../common/icons/logo.svg';
 import Input from '../../common/components/Input/Input';
 import Button from '../../common/components/Button/Button';
 
 // import auth from '../../firebase';
 import { SIGN_IN } from '../../common/consts/routes';
-import NotificationService from '../../common/services/notifications';
 
 import './register.view.scss';
 import translations from './register.view.intl';

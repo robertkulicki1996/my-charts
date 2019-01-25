@@ -1,7 +1,8 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 
-import AppLogoIcon from '../../common/icons/logo.svg';
+import AppLogoIcon from 'svg-react-loader?name=AppLogoIcon!../../common/icons/logo.svg';
 
 import Input from '../../common/components/Input/Input';
 import Button from '../../common/components/Button/Button';
@@ -62,7 +63,7 @@ class RecoverPassword extends Component {
     const { history, intl } = this.props;
     const { email } = this.state;
 
-    // auth.sendPasswordResetEmail(email)
+    // firebase.auth.sendPasswordResetEmail(email)
     // .then(() => {
     //   NotificationService.success(intl.formatMessage(translations.emailSended));
     //   this.setState({

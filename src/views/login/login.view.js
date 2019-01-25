@@ -1,3 +1,4 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
@@ -9,10 +10,10 @@ import { RECOVER_PASSWORD, SIGN_UP, CHOOSE_CHART_TYPE } from '../../common/const
 
 import { AuthStore } from '../../stores/auth';
 
-import AppLogoIcon from '../../common/icons/logo.svg';
-import GoogleLogoIcon from '../../common/icons/google.svg';
-import FacebookLogoIcon from '../../common/icons/facebook.svg';
-import GithubLogoIcon from '../../common/icons/github.svg';
+import AppLogoIcon from 'svg-react-loader?name=AppLogoIcon!../../common/icons/logo.svg';
+import GoogleLogoIcon from 'svg-react-loader?name=GoogleLogoIcon!../../common/icons/google.svg';
+import FacebookLogoIcon from 'svg-react-loader?name=FacebookLogoIcon!../../common/icons/facebook.svg';
+import GithubLogoIcon from 'svg-react-loader?name=GithubLogoIcon!../../common/icons/github.svg';
 import Input from '../../common/components/Input/Input';
 import Button from '../../common/components/Button/Button';
 

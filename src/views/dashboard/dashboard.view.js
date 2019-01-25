@@ -1,3 +1,4 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router';
@@ -10,6 +11,7 @@ import { Bind } from 'lodash-decorators';
 
 import { AuthStore } from '../../stores/auth';
 import { DataStore } from '../../stores/data';
+import { lineChartSettingsStore } from '../../stores/ChartSettings/LineChartSettings';
 
 import NavBar from '../NavBar/NavBar.view';
 
@@ -21,19 +23,19 @@ import Button from '../../common/components/Button/Button';
 import { LINE, BAR, BUBBLE, PIE, DOUGHNUT } from '../../common/consts/chart-types';
 
 // icons
-import EditIcon from '../../common/icons/edit-chart.svg';
-import DeleteIcon from '../../common/icons/delete.svg';
-import LineChart from '../../common/icons/line-chart.svg';
-import BarChart from '../../common/icons/stats.svg';
-import PieChart from '../../common/icons/pie-chart-1.svg';
-import BubbleChart from '../../common/icons/bubble-chart.svg';
+import EditIcon from 'svg-react-loader?name=EditIcon!../../common/icons/edit-chart.svg';
+import DeleteIcon from 'svg-react-loader?name=DeleteIcon!../../common/icons/delete.svg';
+import LineChart from 'svg-react-loader?name=LineChart!../../common/icons/line-chart.svg';
+import BarChart from 'svg-react-loader?name=BarChart!../../common/icons/stats.svg';
+import PieChart from 'svg-react-loader?name=PieChart!../../common/icons/pie-chart-1.svg';
+import BubbleChart from 'svg-react-loader?name=BubbleChart!../../common/icons/bubble-chart.svg';
 
 import './Dashboard.view.scss';
 import translations from './Dashboard.view.intl';
 
 @withRouter
 @injectIntl
-@inject('authStore', 'dataStore')
+@inject('authStore', 'dataStore', 'lineChartSettingsStore')
 @observer
 class Dashboard extends Component {
   static propTypes = {
@@ -77,6 +79,8 @@ class Dashboard extends Component {
         return <BarChart width={48} height={48} />;
       case PIE:
         return <PieChart width={48} height={48} />;
+      case DOUGHNUT:
+        return <PieChart width={48} height={48} />;
       case BUBBLE: 
         return <BubbleChart width={48} height={48} />
       default:
@@ -103,8 +107,42 @@ class Dashboard extends Component {
 
   @action.bound
   goToEditChart(chart) {
-    console.log(chart);
+    const { dataStore, lineChartSettingsStore, history } = this.props;
+    const { chart_data } = chart;
+
+    dataStore.categories = chart_data.categories;
+    dataStore.datasets = chart_data.datasets;
+    dataStore.rows = chart_data.rows;
+    dataStore.chartDatasetsProperties = chart_data.datasetsProperties;
+    dataStore.chartDescription = chart_data.description;
+
+    lineChartSettingsStore.type = chart_data.options.type;
+    lineChartSettingsStore.responsive = chart_data.options.responsive;
+    lineChartSettingsStore.responsiveAnimationDuration = chart_data.options.responsiveAnimationDuration;
+    lineChartSettingsStore.backgroundColor = chart_data.options.backgroundColor;
+    lineChartSettingsStore.padding = chart_data.options.padding;
+    lineChartSettingsStore.animation = chart_data.options.animation;
+    lineChartSettingsStore.legend = chart_data.options.legend;
+    lineChartSettingsStore.title = chart_data.options.title;
+    lineChartSettingsStore.tooltips = chart_data.options.tooltips;
+    lineChartSettingsStore.xAxes = chart_data.options.xAxes;
+    lineChartSettingsStore.yAxes = chart_data.options.yAxes;
+
+    history.push(`/home/${chart.id}`);
   }
+
+  // id: chartId,
+  // saved_at: savedDate,
+  // type: lineChartSettingsStore.type,
+  // user_id: userId,
+  // chart_data: {
+  //   description: this.chartDescription,
+  //   categories: this.categories.slice(),
+  //   rows: this.rows.slice(),
+  //   datasets: this.datasets.slice(),
+  //   datasetsProperties: this.chartDatasetsProperties.slice(),
+  //   options: lineChartSettingsStore
+  // }
 
   render() {
     const { intl } = this.props;
@@ -135,8 +173,8 @@ class Dashboard extends Component {
                   >
                     {this.renderChartIcon(chart.type)}
                     <div className="saved-chart-info">{chart.chart_data.options.title.text}</div>
-                    <div className="date-time">Created at :</div>
-                    <div className="date-time">{new Date(chart.created_at).toLocaleString()}</div>
+                    <div className="date-time">Saved at :</div>
+                    <div className="date-time">{new Date(chart.saved_at).toLocaleString()}</div>
                     <Button className="remove-chart" onClick={() => this.deleteChart(chart.id)}>
                       <DeleteIcon 
                         width={14} 

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -19,9 +20,9 @@ import { DataStore } from '../../../stores/data';
 import { CommonStore } from '../../../stores/common';
 
 // icons
-import DeleteIcon from '../../icons/delete.svg';
-import Delete2Icon from '../../icons/delete2.svg';
-import EditIcon from '../../icons/edit.svg';
+import DeleteIcon from 'svg-react-loader?name=DeleteIcon!../../icons/delete.svg';
+import Delete2Icon from 'svg-react-loader?name=Delete2Icon!../../icons/delete2.svg';
+import EditIcon from 'svg-react-loader?name=EditIcon!../../icons/edit.svg';
 
 // components
 import Button from '../Button/Button';

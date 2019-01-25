@@ -1,3 +1,4 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { action } from 'mobx';
@@ -20,7 +21,7 @@ import DatasetListItem from '../../../common/components/DatasetListItem/DatasetL
 
 import { animationOptions } from '../../../common/consts/animation-options';
 
-import InfoIcon from '../../../common/icons/info.svg';
+import InfoIcon from 'svg-react-loader?name=InfoIcon!../../../common/icons/info.svg';
 import { ChromePicker } from 'react-color';
 
 import { LineChartSettingsStore } from '../../../stores/ChartSettings/LineChartSettings';
@@ -609,16 +610,6 @@ export default class LineChartSettings extends Component {
                 }
               >
                 <div key={index} className="option-wrapper-column">
-                  <div className="option-wrapper">
-                    <div className="option-wrapper__label">Label</div>
-                    <Input
-                      key={index}
-                      type="text"
-                      inputClassName="option-wrapper__custom-input"
-                      value={properties.label}
-                      onChange={(e) => this.handleLabel(e, index)}
-                    />
-                  </div>
                   <div className="option-wrapper">
                     <div className="label">Background color</div>
                     <ContextMenu 

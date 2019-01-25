@@ -1,8 +1,9 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { map, uniqueId, snakeCase, includes } from 'lodash';
+import { map, uniqueId, snakeCase } from 'lodash';
 
 // pdfmake
 import pdfMake from "pdfmake/build/pdfmake";
@@ -37,8 +38,8 @@ import CustomModal from './../../common/components/CustomModal/CustomModal';
 import AddDatasetPopup from './components/AddDatasetPopup/AddDatasetPopup.view';
 
 // icons
-import ExportIcon from './../../common/icons/export.svg';
-import SaveIcon from './../../common/icons/save.svg';
+import ExportIcon from 'svg-react-loader?name=ExportIcon!./../../common/icons/export.svg';
+import SaveIcon from 'svg-react-loader?name=SaveIcon!./../../common/icons/save.svg';
 import { logoData } from './../../common/consts/logo';
 
 // styles
@@ -77,8 +78,6 @@ export default class ChartDataBox extends Component {
   @observable fileName = null;
   @observable exportFileName = `chart_${uniqueId()}`;
 
-  @observable chartDescription = 'Populacja Polski w 2019 zmaleje o 58 000 i osiągnie 37 734 000 ludzi w 2020 roku. Migracja ludności zmniejszyła populację o 10 000 ludzi rocznie uwzględniając emigrację i imigrację. Średnia liczba urodzeń w Polsce wynosi 333 698 rocznie, liczba zgonów to 403 311 w roku. Od 1980 gęstość zaludnienia Polski uległa zmianie z 116,1 na 124,6 w 2017 roku.';
-
   @observable isFileSaving = false;
 
   @action.bound
@@ -93,7 +92,7 @@ export default class ChartDataBox extends Component {
 
   @action.bound
   handleChartDescriptionChange(event) {
-    this.chartDescription = event.target.value;
+    this.props.dataStore.chartDescription = event.target.value;
   }
 
   @action.bound
@@ -284,6 +283,8 @@ export default class ChartDataBox extends Component {
   @Bind()
   downloadPDF() {
     const { dataStore, commonStore } = this.props;
+    const countOfColumns = dataStore.getDatasetsLabels().length + 1;
+    const widths = new Array(countOfColumns).fill('*');
     const imgData = commonStore.canvasRef.current.toDataURL("image/jpeg", 1.0);
     var doc = {
       content: [
@@ -319,12 +320,12 @@ export default class ChartDataBox extends Component {
           height: 180
         },
         {
-          text: !includes(this.chartDescription, 'Type chart description here ...') ? 'Chart description': '',
+          text: dataStore.chartDescription.length > 0 ? 'Chart description' : '',
           style: 'header',
           margin: [0,4,0,4]
         },
         {
-          text: !includes(this.chartDescription, 'Type chart description here ...') ? this.chartDescription : '',
+          text: dataStore.chartDescription.length > 0 ? dataStore.chartDescription : '',
           style: 'subheader',
         },
         {
@@ -334,8 +335,12 @@ export default class ChartDataBox extends Component {
         },
         {
           table: {
+            // headers are automatically repeated if the table spans over multiple pages
+            // you can declare how many rows should be treated as headers
+            headerRows: 1,
+            widths,
             body: [
-              ['Dataset name', ...dataStore.columns],
+              ['Category', ...dataStore.getDatasetsLabels()],
               ...dataStore.getPreparedRowsForReportTable()
             ]
           },
@@ -365,54 +370,13 @@ export default class ChartDataBox extends Component {
         }
       }
     }
-    pdfMake.createPdf(doc).download();
-    // const doc = new jsPDF({
-    //   orientation: 'p',
-    //   unit: 'px',
-    //   format: 'a4'
-    // });
-    // // Document logo
-    // doc.addImage(logoData, 'JPEG', 20, 20, 24, 24);
-    // // Document logo text
-    // doc.addFont('Abha.ttf', 'Abha', 'normal', 'Identity-H');
-    // doc.setFont('Abha');   
-    // doc.setFontSize(12);
-    // doc.text('MyCharts', 50, 32);
-    // doc.setFontSize(8);
-    // doc.text('Make your charts online', 50, 40);
-    // // Chart
-    // const width = doc.internal.pageSize.getWidth();
-    // doc.addImage(imgData, 'JPEG', 20, 60, width - 40, 145);
-    // // Chart description
-    // const noDescriptionPlaceholder = 'Type chart description here ...'
-    // if(!includes(this.chartDescription, noDescriptionPlaceholder)){
-    //   doc.setFontSize(12);
-    //   doc.text("Chart description", 20, 215);
-    //   doc.setFontSize(8);
-    //   const splitTitle = doc.splitTextToSize(this.chartDescription, width-40);
-    //   doc.text(20, 226, splitTitle);
-    // }
-    // // Chart data title
-    // doc.setFontSize(12);
-    // doc.text("Chart Data", 20, !includes(this.chartDescription, noDescriptionPlaceholder) ? 300 : 220);
-    // // Chart data table
-    // const columns = ["Dataset name", ...dataStore.columns];
-    // const rows = dataStore.getPreparedRowsForReportTable();
-    // doc.autoTable(columns, rows, {
-    //   startY: !includes(this.chartDescription, noDescriptionPlaceholder) ? 305 : 226,
-    //   margin: 20,
-    //   styles: {
-    //     fontSize: 8,
-    //     fontStyle: 'normal',
-    //     overflow: 'ellipsize',
-    //     valign: 'middle'
-    //   },
-    //   headerStyles: {
-    //     fillColor: [235, 30, 100]
-    //   }
-    // });
-    // // Save document
-    // doc.save(`${this.exportFileName}`);
+    try{
+      pdfMake.createPdf(doc).download();
+      this.hideExportPopup();
+    } catch(e) {
+      window.console.error(e);
+      NotificationService.error(e);
+    }
   }
 
   @action.bound
@@ -593,7 +557,7 @@ export default class ChartDataBox extends Component {
         <React.Fragment>
           <Input
             textarea
-            value={this.chartDescription}
+            value={this.props.dataStore.chartDescription}
             onTextareaChange={this.handleChartDescriptionChange} 
           />
         </React.Fragment>
@@ -633,7 +597,7 @@ export default class ChartDataBox extends Component {
               </div>
             </Button>
             <Button 
-              className="add-button"
+              className="save-button"
               onClick={() => this.saveChart(this.props.match.params.id)}
             >
               <div className="button-label">
@@ -644,20 +608,16 @@ export default class ChartDataBox extends Component {
                     loading={this.isFileSaving}
                   />
                 ) : (
-                  <React.Fragment>
-                    <div className="b-label">Save</div>
-                    <SaveIcon width={14} height={14} />
-                  </React.Fragment>
+                  <SaveIcon width={14} height={14} />
                 )}
               </div>
             </Button>
             <Button 
-              className="add-button"
+              className="export-icon-button"
               onClick={this.showExportPopup}
             >
               <div className="button-label">
-                <div className="b-label">Export</div>
-                <ExportIcon width={14} height={14} />
+                <ExportIcon width={14} height={14} /> 
               </div>
             </Button>
           </div>

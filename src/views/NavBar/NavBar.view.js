@@ -1,3 +1,4 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
@@ -5,13 +6,14 @@ import { injectIntl } from 'react-intl';
 import { observer, inject } from 'mobx-react';
 import { Bind } from 'lodash-decorators';
 import Avatar from 'react-avatar';
+import { Tooltip } from 'react-tippy';
 import { SIGN_IN, DASHBOARD, CHOOSE_CHART_TYPE } from '../../common/consts/routes';
 
 import { observable, action } from 'mobx';
 import { AuthStore } from '../../stores/auth';
 
-import AppLogoIcon from '../../common/icons/logo.svg';
-import PlusIcon from '../../common/icons/plus-button.svg';
+import AppLogoIcon from 'svg-react-loader?name=AppLogoIcon!../../common/icons/logo.svg';
+import PlusIcon from 'svg-react-loader?name=PlusIcon!../../common/icons/plus-button.svg';
 import Button from '../../common/components/Button/Button';
 import ContextMenu from '../../common/components/ContextMenu/ContextMenu';
 
@@ -95,7 +97,19 @@ export default class NavBar extends Component {
 
     return (
       <div className="navbar">
-        <AppLogoIcon width={40} height={40} />
+        <div className="navbar-buttons">
+          <AppLogoIcon width={40} height={40} />
+          <Button
+            className="light-button" 
+            textColor="pink"    
+            onClick={this.setLightTheme} 
+          />
+          <Button
+            className="dark-button" 
+            textColor="pink"    
+            onClick={this.setDarkTheme} 
+          />
+        </div>
         <div className="navbar-buttons">
           {this.props.isNewChartButton && (
             <Button

@@ -8,14 +8,20 @@ import authStore from './auth';
 import lineChartSettingsStore from './ChartSettings/LineChartSettings';
 
 export class DataStore {
+  // Labels
   @observable categories = [];
 
+  // Objects of existing datasets
   @observable datasets = [];
 
+  // Objects of table rows
   @observable rows = [];
 
   // Array of datasets with properties
   @observable chartDatasetsProperties = [];
+
+  // Chart description
+  @observable chartDescription = '';
 
   // Optional imported csv file (not parsed)
   @observable csvFile = null;
@@ -40,6 +46,11 @@ export class DataStore {
     return dataset.label;
   }
 
+  @action.bound
+  getDatasetsLabels() {
+    return map(this.datasets, dataset => dataset.label);
+  }
+
   // Return dataset properties by index
   @action.bound
   getDatasetProperty(index) {
@@ -62,14 +73,9 @@ export class DataStore {
   // Return datasets data with labels
   @action.bound
   getPreparedRowsForReportTable() {
-    const { rows, chartDatasetsProperties } = this;
     const preparedRows = [];
-    map(rows, (row, index) => {
-      delete row.id;
-      preparedRows.push([
-        chartDatasetsProperties[index].label,
-        ...Object.values(row)]
-      );
+    map(this.rows, row => {
+      preparedRows.push(Object.values(row));
     });
     return preparedRows;
   }
@@ -111,15 +117,14 @@ export class DataStore {
   async createChart(){
     const chartId = uniqueString()
     const userId = authStore.authUser.uid;
-    const createdDate = Date();
+    const savedDate = Date.now();
     await firebase.database().ref(`users/${userId}/charts/${chartId}`).set({
       id: chartId,
-      created_at: createdDate,
-      last_modification: createdDate,
+      saved_at: savedDate,
       type: lineChartSettingsStore.type,
       user_id: userId,
       chart_data: {
-        description: 'description',
+        description: this.chartDescription,
         categories: this.categories.slice(),
         rows: this.rows.slice(),
         datasets: this.datasets.slice(),
@@ -133,12 +138,13 @@ export class DataStore {
   @action.bound
   async updateChart(chartId){
     const userId = authStore.authUser.uid;
-    await firebase.database().ref(`users/${userId}/charts/${chartId}`).set({
+    const savedDate = Date.now();
+    await firebase.database().ref(`users/${userId}/charts`).update({
       [chartId]: {
-        last_modification: Date(),
+        saved_at: savedDate,
         type: lineChartSettingsStore.type,
         chart_data: {
-          description: 'description',
+          description: this.chartDescription,
           categories: this.categories.slice(),
           rows: this.rows.slice(),
           datasets: this.datasets.slice(),

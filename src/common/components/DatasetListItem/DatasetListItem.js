@@ -16,42 +16,31 @@ export default class DatasetListItem extends Component {
     dataStore: PropTypes.instanceOf(DataStore).isRequired
   }
 
-  @observable color = '';
-  @observable label = '';
-
-  @action.bound
-  setInitialValue() {
-    const { dataStore, datasetIndex } = this.props;
-    const datasetProperty = dataStore.getDatasetProperty(datasetIndex);
-    if(datasetProperty.fill === true) {
-      this.color = datasetProperty.backgroundColor;
-    } else {
-      this.color = datasetProperty.borderColor;
-    }
-    this.label = datasetProperty.label;
-  }
+  @observable datasetProperty = {};
 
   @action
-  componentDidMount() {
-    this.setInitialValue();
+  componentDidMount(){
+    const { dataStore, datasetIndex } = this.props;
+    this.datasetProperty = dataStore.getDatasetProperty(datasetIndex);
   }
 
   @action
   componentWillReceiveProps() {
-    this.setInitialValue();
+    const { dataStore, datasetIndex } = this.props;
+    this.datasetProperty = dataStore.getDatasetProperty(datasetIndex);
   }
 
   render() {
-    const { color, label } = this;
+    const { datasetProperty } = this;
 
     return (
       <div className="dataset-list-item">
         <div 
-          title={label} 
+          title={datasetProperty.label} 
           className='dataset-icon'
-          style={{ backgroundColor: color }} 
+          style={{ backgroundColor: datasetProperty.backgroundColor }} 
         />
-        <div className='dataset-label'>{label}</div>
+        <div className='dataset-label'>{datasetProperty.label}</div>
       </div>
     );
   }
